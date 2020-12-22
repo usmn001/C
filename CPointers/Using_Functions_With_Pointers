@@ -1,0 +1,48 @@
+                                       
+                                   ------------- Using Pointers With Functions---------------
+
+To use pointers for passing value of a variable to a function from main or any aprt of a program we do :
+
+func_name(&variable_name);
+
+and we define a function as : func_name(int *pointer_name){
+ /*here we can alter or change value of pointed variable by performing any operation as result the value of varaible will be changed for both parts of a program i.e. in main and in the function being call'd */
+
+*pointer_name = *pointer_name + 2 ; /* similarly we can perform any other arithmeti or logical operation and change the pointed variable value */
+
+} 
+        
+This above method of passing variables to a function by using it's address instead of it's own value is called " Pass by reference " same holds true when we we pass address of a structure,array to another function,thread instead of original value by using pointers is called 
+" Pass by reference"
+
+
+
+                                       
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

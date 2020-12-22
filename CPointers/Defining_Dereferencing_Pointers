@@ -1,0 +1,116 @@
+
+Pointers in C point hold and point to memory addresses of variables,arrays,structures,memory allocations done by malloc and memset functions for allocating memory on heap. All kinds of pointers can be passed from main thread to other functions,structures,tasks and threads and vice versa.
+
+Note : In C WE DON'T HAVE STRING DATA TYPE USE CHARACTER ARRAYS INSTEAD, for input use scanf command.
+
+Like variable & arrays data types, a pointer has also different data types besides structure,arrays and other advanced types.
+ 
+                           unsigned char       declaration       unsigned char *p1;           
+                           char                declaration       char *p1;                     
+                           unsigned int        declaration       unsigned int *p1; 
+                           int                 declaration       int *p1; 
+                           unsigned short      declaration       unsigned short *p2; 
+                           short               declaration       short *p2;                    
+                           unsigned long       declaration       unsigned long *p3;
+                           long                declaration       long *p3;
+                           float               declaration       float *p4;
+                           double              declaration       double *p4; 
+                           
+                                                     void pointers are also known as generic pointers can be casted into other data types. 
+void          declaration       void *p6;            void pointers don't have any data type  mostly returned from malloc and memset
+null          declaration       data_type *p1=NULL;  NULL pointers have 0 as their address & point at nothing (NULL stands for 0).
+wild          declaration       data_type *p1;       WILD pointers arise when we don't initialize properly by assigning them some 
+                                                     address,golden rule of thumb is that pointers should be initialized as NULL 
+                     
+dangling                                             dangling pointer's are created when memory address assigned to them is deleted or  
+                                                     freed they get created after execution of free(ptr) call.        
+near                                                 points to a 16 bit memory address , allowing access of 64kb memory at a time.
+
+far       32 bit pointer can access memory outside current segment segment register gets allocated to store segment address another
+          register is used to store offset within current segment.
+
+huge      32 bit pointer can access outside memory segment allowing modification of current memory segment unlike far pointer.
+
+                                       
+                                   ------------- Defining & Dereferencing Pointers---------------
+        
+As we know variables,constants,structures,functions and all statements of a program each one has it's own address. For a pointer to store address of a varaible we do : 
+                        data_type_decaration *pointer_name = &variable_name; 
+                                             or 
+                                 pointer_name = &variable_name;
+                                             
+To pass pointers to a function we do : 
+
+func_name(pointer_name1,pointer_name2) 
+
+
+function declaration : return_data_type func_name(data_type *pointer_name1,data_type *pointer_name2,...){
+
+}
+
+function definition : return_data_type func_name(data_type *,data_type *,....);  
+" Note : Function definition is always done outside of main and in the start of a program soon after preprocessor directives".
+
+
+The printf format specifier for :                                             Data type size in bits & bytes
+                             prinitng address of a pointer is %p.  
+                             printing double data type is %lf.                      64-bits, 8 Bytes.
+                             printing (signed,unsigned)character data type is %c.   8-bits,  1 Byte.
+                             printing string data type is %s.                       
+                             printing float data type is %f.                        32-bits, 4 Bytes.
+                             printing short data type is %hd.                       16-bits, 2 Bytes.
+                             printing signed int data type is %i                    32-bits, 4 Bytes or (Compiler dependent)
+                             printing unsigned int data type is %u.                 32-bits, 4 Bytes. (Compiler dependent)   
+                             printing long int data type is %ld.                    32-bts,  4 Bytes.
+                                   
+As we know pointers store memory addresses of variables,structures and other memory locations allocated and point their , just like we can assign a certain memory address we can also change contents stored memory location copied in the pointer from mentioned memory sources for e.g. in case of variable 
+                              int a = 1; 
+                              int *ptr = &a or *ptr=&a;  
+                              *ptr = 2 ;      
+                              
+                           now variable a will have value 2 instead of 1 thus we can say that generally 
+ 
+                             *pointer_name = value_to_be_assigned_at_copied_memory_address;    
+
+
+                                
+
+
+
+
+
+
+
+
+
+
+
+                                       
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
