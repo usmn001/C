@@ -1,0 +1,56 @@
+
+/************************MPU9150 Definitions ***********************/
+#ifndef _I2C1_MPU9150_H
+#define _I2C1_MPU9150_H
+
+// Version : 2
+
+// Includes
+#include "I2C_Error_Handler.h"
+#include "stm32f4xx_hal.h"
+
+//Magnetometer Registers
+
+#define MPU9150_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for InvenSense evaluation board
+#define MPU9150_ADDRESS_AD0_HIGH    0xD2 // address pin high (VCC)
+#define MPU9150_DEFAULT_ADDRESS     MPU9150_ADDRESS_AD0_LOW
+#define MPU9150_RA_WHO_AM_I         0x75
+
+
+// HAL_I2C1 Driver Parameter Definitios
+
+#define s_8                       1         // Amount Of Data To Be Sent & Received = 1 Byte
+#define s_16                      2         // Amount of Data To Be Sent & Received = 2 Byte
+#define s_32                      4         // Amount of Data To Be Sent & Received = 4 Byte
+#define s_40                      5         // Amount of Data To Be Sent & Received = 5 Byte
+#define s_64                      8         // Amount of Data To Be Sent & Received = 8 Byte
+#define timeout                  1000       // TIMEOUT DURATION IN MILLISECONDS . In Seconds = 1S 
+
+#define mem_add_size     I2C_MEMADD_SIZE_8BIT     // POINTER REGISTER ADDRESS SIZE IS OF 8-BITS
+#define mem_add_size3    I2C_MEMADD_SIZE_16BIT    // POINTER REGISTER ADDRESS SIZE IS OF 16-BITS
+
+// FUNCTION PROTOTYPES
+void mpu_stat(void);
+uint8_t who_am_i (void);                    // READ WHO AM I REGISTER OF MPU9150 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif /* _I2C1_MPU9150_H */
+
+                     /*************End Of File**************/

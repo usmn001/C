@@ -1,0 +1,36 @@
+/************************MPU9150 Definitions ***********************/
+#ifndef _UART2_GPS_H
+#define _UART2_GPS_H
+
+/* Includes   */
+#include "stm32f4xx_hal.h"
+#include "LIGHTS.h"
+#include "UART1.h"
+
+
+// External Private Variable 
+extern UART_HandleTypeDef huart2;
+
+
+// FUNCTION PROTOTYPES
+
+void UART2_Config(void);       // CONFIGURE SYSTEM POSITION UPDATE RATE : MSG ID = 0x0E , Rate = 0x20 , Attributes = 0x01   
+void UART2_NMEA(void);         // CONFIGURE & SELECT OUTPUT MESSAGE TYPE  
+void UART2_QSID(void);         // QUERY SOFTWARE VERSION ID 
+void UART2_RCV(void);          // RECEIVE GPS NMEA DATA 
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif /* _UART2_GPS_H */
+
+/*************END OF FILE************/

@@ -1,0 +1,174 @@
+
+
+
+#include "I2C1_Si7020.h"
+
+// External Private Variable 
+extern I2C_HandleTypeDef hi2c1;
+		
+void si_stat(void)
+{
+	uint8_t hal_status=0;
+hal_status=(HAL_I2C_IsDeviceReady(&hi2c1,dev_addr3,2,1000));
+	
+if(hal_status!=0x00)
+	{
+i2c1_error_handler(hal_status);
+}
+	
+
+}
+// READ Si7020-A20 FIRMWARE REVISION 
+
+uint8_t r_firm_v(void)
+{
+uint8_t   firm_v = 0 ;          // Variable For Storing Firmware Revision Number  
+uint8_t   s1 = 2;	              // Amount Of Data to be sent = 2 Byte
+uint8_t   rb2[2];               // 1-Byte Buffer For Receiving Data		
+if(	HAL_I2C_Mem_Read(&hi2c1,dev_addr3,cmd_rev,add_size3,(uint8_t*)rb2,s1,t1) == HAL_OK)
+{
+firm_v = rb2[0];
+}
+
+return firm_v;
+
+}
+
+ // Command For Reading 1st Electronic ID Second Byte
+
+uint8_t r_eid1(void)
+{	
+uint8_t s3=4;                    // Size Of Data To Be Sent & Received = 4 Byte		
+uint8_t  rb2[4];                 // 4-Byte Buffer For Receiving Data		
+uint8_t esn_v = 0;               // Variable For Storing Electronic Serial Number
+uint8_t hal_status=0;	
+hal_status=( HAL_I2C_Mem_Read(&hi2c1,dev_addr3,cmd_eid1,add_size3,(uint8_t*)rb2,s3,t1));
+if(hal_status!=0x00)
+{
+i2c1_error_handler(hal_status);	
+}
+esn_v = rb2[0];
+return esn_v;	
+}
+
+// Command For Reading 2nd Electronic ID Second Byte
+
+uint8_t r_eid2(void)
+{	
+uint8_t s3=4;                     // Size Of Data To Be Sent & Received = 4 Byte		
+uint8_t  rb2[4];                 // 4-Byte Buffer For Receiving Data		
+uint8_t esn_v = 0;                // Variable For Storing Electronic Serial Number
+if( HAL_I2C_Mem_Read(&hi2c1,dev_addr3,cmd_eid2,add_size3,(uint8_t*)rb2,s3,t1)==HAL_OK)	
+{
+esn_v = rb2[0];
+}		
+return esn_v;	
+}
+
+
+
+
+
+// Command To Measure Relative Humidity ,Hold Master Mode
+
+float r_hum1(void)
+{	
+uint8_t s2=2;                     // Size Of Data To Be Sent & Received = 2 Byte	
+uint8_t  rb2[2];                  // 2-Byte Buffer For Receiving Data		
+uint16_t rhum_v = 0;              // Variable For Storing Relative Humidity Code
+float hum_v = 0;                  // Variable For Storing Relative Humidity 	
+if( HAL_I2C_Mem_Read(&hi2c1,dev_addr3,cmd_rhm1,add_size,(uint8_t*)rb2,s2,t1)==HAL_OK)	
+{	
+rhum_v = rb2[0];
+rhum_v = rhum_v<<8;
+rhum_v = rhum_v + rb2[1];
+hum_v =( ( (125*rhum_v)/65536 ) -6 );	
+}	
+return hum_v;	
+}
+
+
+// Command To Measure Temperature  , Hold Master Mode
+
+float r_temp11(void)
+{	
+uint8_t s2=2;                    // Size Of Data To Be Sent & Received = 2 Byte		
+uint8_t  rb2[2];                 // 2-Byte Buffer For Receiving Data	
+uint16_t rtemp_v = 0;            // Variable For Storing Temperature Code	
+float temp_v = 0;                // Variable For Storing Temperature		
+if( HAL_I2C_Mem_Read(&hi2c1,dev_addr3,cmd_temp1 ,add_size,(uint8_t*)rb2,s2,t1)==HAL_OK)	
+{	
+rtemp_v = rb2[0];
+rtemp_v = rtemp_v<<8;
+rtemp_v = rtemp_v + rb2[1];	
+temp_v =( -46.85+( (175.72*rtemp_v)/65536 ) );		
+}
+return temp_v;	
+}
+
+
+
+// Command For Reading Temperature , From Previous RH Measurement 
+
+float r_temp33(void)
+{	
+uint8_t s2=2;                     // Size Of Data To Be Sent & Received = 2 Byte		
+uint8_t  rb2[2] ;                 // 2-Byte Buffer For Receiving Data	
+uint16_t rtemp_v = 0;             // Variable For Storing Temperature Code	
+float temp_v = 0;                 // Variable For Storing Temperature			
+if( HAL_I2C_Mem_Read(&hi2c1,dev_addr3,cmd_temp3 ,add_size,(uint8_t*)rb2,s2,t1)==HAL_OK)	
+{	
+rtemp_v = rb2[0];
+rtemp_v = rtemp_v<<8;
+rtemp_v = rtemp_v+rb2[1];	
+temp_v =( -46.85+( (175.72*rtemp_v)/65536 ) );	
+}
+return temp_v;	
+}
+
+
+
+/********* Si7020 CONTROL REGISTER WRITE FUNCTIONS ON I2C1 FOR IC1 With Address 0x80 ***********/
+
+
+// Command For Reading Heater Register
+
+uint8_t r_heat(void)
+{	
+uint8_t s1=1;                     // Size Of Data To Be Sent & Received = 1 Byte		
+uint8_t  rb2[1];                 // 4-Byte Buffer For Receiving Data		
+uint8_t heat_v = 0;               // Variable For Storing Heater Register Value
+if( HAL_I2C_Mem_Read(&hi2c1,dev_addr3,cmd_rheat,add_size,(uint8_t*)rb2,s1,t1)==HAL_OK)	
+{
+heat_v = rb2[0];
+}		
+return heat_v;	
+}
+
+
+
+
+
+
+// Command For Resetting Device
+
+void rst_si7020(void)
+{
+uint8_t s2=2;                     // Size Of Data To Be Sent & Received = 2 Byte	
+uint8_t tb2[2];                  // 2-Byte Buffer For Sending Data	
+tb2[0] = 0x03;  
+tb2[1] = 0x0A;	
+HAL_I2C_Mem_Write(&hi2c1,dev_addr3,cmd_rst,add_size,(uint8_t*)tb2,s2,t1);	
+}
+
+
+
+
+
+
+
+
+
+
+
+

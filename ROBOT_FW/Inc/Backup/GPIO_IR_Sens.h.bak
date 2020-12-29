@@ -1,0 +1,38 @@
+
+
+
+               /*******************SPI3 LCD*****************/
+
+
+#ifndef _GPIO_IR_Sens_H
+#define _GPIO_IR_Sens_H
+
+// Includes
+#include "stm32f4xx_hal.h"
+
+uint8_t Read_IR_Sens1(void);
+uint8_t Read_IR_Sens2(void);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif /* GPIO_IR_Sens_H */
+                             
+														 /******** END OF FILE *********/
+															
+															
+
+
+

@@ -1,0 +1,103 @@
+
+
+/****** SCCB PROTOCOL HEADER FILE********/
+
+
+#ifndef _SCCB_H
+#define _SCCB_H
+
+
+#define SCCB_TIMEOUT_FLAG          ((uint32_t)35)     /* 35 ms */
+#define SCCB_TIMEOUT_ADDR_SLAVE    ((uint32_t)10000)  /* 10 s  */
+#define SCCB_TIMEOUT_BUSY_FLAG     ((uint32_t)10000)  /* 10 s  */
+
+
+
+/** @defgroup SCCB_Flag_definition SCCB Flag definition
+  * @{
+  */
+#define SCCB_FLAG_SMBALERT               ((uint32_t)0x00018000)
+#define SCCB_FLAG_TIMEOUT                ((uint32_t)0x00014000)
+#define SCCB_FLAG_PECERR                 ((uint32_t)0x00011000)
+#define SCCB_FLAG_OVR                    ((uint32_t)0x00010800)
+#define SCCB_FLAG_AF                     ((uint32_t)0x00010400)
+#define SCCB_FLAG_ARLO                   ((uint32_t)0x00010200)
+#define SCCB_FLAG_BERR                   ((uint32_t)0x00010100)
+#define SCCB_FLAG_TXE                    ((uint32_t)0x00010080)
+#define SCCB_FLAG_RXNE                   ((uint32_t)0x00010040)
+#define SCCB_FLAG_STOPF                  ((uint32_t)0x00010010)
+#define SCCB_FLAG_ADD10                  ((uint32_t)0x00010008)
+#define SCCB_FLAG_BTF                    ((uint32_t)0x00010004)
+#define SCCB_FLAG_ADDR                   ((uint32_t)0x00010002)
+#define SCCB_FLAG_SB                     ((uint32_t)0x00010001)
+#define SCCB_FLAG_DUALF                  ((uint32_t)0x00100080)
+#define SCCB_FLAG_SMBHOST                ((uint32_t)0x00100040)
+#define SCCB_FLAG_SMBDEFAULT             ((uint32_t)0x00100020)
+#define SCCB_FLAG_GENCALL                ((uint32_t)0x00100010)
+#define SCCB_FLAG_TRA                    ((uint32_t)0x00100004)
+#define SCCB_FLAG_BUSY                   ((uint32_t)0x00100002)
+#define SCCB_FLAG_MSL                    ((uint32_t)0x00100001)
+/**
+  * @}
+  */
+
+// Includes
+#include "stm32f4xx_hal.h"
+
+
+
+
+// Function Prototypes
+
+HAL_StatusTypeDef HAL_SCCB_IsDeviceReady(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout);
+
+HAL_StatusTypeDef HAL_SCCB_Mem_Write(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+
+HAL_StatusTypeDef HAL_SCCB_Mem_Read(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif /* _SCCB_H */
+
+	                    
+
+
+/*********End Of File**********/
+
+
+
+
+
+
+
+
+
+
+
+
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													

@@ -1,0 +1,35 @@
+
+
+
+            /*******************DAC AUDIO OUT*****************/
+
+
+// Includes
+#include "DAC_Audio Out.h"
+
+// Private variable
+
+extern DAC_HandleTypeDef hdac;
+
+void Turn_On_Sound()
+{
+HAL_GPIO_WritePin(GPIOE,AMP_CTR_LCD_Pin,GPIO_PIN_SET); 	
+HAL_DAC_Start(&hdac,DAC_CHANNEL_2);	
+}
+
+
+
+void Turn_Of_Sound()
+{
+HAL_DAC_Stop(&hdac,DAC_CHANNEL_2);
+HAL_GPIO_WritePin(GPIOE,AMP_CTR_LCD_Pin,GPIO_PIN_SET); 	
+}
+
+
+                                 
+																 
+																     
+																		 
+																		 
+																		 /* End Of File */
+

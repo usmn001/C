@@ -1,0 +1,25 @@
+
+
+
+            /*******************DAC AUDIO OUT*****************/
+
+
+// Includes
+#include "DAC_Audio.h"
+#include "LIGHTS.h"
+
+
+void Audio_On()
+{
+HAL_GPIO_WritePin(GPIOE,AMP_CTR_LCD_Pin,GPIO_PIN_SET); 
+}
+                                 
+void Audio_Of()
+{
+HAL_GPIO_WritePin(GPIOE,AMP_CTR_LCD_Pin,GPIO_PIN_RESET); 
+}	
+																     
+																		 
+																		 
+																		 /* End Of File */
+

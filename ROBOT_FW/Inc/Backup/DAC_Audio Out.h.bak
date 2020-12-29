@@ -1,0 +1,31 @@
+
+
+               /*******************DAC AUDIO OUT*****************/
+
+
+#ifndef _DAC_Audio_Out_H
+#define _DAC_Audio_Out_H
+
+
+// Includes
+#include "stm32f4xx_hal.h"
+
+
+
+void Turn_On_Sound(void);
+void Turn_Of_Sound(void);
+
+
+
+
+
+
+
+
+
+
+
+#endif /*_DAC_Audio_Out_H */
+
+           /********End of file***********/
+

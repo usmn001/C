@@ -1,0 +1,41 @@
+
+#ifndef _SCCB_OV7670_H
+#define _SCCB_OV7670_H
+
+
+// Includes
+#include "stm32f4xx_hal.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif /* _SCCB_OV7670_H */
+
+	                        /*********End Of File**********/
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													

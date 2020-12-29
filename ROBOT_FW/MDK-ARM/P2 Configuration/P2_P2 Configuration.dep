@@ -1,0 +1,33 @@
+Dependencies for Project 'P2', Target 'P2 Configuration': (DO NOT MODIFY !)
+F (../Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startup_stm32f429xx.s)(0x563A39FA)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I "D:\MY PROJECTS\COMPLETED_PROJECTS\LAWN MOWING ROBOT_BIT_STREAMS\Embed Trion Project\PROJECT CODE\LAWN MOWING ROBOT\P2\MDK-ARM\RTE"-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0--pd "_RTE_ SETA 1" --pd "STM32F429xx SETA 1"--list startup_stm32f429xx.lst --xref -o "p2 configuration/\startup_stm32f429xx.o" --depend "p2 configuration/\startup_stm32f429xx.d")
+F (../Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c)(0x563A39FB)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O1 -Otime --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include --C99-I "D:\MY PROJECTS\COMPLETED_PROJECTS\LAWN MOWING ROBOT_BIT_STREAMS\Embed Trion Project\PROJECT CODE\LAWN MOWING ROBOT\P2\MDK-ARM\RTE"-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0-D_RTE_ -DSTM32F429xx -DUSE_HAL_DRIVER -DSTM32F429xx-o "p2 configuration/\system_stm32f4xx.o" --omf_browse "p2 configuration/\system_stm32f4xx.crf" --depend "p2 configuration/\system_stm32f4xx.d")
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x563A39FA)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h)(0x563A39FA)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x563A3A04)
+F (../Src/stm32f4xx_hal_msp.c)(0x5682CCDF)()
+F (../Src/main.c)(0x56C0CB5D)()
+F (../Src/stm32f4xx_it.c)(0x5682CCDE)()
+F (.\P2 Configuration\15_lights.o)(0x56BE4D46)()
+F (..\Inc\8_UART1.c)(0x566FEF36)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c)(0x563A3A06)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dac_ex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c)(0x563A3A07)()
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dac.c)(0x563A3A07)()

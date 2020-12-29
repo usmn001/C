@@ -1,0 +1,44 @@
+p2 configuration/\4_5_i2c1_si7020.o: ..\Inc\4_5_I2C1_Si7020.c
+p2 configuration/\4_5_i2c1_si7020.o: ..\Inc\4_5_I2C1_Si7020.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Inc/stm32f4xx_hal_conf.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Inc/mxconstants.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/CMSIS/Include/core_cm4.h
+p2 configuration/\4_5_i2c1_si7020.o: E:\INSTALLED SOFTWARES\KEIL\ARM\ARMCC\Bin\..\include\stdint.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/CMSIS/Include/core_cmInstr.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/CMSIS/Include/core_cmSimd.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
+p2 configuration/\4_5_i2c1_si7020.o: E:\INSTALLED SOFTWARES\KEIL\ARM\ARMCC\Bin\..\include\stdio.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dcmi.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dcmi_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sdram.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fmc.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+p2 configuration/\4_5_i2c1_si7020.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+p2 configuration/\4_5_i2c1_si7020.o: ..\Inc\I2C_Error_Handler.h
+p2 configuration/\4_5_i2c1_si7020.o: E:\INSTALLED SOFTWARES\KEIL\ARM\ARMCC\Bin\..\include\math.h
+p2 configuration/\4_5_i2c1_si7020.o: ..\Inc\15_LIGHTS.h

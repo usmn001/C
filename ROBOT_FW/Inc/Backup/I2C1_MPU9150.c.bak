@@ -1,0 +1,131 @@
+
+
+                  /******************* MPU9150 FUNCTIONS*******************/
+
+
+// Includes
+#include "I2C1_MPU9150.h"
+#include "LIGHTS.h"
+
+// External Private Variable 
+extern I2C_HandleTypeDef hi2c1;
+
+/* 8,16,32,64 Bit Buffers used for transmission */
+
+static uint8_t  tb_8[1];             // A 8 Byte TX Buffer Of 1 Memory Locations
+static uint8_t  rb_8[1];             // A 8 Byte RX Buffer Of 1 Memory Locations
+static uint16_t tb_16[1];            // A 16 Byte TX Buffer Of 1 Memory Locations
+static uint16_t rb_16[1];            // A 16 Byte RX Buffer Of 1 Memory Locations
+static uint32_t tb_32[1];            // A 32 Byte TX Buffer Of 1 Memory Locations
+static uint32_t rb_32[1];            // A 32 Byte RX Buffer Of 1 Memory Locations
+static uint64_t tb_64[1];            // A 64 Byte TX Buffer Of 1 Memory Locations
+static uint64_t rb_64[1];            // A 64 Byte RX Buffer Of 1 Memory Locations
+
+// Buffering Varaibles
+static uint8_t  rd1 = 0;     // 8-Bit Variable For Storing & Returning Data To The Caller Function
+static uint16_t rd2 = 0;     // 16-Bit Variable For Storing & Returning Data To The Caller Function
+static uint32_t rd3 = 0;     // 32-Bit Variable For Storing & Returning Data To The Caller Function
+static uint64_t rd4 = 0;     // 64-Bit Variable For Storing & Returning Data To The Caller Function
+
+static uint8_t hal_status=0;
+static uint8_t mem_add = 0;
+
+
+
+
+void mpu_stat(void)
+{
+uint8_t hal_status=0;
+
+if(HAL_I2C_IsDeviceReady(&hi2c1,0x68 ,1,1000)==HAL_OK)
+{
+led_green_on();	
+	
+}
+else if(HAL_I2C_IsDeviceReady(&hi2c1,0x69 ,1,1000)==HAL_OK)
+{
+led_green_on();	
+}
+else if(HAL_I2C_IsDeviceReady(&hi2c1,0xD0 ,1,1000)==HAL_OK)
+{
+led_green_on();	
+}	
+else if(HAL_I2C_IsDeviceReady(&hi2c1,0xD2 ,1,1000)==HAL_OK)
+{
+led_green_on();	
+}
+else if(HAL_I2C_IsDeviceReady(&hi2c1,0xD1 ,1,1000)==HAL_OK)
+{
+led_green_on();	
+}	
+
+
+
+
+
+
+else
+led_red_on();	
+/*hal_status=(HAL_I2C_IsDeviceReady(&hi2c1,MPU9150_ADDRESS_AD0_LOW ,1,1000));
+	
+if(hal_status!=0x00)   // I.E IF HAL_OK IS NOT RECEIVED 
+	{
+	hi2c1.Instance->CR1 |= I2C_CR1_START;
+ HAL_Delay(1);		
+ hi2c1.Instance->CR1 |= I2C_CR1_STOP;
+hal_status=(HAL_I2C_IsDeviceReady(&hi2c1,MPU9150_ADDRESS_AD0_LOW ,1,1000));
+if(hal_status!=0x00)   // I.E IF HAL_OK IS NOT RECEIVED 
+{
+i2c1_error_handler(hal_status);	
+}
+		
+		
+		
+}*/
+
+}
+
+
+// READ WHO AM I REGISTER OF MPU9150
+
+uint8_t who_am_i (void)
+{
+mem_add = MPU9150_RA_WHO_AM_I  ;	
+hal_status = HAL_I2C_Mem_Read(&hi2c1, MPU9150_ADDRESS_AD0_LOW ,mem_add,mem_add_size,(uint8_t*)rb_8,s_8,timeout);	
+if(hal_status!=HAL_OK)
+{
+i2c1_error_handler(hal_status);
+}		
+else if (hal_status==HAL_OK)
+{
+rd1 = rb_8[0];
+return  rd1;	
+}
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                         /******************End Of File********************/
+
+
+
+

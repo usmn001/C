@@ -1,0 +1,146 @@
+
+
+/*******************NRF24L01 Driver Definitions ******************/
+
+
+#ifndef _SPI2_NRF24L01_H
+#define _SPI2_NRF24L01_H
+
+// Includes
+#include "stm32f4xx_hal.h"
+#include "LIGHTS.h"
+
+// External Private Variables
+extern SPI_HandleTypeDef hspi2;
+
+
+// NRF24L01 REGISTER ADDRESSES
+
+#define config                   0x00 
+#define en_aa                    0x01
+#define en_rxaddr                0x02
+#define setup_aw                 0x03
+#define setup_retr               0x04
+#define rf_ch                    0x05
+#define rf_setup                 0x06
+#define status                   0x07
+#define observe_tx               0x08
+#define rpd                      0x09
+#define rx_addr_p0               0x0A
+#define rx_addr_p1               0x0B
+#define rx_addr_p2               0x0C
+#define rx_addr_p3               0x0D
+#define rx_addr_p4               0x0E
+#define rx_addr_p5               0x0F
+#define tx_addr                  0x10
+#define rx_pw_p0                 0x11
+#define rx_pw_p1                 0x12
+#define rx_pw_p2                 0x13
+#define rx_pw_p3                 0x14
+#define rx_pw_p4                 0x15
+#define rx_pw_p5                 0x16
+#define fifo_stat                0x17
+#define dynpd                    0x1C
+#define feature                  0x1D
+
+#define rx_payload               0x61
+#define tx_payload               0xA0
+#define flush_tx                 0xE1
+#define flush_rx                 0xE2
+#define reuse_tx_pl              0xE3 
+#define r_rx_pl_wid              0x60
+#define w_ack_payload            0xA8
+#define w_tx_payload_no_ack      0xB0
+#define nop                      0xFF
+
+// HAL_SPI Driver Parameter Definitios
+#define s_8                       1         // Amount Of Data To Be Sent & Received = 1 Byte
+#define s_16                      2         // Amount of Data To Be Sent & Received = 2 Byte
+#define s_32                      4         // Amount of Data To Be Sent & Received = 4 Byte
+#define s_40                      5         // Amount of Data To Be Sent & Received = 5 Byte
+#define s_64                      8         // Amount of Data To Be Sent & Received = 8 Byte
+#define timeout                  1000       // TIMEOUT DURATION IN MILLISECONDS . In Seconds = 1S 
+
+// RX & TX BUFFER SIZES
+#define tb_s                      2         // EIGHT BIT TX BUFFER SIZE = 2   
+#define rb_s                      2         // EIGHT BIT RX BUFFER SIZE = 2 
+
+
+// READ FUNCTION PROTOTYPES
+
+uint8_t  r_config     (void);                // READ CONFIGURATION REGISTER OF NRF24L01
+uint8_t  r_en_aa      (void);                // READ ENABLE AUTO ACKNOWLEDGEMENT REGISTER OF NRF24L01 
+uint8_t  r_en_rxaddr  (void);                // READ ENABLED RX ADDRESSES OF NRF24L01
+uint8_t  r_setup_aw   (void);                // READ SETUP OF ADDRESS WIDTHS OF NRF24L01  
+uint8_t  r_setup_retr (void);                // READ SETUP OF AUTOMATIC RETRANSMISSION REGISTER OF NRF24L01      
+uint8_t  r_rf_ch      (void);                // READ RF CHANNEL REGISTER OF NRF24L01
+uint8_t  r_rf_setup   (void);                // READ RF SETUP REGISTER OF NRF24L01
+uint8_t  r_status     (void);                // READ STATUS REGISTER OF NRF24L01
+uint8_t  r_observe_tx (void);                // READ TRANSMIT OBSERVE REGISTER OF NRF24L01
+uint8_t  r_rpd        (void);                // READ RECEIVED POWER DETECT REGISTER OF NRF24L01
+uint64_t r_rx_addr_p0 (void);                // READ RECEIVED DATA PIPE 0
+uint64_t r_rx_addr_p1 (void);                // READ RECEIVED DATA PIPE 1
+uint8_t  r_rx_addr_p2 (void);                // READ RECEIVED DATA PIPE 2
+uint8_t  r_rx_addr_p3 (void);                // READ RECEIVED DATA PIPE 3
+uint8_t  r_rx_addr_p4 (void);                // READ RECEIVED DATA PIPE 4
+uint8_t  r_rx_addr_p5 (void);                // READ RECEIVED DATA PIPE 5
+uint64_t r_tx_addr    (void);                // READ RECEIVED TRANSMIT REGISTER OF NRF24L01
+uint8_t  r_rx_pw_p0   (void);                // READ NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 0 OF NRF24L01
+uint8_t  r_rx_pw_p1   (void);                // READ NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 1 OF NRF24L01
+uint8_t  r_rx_pw_p2   (void);                // READ NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 2 OF NRF24L01
+uint8_t  r_rx_pw_p3   (void);                // READ NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 3 OF NRF24L01
+uint8_t  r_rx_pw_p4   (void);                // READ NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 4 OF NRF24L01
+uint8_t  r_rx_pw_p5   (void);                // READ NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 5 OF NRF24L01
+uint8_t  r_fifo_stat  (void);                // READ FIFO STATUS REGISTER OF NRF24L01
+uint8_t  r_dynpd      (void);                // READ ENABLE DYNAMIC PAYLOAD LENGTH REGISTER OF NRF24L01
+uint8_t  r_feature    (void);                // READ FEATURE REGISTER OF NRF24L01
+
+void     r_rx_payload           (void);      // READ RX_PLD REGISTER OF NRF24L01
+void     c_flush_tx             (void);      // FLUSH TX FIFO OF NRF24L01
+void     c_flush_rx             (void);      // FLUSH RX FIFO OF NRF24L01
+void     c_reuse_tx_pl          (void);      // REUSE LAST TRANSMITTED PAYLOAD
+void     c_r_rx_pl_wid          (void);      // READ RX PAYLOAD WIDTH FOR TOP
+void     c_w_ack_payload        (void);      // WRITE PAYLOAD TO BE TRANSMITTED WITH ACK PACKET 
+void     c_w_tx_payload_no_ack  (void);      // DISABLE AUTOACK
+void     c_nop                  (void);      // NO OPERATION
+
+
+// WRITE FUNCTION PROTOTYPES
+
+void    w_config(uint8_t data);              // WRITE CONFIGURATION REGISTER OF NRF24L01  
+void    w_en_aa(uint8_t data);               // WRITE ENABLE AUTO ACKNOWLEDGEMENT REGISTER OF NRF24L01 
+void    w_en_rxaddr(uint8_t data);           // WRITE ENABLED RX ADDRESSES OF NRF24L01     
+void    w_setup_aw(uint8_t data);            // WRITE SETUP OF ADDRESS WIDTHS OF NRF24L01 
+void    w_setup_retr(uint8_t data);          // WRITE SETUP OF AUTOMATIC RETRANSMISSION REGISTER OF NRF24L01  
+void    w_rf_ch(uint8_t data);               // WRITE RF CHANNEL REGISTER OF NRF24L01
+void    w_rf_setup (uint8_t data);           // WRITE RF SETUP REGISTER OF NRF24L01
+void    w_status(uint8_t data);              // WRITE STATUS REGISTER OF NRF24L01
+void    w_observe_tx(uint8_t data);          // WRITE TRANSMIT OBSERVE REGISTER OF NRF24L01
+void    w_rpd(uint8_t data);                 // WRITE RECEIVED POWER DETECT REGISTER OF NRF24L01 
+void    w_rx_addr_p0(uint64_t data);         // WRITE RECEIVED DATA PIPE 0 
+void    w_rx_addr_p1(uint64_t data);         // WRITE RECEIVED DATA PIPE 1
+void    w_rx_addr_p2(uint8_t data);          // WRITE RECEIVED DATA PIPE 2
+void    w_rx_addr_p3(uint8_t data);          // WRITE RECEIVED DATA PIPE 3
+void    w_rx_addr_p4(uint8_t data);          // WRITE RECEIVED DATA PIPE 4
+void    w_rx_addr_p5(uint8_t data);          // WRITE RECEIVED DATA PIPE 5 
+void    w_tx_addr(uint64_t data);            // WRITE RECEIVED TRANSMIT REGISTER OF NRF24L01
+void    w_rx_pw_p0(uint8_t data);            // WRITE NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 0 OF NRF24L01
+void    w_rx_pw_p1(uint8_t data);            // WRITE NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 1 OF NRF24L01
+void    w_rx_pw_p2(uint8_t data);            // WRITE NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 2 OF NRF24L01
+void    w_rx_pw_p3(uint8_t data);            // WRITE NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 3 OF NRF24L01
+void    w_rx_pw_p4(uint8_t data);            // WRITE NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 4 OF NRF24L01
+void    w_rx_pw_p5(uint8_t data);            // WRITE NUMBER OF BYTES IN RX PAYLOAD IN DATA PIPE 5 OF NRF24L01
+void    w_fifo_stat(uint8_t data);           // WRITE FIFO STATUS REGISTER OF NRF24L01
+void    w_dynpd(uint8_t data);               // WRITE ENABLE DYNAMIC PAYLOAD LENGTH REGISTER OF NRF24L01 
+void    w_feature(uint8_t data);             // WRITE FEATURE REGISTER OF NRF24L01
+
+void    w_tx_payload(uint64_t data);         // WRITE TX_PLD REGISTER OF NRF24L01
+
+
+
+
+
+#endif /* _SPI2_NRF24L01_H */
+
+
+                           /*******End Of File**********/
