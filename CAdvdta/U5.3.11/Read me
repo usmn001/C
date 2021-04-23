@@ -1,0 +1,24 @@
+
+Description : Create a sorted copy of a linked list in C, Ansi-style
+
+Course Name : C Programming Advanced Data Types
+
+Explanation : In this program we are generating a linked list in ascending order from
+ an unordered list by using it's starting pointer passed from main function by sorted=sortedCopy(start) statement
+ for accessing and comparing elements stored in it's structure nodes while this comparison is performed in insertIntoSorted() function
+ where two elements of this unordered list are compared while addresses of these nodes  are passed from sortedCopy() function into
+ it while also performing continous updation of starting or beginning node address in the statement  sortedStart=insertIntoSorted(sortedStart,newDigit) continously being executed inside while loop until end of this unordered list
+ pointed by ptr pointer isn't reached and the initial value of this sortedStart pointer is got from statement 
+ sortedStart=createDigit(ptr->num) before going  into the while loop. This comparison performed inside insertIntoSorted() function
+ is done by while((ptr!=NULL) && (ptr->num < newDigit->num)) loop this loop keeps on executing until initial node num value pointed by
+ ptr->num  remains lesser than newer nodes num values pointed by newDigit->num and when this condition becomes we change the order of
+ these nodes by updating next pointers such that the node containing smaller num value comes before the node containing larger
+ num value i.e. prev->next = newDigit ( "here prev contains address of node for which last time this condition "ptr->num < newDigit->num"
+ held true before breaking away from while loop" ) and newDigit->next=ptr (" here as ptr->num is greater than newDigit->num so we copy address of node ptr in newDigit node's member structure pointer next ) thus node with address in newDigit pointer comes first before that of node ptr. Moreover if while loop with condition ((ptr!=NULL) && (ptr->num < newDigit->num)) doesn't satisified even in 1st iteration i.e.
+ (in i1st iteration this condition ptr->num < newDigit->num) isn't met then  to bring the nodes in ascending order we execute function
+ insertAtFront() where we copy the addess of node cotaining higher num value than that of newDigit node inside newDigit's next pointer by
+ newptr->next=start here newptr held's the value of newDigit node thus this is how we can sort an unordered list in an ascending order
+ sequence with "next member pointer's playing a crucial role in that as the list get's printed by function printlist() to that we pass
+ starting address of list and this address kept on getting updated by statement ptr=ptr->next until end of list indicated by
+ NULL terminator isn't reached".
+
