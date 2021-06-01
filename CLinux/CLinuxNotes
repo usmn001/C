@@ -1,0 +1,247 @@
+The linux is written in C.
+
+Function Declaration
+
+A function declaration defined before main and after preprocessor directives is simply the prototype of the function informing the compiler what the return type of the function is and telling the compiler the name of the function as well as indicating the compiler all of the types of the arguments that go into the function. Function Declaration is also known as function prototypes and these prototypes could also be defined in separate header file with .h extension.
+
+
+Example & Format : 
+function declaration : return_data_type func_name(data_type *pointer_name1,data_type *pointer_name2,...)
+
+
+Function Definition : The function definition, on the other hand,
+is the whole thing which includes the code that defines the function, what the function actually does.
+Function definition is normally done outside of main and in the start of a program soon after preprocessor directives or it could also be done in separate code files with .c extension and it could also be done after main function of a program.
+
+
+Example & Format : 
+return_data_type func_name(data_type *,data_type *,....){
+
+function code 
+
+}  
+
+                           --------------------------Unit 7.1:Using a Library In C -----------------------------------
+
+Libraries are a piece of code that is shared from other developers in a way that we can call functions defined and declared there by simply including them at the time of cross compiling our piece of source code or by including header files before main in our program. Libraries are defined by lib prefix in linux and they contain function definitions .
+
+In linux all header files containing prototypes of the functions defined in library files or in source files are present in usr/include directory while library files are present in /usr/lib , /usr/lib32 , /usr/libexec , /usr/libx32
+
+To use a library in our source code from it's definition present in a file containing (lib) prefix we just need to mention it's absolute path with the gcc compiler command in terminal window before our source or program code file name  and then mention it's declaration file also known as function prototype in our source code by using #include preprocessor directive for e.g.
+
+Command Format In Terminal (Absolute Path Approach) : 
+
+gcc (-compiler flags or options i.e. Wall) programfile.c absolutepathoflibrary\libnameoflibfile.ext -o nameofprogram
+
+Example : 
+
+gcc -std=c11 -Wall -Wextra -fmax-errors=10  program.c usr/lib32/libm.a -o program   (Here libm.a is the library file)
+
+Here -std  an option gcc flag sets the -std flag to set the C standard (in this case c11) This will warn us if we break c11 standard rules!
+     -Wall flag is used to turn on additional warnings about potential bad code practices.
+     -Wextra flag is used to turn on more warnings than the -Wall flag alone will activate.
+     -fmax-errors=10 flags indicates listing of maximum of 10 errors
+     -o option flag sets the compiler optimiztion level
+Here nameofprogram is the name of binary file that will be produced from programfile.c source file alongwith linking and compiling of library file from it's absoulte path by the gcc compiler. 
+
+We can also link a external library to our source code without mentioning the complete path of library file through relative addressing of relevant library function definition file by following command in terminal window :
+
+Command Format In Terminal (Relative Path Approach) : 
+
+gcc (-compiler flags or options i.e. Wall,std,Wextra -fmax-errors) programfile.c -l(suffixafterlib) -o nameofprogram
+
+Example : 
+
+gcc -std=c11 -Wall -Wextra -fmax-errors=10 program.c -lm -o program    ("Here in -lm 'm' is the suffix word that came after lib prefix of library file libm.a)
+
+Here -std  an option gcc flag sets the -std flag to set the C standard (in this case c11) This will warn us if we break c11 standard    rules!
+     -Wall flag is used to turn on additional warnings about potential bad code practices.
+     -Wextra flag is used to turn on more warnings than the -Wall flag alone will activate.
+     -fmax-errors=10 flags indicates listing of maximum of 10 errors
+     -o option flag sets the compiler optimiztion level
+
+Hence we can link function definitions from a library file by either providing absolute path or relative path of a library file 
+with compiler command in terminal window.
+
+To provide function prototypes and declarations we just need to mention relevant header file of our library that we want to use by using #include preprocessor directive in our code shown as : 
+
+Syntax Written In Text : 
+#include<name of header file>
+
+So to use  code from external sources we need both function definition and declaration files and both are required to be linked and comiled by the compiler to generate required source code file containing the complete code.
+
+
+                                          ----------- Using Multiple Libraries In C--------------------
+
+To use multiple libraries in C while using gcc compiler in linux we need to follow the following format of command in terminal : 
+
+Command Format In Terminal (Absolute Path Approach) : 
+gcc (-compiler flags or options i.e. Wall)  absolutepathoflibrary1\libnameoflibfile.ext absolutepathoflibrary2\libnameoflibfile.ext programfile.c -o nameofprogram
+
+Example : 
+
+gcc -std=c11 -Wall -Wextra -fmax-errors=10 usr/lib32/libcurses.a  usr/lib32/libmenu.so program.c -o program   (Here libm.a is the library file)
+
+Here -std  an option gcc flag sets the -std flag to set the C standard (in this case c11) This will warn us if we break c11 standard    rules!
+     -Wall flag is used to turn on additional warnings about potential bad code practices.
+     -Wextra flag is used to turn on more warnings than the -Wall flag alone will activate.
+     -fmax-errors=10 flags indicates listing of maximum of 10 errors
+     -o option flag sets the compiler optimiztion level
+
+Command Format In Terminal (Relative Path Approach) : 
+
+gcc (-compiler flags or options i.e. Wall,std,Wextra -fmax-errors) -lsuffixnameoflibfile1 -lsuffixnameoffile2 programfile.c -o nameofprogram
+
+Example : 
+
+gcc -std=c11 -Wall -Wextra -fmax-errors=10 -lcurses.a -lmenu program.c -o program   ("Here in -lcurses and -lmenu 'curses' and menu are the suffix words that came after lib prefixes of library files libcurses.a libmenu.so            )
+
+Here -std  an option gcc flag sets the -std flag to set the C standard (in this case c11) This will warn us if we break c11 standard rules!
+     -Wall flag is used to turn on additional warnings about potential bad code practices.
+     -Wextra flag is used to turn on more warnings than the -Wall flag alone will activate.
+     -fmax-errors=10 flags indicates listing of maximum of 10 errors
+     -o option flag sets the compiler optimiztion level
+     
+So we can compile similarly more than 1 or 2 libraries with our source code by either mentioning their absolute paths before the name of our source code file with .c extension or through much easier relative path approach while it should be noted that relevant function prototype header files would be included in source code by using #include preprocessor directive in whatever method of linking library files we choose i.e either relative or absolute. It should be noted that library files stdlib and stdio are automoatically linked and compiled by the compiler therefore not required to be linked at the time of compilation and not indicated with gcc command of compilation in terminal window.
+
+
+                           -----------------Unit 7.2 : Modularization Libraries and Makefiles---------------------
+                                         
+----GCC Details-----
+                                         
+When we execute gcc compiler command in terminal then behind several processes happen by : 
+
+Preprocessor : Inserts Header file code in our main source code file and then passed to next stage of compilation.
+Compiler : Takes input of source code containing header file codes and produces an assembly language equivalent source code file and then this file is passed to assembler.
+Assembler : Assembler generates machine code file from the assembly code that was passed to it from compiler.
+
+Linker : Combines main source code machine language file passed from assembler with library files and produces a single executable file.
+
+All of the above steps by simply invoking and executing gcc command in terminal window.
+
+                            
+-----Generating an Object Code From C Source Code--------
+
+To use gcc compiler for generating an object code from c source code we use following command thus inoking the assembler
+Command Format 
+gcc (-compiler flags or options i.e. Wall,std,Wextra -fmax-errors) -c -o objectfilename.o sourcefilename.c          
+
+Command Example
+gcc -c -o program.o program.c
+Here :
+      -c is flag informing the compiler to generate only machine readable object code not the executable one.
+                                                      
+------Generating an Executable From Object Code----------
+
+To generate an executable file from object code we type following command in terminal and invoke the linker
+
+Command Format 
+gcc -o filenametobegenerated objectcodefilename.o
+
+Command Example
+gcc -o program program.o
+
+
+-------Object File-------
+
+Sometimes we need to split our main program source files into several ones like one file containing one function code and another one with other function codes to do this division we need to create two files one containing the function definitions in relevant source code file with .c extension and the other having function prototypes with in a header file with .h extension and we need mention function prototype header file in our main program source code file by using #include preprocessor directive as #include "nameofheaderfile" here we are not using angular brackets as they will make the compiler to look for relevant header file in default include directory which on linux is /usr/include while without these brackets compiler will consider current directory for it however we can also mention absoulte path of it if required.  Afer this we need to create relevant object files from main source code file with .c extension and of function definition file with the same .c extension
+
+Command Formwat For Linking Two Object Files
+
+gcc -o executablefilename objectfile1name.o objectfile2name.o     Here executable file  is made by linking both object files. 
+
+Example
+
+gcc -o program program.o weatherstats.o
+
+We can also link function object file with our main program also by 
+
+gcc (-compiler flags or options i.e. Wall,std,Wextra -fmax-errors) objectfilename.o sorucecodefile.c -o executablefile
+Example : 
+gcc -std=c11 -Wall -Wextra -fmax-errors=10 weatherstats.o program.c -o program
+
+
+----Modify Object Files------
+
+Whenever we want to make a change either in our main source code file or in other function code file we have to recompile and link using gcc compiler that is if the change has been made in a function code then we have to recompile it to generate it's object file from it's source code and then relink it with our main source code file to form a signle executable file for e.g : 
+
+If program.c is our main source code file and weatherstats.c is our function code if we make a change in program.c independent of function code then we have to recompile it as : gcc -Wall -c -o program.o program.c
+
+If we make a change in weathestats.c file then again we have to recomile it and produce it's object file and then link it with main source code file as : 
+gcc -Wall -c -o weatherstats.o weatherstats.c
+gcc -Wall weatherstats.o program.o -o program
+
+If we make changes in both main source code and function file then we have to recompile and relink both of them as : 
+gcc -Wall -c -o program.o program.c
+gcc -Wall -c -o weatherstats.o weatherstats.c 
+gcc -Wall weatherstats.o program.o -o program
+
+We dont require other compiler flags except of wall when generating an object file from a source code however we will need them when compiling a source code with or without other object code file to genrate a executable file.
+Thus this approach becomes very cumbersome and tedious if we have multiple source code files containing different function definitions and other program statements as for every small change we have to again and again perform the steps of recompilation and relinking in order to solve this issue of recomilation and linking of multiple source code files we will use makefile system concept.
+
+
+--------Creating and Using Makefile-----------
+
+To use makefile for automating the build process and get rid of executing and repeating process of compilation and linking we need to follow preceding makefile structure when creating it and using it.
+
+In a make file we need to type what we want to produce: name of ingredients or dependecies or what's needed to do so
+(tab space)how to produce 
+
+Example : 
+If we want to produce an executable program from program.o and weatherstats.o files then we will write in makefile as 
+
+program: program.o weatherstats.o
+	gcc -std=c11 -Wall -Wextra -fmax-errors=10 program.o weatherstats.o -o program
+	
+Similarly to produce program.o file from program.c and weatherstats.h we'll write in makefile as :
+
+program.o: program.c weatherstats.h
+	gcc -std=c11 -Wall -Wextra -fmax-errors=10 -c program.c -o program
+
+To produce weatherstats.o object filefile from weatherstats.c we will do 
+
+weatherstats.o: weatherstats.c
+	gcc -std=c11 -Wall -Wextra -fmax-errors=10 -c weatherstats.c -o weatherstats.o
+
+Example : Comibing All Instructions In A Single Makefile
+
+Now we can combine all above instructions in a single make file so that all execute in squence and automatically upon the execution of make command in terminal that is :-
+
+program: program.o weatherstats.o
+	gcc -std=c11 -Wall -Wextra -fmax-errors=10 program.o weatherstats.o -o program
+
+program.o: program.c weatherstats.h
+	gcc -std=c11 -Wall -Wextra -fmax-errors=10 -c program.c -o program.o
+
+weatherstats.o: weatherstats.c
+	gcc -std=c11 -Wall -Wextra -fmax-errors=10 -c weatherstats.c -o weatherstats.o
+
+
+Thus "make" build and utility system enables us to get rid of time consuming recomiling and linking when we have multiple files of source
+spanning to hundereds of functions and other program statements files.
+
+
+
+
+
+
+
+		
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+                               
+
+
+
+
+
+
