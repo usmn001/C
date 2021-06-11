@@ -10,13 +10,7 @@ LCFLAGS   = rcs
 # define comipler flags
 CFLAGS   = -std=c11 -Wall -fmax-errors=10 -Wextra
 
-# define library paths inherst addition to /usr/lib
-LFLAGS   = -L. 
-
-# define libraries to use
-#LIBS = -lweather
-
-# define library name to compile and use
+# define archive library file name to compile and link
 LIBN = libweather.a
 
 # define the object files that this project needs
