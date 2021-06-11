@@ -59,6 +59,7 @@ Here -std  an option gcc flag sets the -std flag to set the C standard (in this 
      -Wextra flag is used to turn on more warnings than the -Wall flag alone will activate.
      -fmax-errors=10 flags indicates listing of maximum of 10 errors
      -o option flag sets the compiler optimiztion level
+In this way library files are automoatically linked by the linker with our source code as linker finds these files in defaulat location i.e. usr/lib/ on our linux system.
 
 Hence we can link function definitions from a library file by either providing absolute path or relative path of a library file 
 with compiler command in terminal window.
@@ -91,6 +92,8 @@ Here -std  an option gcc flag sets the -std flag to set the C standard (in this 
 Command Format In Terminal (Relative Path Approach) : 
 
 gcc (-compiler flags or options i.e. Wall,std,Wextra -fmax-errors) -lsuffixnameoflibfile1 -lsuffixnameoffile2 programfile.c -o nameofprogram
+
+In this way library files are automoatically linked by the linker with our source code as linker finds these files in defaulat location i.e. usr/lib/ on our linux system.
 
 Example : 
 
@@ -218,21 +221,287 @@ weatherstats.o: weatherstats.c
 
 
 Thus "make" build and utility system enables us to get rid of time consuming recomiling and linking when we have multiple files of source
-spanning to hundereds of functions and other program statements files.
+spanning to hundereds of functions and other program statement files.
+
+
+There is another shorter abbreviated version of make file as well as elaborated below :
+
+#define the C Compiler to use 
+CC	= gcc
+#define compiler flags
+CFLAGS	= -std=c11 -Wall -fmax-errors=10 -Wextra
+#define library paths in addition to /usr/lib
+LFLAGS	= 
+#define libraries to use
+LIBS	=
+#define the object files that this project needs
+OBJFILES	= program.o weatherstats.o
+#define the name of executable file
+MAIN	= program
+
+# all of the below is generic - are typically only adjusts the above
+
+all: $(MAIN)
+
+$(MAIN): $(OBJFILES)
+	$(CC) $(CFLAGS) -o $(MAIN) $(OBJFILES)
+	
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+	
+clean:
+	rm -f $(OBJFILES) $(MAIN)		
+
+
+In the above makefile much smaller version here : # symbol represents start of comment, used for putting up comments
+                                                  $ symbol before variables such as MAIN,OBJFILES,CC,CFLAGS indicates and refers to 
+                                                    values held by these variables as defined previoulsy in the start of make file.
+While the statements containing $ sign are equal to the ones defined earlier except that they are a part of this reduced make file structure.
+The line all: $(MAIN) 
+says that target all whatever is indicated by MAIN variable and here it's program executable file which further depends on object files defined by OBJFILES variable.
+
+In The line : %.o: %.c 
+	$(CC) $(CFLAGS) -c -o $@ $<                            
+   
+This %.o: %.c indicates how are we going to generate object files from source files and on what files the object files depends.
+   Notations %.o is for object file
+             %.c is for source code files                                                    
+While in  $(CC) $(CFLAGS) -c -o $@ $<    sign $@ and $< are funny constructs here just put them as it is in a makefile 
+
+The last line                                                              
+clean:
+	rm -f $(OBJFILES) $(MAIN)        
+
+deletes all object files and executable files with names defined by their respective variable values earlier.
+
+
+
+----Run a program with Makefile-----
+
+We can also run a program through makefile by including this line among compilation and linking statements in the last  i.e.
+
+launch: name of executable
+	./nameofexecutable
+
+example : - 
+
+launch: program
+	./program
+
+
+It should be noted that gcc compiler only recompiles those source and object files that were changed while others are not.
+
+
+------------Static Library----------------
+
+A single library or multiple libraries are consist of a collection of object files liked together by linker to form a library file defined in linux with .a extension. A static library is created in following steps : 
+
+At first function code source files are compiled into object files with .o extension.
+In Second step these object files are bundled together in an archive library file with .a extension.
+In third step this library will be linked to our main source code by the linker in a way that only those functions are extracted from library file that are used and neccessary for our main source code execution.  
 
 
 
 
+To create a static library with .a extension we use terminal command ar with parameters rcs alongwith libraryfilename as describe below
+
+Command format : ar rcs libname.a objectfile1.o or objfile1.o objfile2.o  ........    
+Where lib is the prefix before library file name .
+Example:
+ar rcs libweather.a weatherstats.o       Here ar stands for archive 
+                                              r  stands for replace in case certain .o file is part of current library being created  
+                                              c  stands for creative      
+  		                               s  stands for create an index for faster access.
+
+  
+Later on we can link created library file with our main source code either through absolute path or relative path approach as 
+
+To link by absolute path we type in terminal as gcc -c libweather.a program.o -o program 
+
+To link by relative path our newly created library we type in terminal as gcc -c -L. -lweather.a program.o -o program 
+
+We used -L. notation to inform the linker to find and add this library automatically instead outside of defalut location of /usr/lib as
+we have created it and it doesn't exist in /usr/lib folder. 
 
 
+----Static vs Dynamic Libraries Or (Static Linking Vs Dynamic Linking) In C----
 
-		
+
+Static Library or Static Linking
+
+i).   Linker finds all used functions(sqrt(),printf() e.t.c) codes and puts them together into our single executable file.
+ii).  Library files have extension .a in linux and .lib in windows.
+iii). Generated Executable is a larger file and needs more storage space. 
+iv).  If their is change in library file with .a extension then still executable does not automatically updated and needs to be relinked
+      with library file.
+v).   If library becomes incompataible then generated executable will still run unless it's not relniked with updated library file code.
+vi).  Static library access is faster as compared with that of dynamic library access time. 
+
+
+Dynamic Library or Dynamic LInking
+
+i).   Linked dynamically at run time by the os,every program that accesses the library uses the same copy.
+ii).  Library files  have the extension .so in linux and .dll in windows.
+iii). Executable only contains the name of a link to the library.
+iv).  If library file changes then executable will contain newer library file updated code. 
+v).   If library file becomes incompatabile with our main source code then previously generated executable won't run.
+vi).  Dynamic querying of symbols takes time so dynamic library files access is slower.
+
+
+Library                               Static                                           Dynamic          
+
+Compiled Command 	       gcc -c part1.c part1.o                          gcc -c -fpic part1.c part1.o    (fpic is compiler flag)
+To Create Library             ar rcs libmylib.a part1.o part2.o               gcc -shared -o libmylib.so part1.o part2.o
+Compile main program          gcc -c program.c -o program.o                   gcc -c program.c -o program.o
+To link with main program     gcc -o program program.o -L. -lmylib            gcc -o program program.o -L. -lmylib
+                                         or                                   Add library path to environment variable  
+	                      gcc program.c libname.a -o program              export LD_LIBRARY_PATH:$PWD:$LD_LIBRARY_PATH  
+	                                 or
+	                   gcc (compiler-flags) program.c -L. -lmylib -o program           
+	In above comparative scenarios of both static and dynamic we have assumed that library files are placed in
+	the same path or folder where main program executbale is present.
 	
 	
+
+libweather.a: weatherstats.o weatherio.o
+        ar rcs libweather.a weatherstats.o weatherio.o
+
+
+                                            ----------Ultimate Makefile---------------
+
+It appears to me that Makefiles can be customized with own variable names having own values and with our own equations (consisting of variable names with $ notation) for performing a certain task for example in the follwoing two scenarios i am using self created versions of two makefiles one for linking a static library using absolute path approach and another by relative path approach.
+
+
+
+-----------Absolute Path Approach Format Makefile---------- 
+
+# define the C compiler to use
+CC       = gcc
+
+#define library compilation command to use
+LC       = ar 
+
+#define library compilation flags
+LCFLAGS   = rcs
+
+# define comipler flags
+CFLAGS   = -std=c11 -Wall -fmax-errors=10 -Wextra
+
+# define library name to compile and use
+LIBN = libweather.a
+
+# define the object files that this project needs
+OBJ0 = program.o  
+OBJ1 = weatherstats.o
+OBJ2 = weatherio.o
+
+#define name of src files to use 
+SRC0 = program.c
+SRC1 = weatherstats.c
+SRC2 = weatherio.c
+
+# define the name of the executable file
+MAIN     = program
+
+# all of the below is generic - one typically only adjusts the above
+
+$(MAIN): $(OBJ0) $(LIBN)
+	$(CC) $(CFLAGS) $(OBJ0) $(LIBN) -o $(MAIN)
 	
+$(LIBN): $(OBJ1) $(OBJ2)
+	$(LC) $(LCFLAGS) $(LIBN) $(OBJ1) $(OBJ2)  
+
+$(OBJ0): $(SRC0)
+	$(CC) $(CFLAGS) -c $(SRC0) -o $(OBJ0)
+
+$(OBJ1): $(SRC1)
+	$(CC) $(CFLAGS) -c $(SRC1) -o $(OBJ1) 
+
+$(OBJ2): $(SRC2)
+	$(CC) $(CFLAGS) -c $(SRC2) -o $(OBJ2)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+launch: program
+	./program
+
+clean:
+	rm -f *.o $(MAIN) $(P1)
+
+
+
+--------------Relative Path Approach Makefile Format------------
+
+# define the C compiler to use
+CC       = gcc
+
+#define library compilation command to use
+LC       = ar 
+
+#define library compilation flags
+LCFLAGS   = rcs
+
+# define comipler flags
+CFLAGS   = -std=c11 -Wall -fmax-errors=10 -Wextra
+
+# define library paths inherst addition to /usr/lib
+LFLAGS   = -L. 
+
+# define libraries to use
+LIBS = -lweather
+
+# define library name to compile and use
+LIBN = libweather.a
+
+# define the object files that this project needs
+OBJ0 = program.o  
+OBJ1 = weatherstats.o
+OBJ2 = weatherio.o
+
+#define name of src files to use 
+SRC0 = program.c
+SRC1 = weatherstats.c
+SRC2 = weatherio.c
+
+# define the name of the executable file
+MAIN     = program
+
+# all of the below is generic - one typically only adjusts the above
+
+$(MAIN): $(OBJ0) $(LIBN)
+	$(CC) $(CFLAGS) $(OBJ0) $(LFLAGS) $(LIBS) -o $(MAIN)
 	
-	
-	
+$(LIBN): $(OBJ1) $(OBJ2)
+	$(LC) $(LCFLAGS) $(LIBN) $(OBJ1) $(OBJ2)  
+
+$(OBJ0): $(SRC0)
+	$(CC) $(CFLAGS) -c $(SRC0) -o $(OBJ0)
+
+$(OBJ1): $(SRC1)
+	$(CC) $(CFLAGS) -c $(SRC1) -o $(OBJ1) 
+
+$(OBJ2): $(SRC2)
+	$(CC) $(CFLAGS) -c $(SRC2) -o $(OBJ2)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+launch: program
+	./program
+
+clean:
+	rm -f *.o $(MAIN) $(P1)
+
+
+
+
+
+
+
+
+
+
 
 
 
