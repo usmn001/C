@@ -494,6 +494,74 @@ clean:
 	rm -f *.o $(MAIN) $(P1)
 
 
+                 ---------------------------- Pass arguments to a program from the command line -------------------------
+                 
+                 
+The arguments passed to main function or thread of our program are similar to passing or sending values to functions either passed by reference or by value from one function to another or through main thread to a function as we studied earlier.
+
+Syntax For Passing Arguments In Linux Terminal : 
+./nameofexecutable -argument1 -argument2 .......      or ./nameofexecutable argument1 argument2
+
+Syntax And Format of our main thread insource file : 
+return_type main(int argc,char *argv[])          or return_type main(int argc, char **argv)      or return_type(int argc, char argv[][])
+
+                   argc counts the number of arguments passed by the user to program from terminal, it will be +1 if we don't pass any
+                   argument because by default first argument will always be name of program that is being executed in addition to the
+                   number of arguments passed.
+                   
+                   char *argv[] is the array of pointers where each pointer points to memory locations storing the passed arguments 
+                   having character data type and the length or size or number of indexes of these array of pointer is defined by the
+                   compiler at compile time. 
+                   
+                   char argv[][] is a multidimensional array of pointers where every single pointer points to memory locations with
+                   stored passed arguments and similary it's size (rows,columns) are defined by compiler at compile time.  
+                   
+                   char ** argv means that argv contains an address to an array and each cell or index of this array further contains 
+                   address to an array of characters
+
+---Use arguments passed to a program from command line--
+
+As we know from our previous discussion that parameter char *argv[] in main thread is an array of pointers with character data type pointing towards memeory locations storing character data and each of this character data is stored as ASCII code in memory now to perform operation on these stored equivalent ASCII codes of each character we need to convert these ASCII codes into relevant mathematical data types such integer,float , double and e.t.c according to requirement and we do this by calling functions atoi (ASCII  to integer and atof(ASCII to float) provided in stdlib library. 
+
+Morevover to access string of the elements of data in char *argv we can do it either by dereferencing or by using matrix notation i.e.
+
+*(argv+index) or simply argv[index] However to access each single element we do it by *(*(argv+index)) or argv[row_index][column_index]
+as we know argv is a multidimensional array of pointers.
+
+Example Used Vim : 
+#include <stdio.h>
+#include <stdlib.h> // for atoi and atof
+#include <string.h> // for strcmp
+
+int main(int argc, char *argv[]) {
+    int i, compare, wholeNumber;
+    double decimalNumber;
+    
+    printf("I have %d arguments from the command line: \n", argc);
+    for (i = 0; i<argc; i++) {
+        printf("Argument %d: %s\n", i, argv[i]);
+    }
+    
+    if (argc == 4) {
+        compare = strcmp(argv[1], "-e");
+        if (compare ==0) {
+            printf("argv[1] equals -e \n");
+        } else {
+            printf("argv[1] does not equal -e \n");
+        }
+        wholeNumber = atoi(argv[2]);
+        printf("%s as an integer is %d.\n", argv[2], wholeNumber);
+        decimalNumber = atof(argv[3]);
+        printf("%s as a double is %lf.\n", argv[3], decimalNumber);
+    }
+    return 0;
+}
+
+
+
+
+
+
 
 
 
