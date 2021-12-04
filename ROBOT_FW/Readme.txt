@@ -1,4 +1,5 @@
-I have developed device drivers for following peripherals   
+I have developed device drivers for following peripherals in KEIL MDK ARM.
+
 
 3  -  Thermopiles x 2 : TMP006
 4  -  Temperature Sensor x 1 : Si7020
