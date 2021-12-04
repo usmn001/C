@@ -2,7 +2,7 @@ Description : This firmware for ADC Chip was developed to measure temperature fr
 their positive and negative outputs going to multiplexers and it's the job of MCU to select which temperature sensor it wants to read and therefore generates
 corresponding output signal on it's I/O pin for feeding the multiplexer i/o Pin(A0,A1,A2,A3). 
 
-
+IDE : STM32CubeIDE
 MCU : STM32L476RCTX
 MCU I/O Interface : SPI
 Peripheral Chips Used : ADC7792(Analog to Digital Converter Chip) , (ADG706BRUZ) Multiplexer Chip
