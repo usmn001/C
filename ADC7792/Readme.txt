@@ -19,9 +19,9 @@ MUX Pin                              <-------->       MCU Pin                   
 
 16 A1 (MUX_A1)                                        PA1 (MUX_A1)                        o
 
-15 A2 (MUX_A2)                                        PA2 (MUX_A2)                        o      Used also for printf debugging after available to mux
+15 A2 (MUX_A2)                                        PA2 (MUX_A2)                        o      
 
-14 A3 (MUX_A3)                                        PA3 (MUX_A3)                        o      Used also for printf debugging after available to mux
+14 A3 (MUX_A3)                                        PA3 (MUX_A3)                        o      
 
 
 ADC I/0 Connection To MCU : 
