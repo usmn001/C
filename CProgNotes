@@ -1,0 +1,272 @@
+
+       *****************************Data Types & Keywords In C********************************
+
+In C the Data Types are used for storing or holding data in memory ram and rom(using const keyword) either through variables,arrays or through structures(defined by keywords typedef & struct). Each data type is defined by specific keyword and hold a specific number of bits/ bytes in memory and these are character(signed & unsigned), integer(signed & unsigned), short(signed & unsigned), long(signed & unsigned), float and double. While there are also special data types in C as well alongwith custom definition of certain data types through
+structures and one special data types in C is of file pointers defined by keyword "FILE" for e.g. FILE *fptr; where fptr is our file pointer pointing to the address of a file. 
+
+
+Printf/Scanf/sizeof Format Specifier      Data Type                    Range                 Size In Bits/Precision
+ 
+          %c                       unsigned char                0 to +255                8 bits
+          %c                       signed char                 -128 to + 127             8 bits
+          %i                       int                          32-bit in keil           compiler dependent
+          %u                       unsinged int                 32-bit in keil           compiler dependent
+          %hi/%hd                  unsigned short               0 to +65535              16 bits   unsigned
+          %hi/%hd                  short                       -32768 to +32767          16 bits   signed
+          %lu                      unsigned long                0 to 4294967295L         32 - bit  unsigned 
+          %li                      long                   -2147483648L to 2147483647L    32 - bit  signed              
+          %f                       float                       +-10^-38 to +-10^+38      64 - bit float
+          %lf                      double              +-10^-308 to -10^+308         64 - bit float    
+          %p                       for printing address stored in a pointer. 
+          %d                       decimal                      similar to int but differ when used with scanf();      
+          %zu                      size_t  returned by sizeof()                                   
+
+Abbreviations/Shortkeywords/Notations Used For Declaring Data types In C : 
+
+
+          unit8_t      for declaring 8- bit unsigned integer data type
+          uint16_t     for declaring 16-bit unsigned integer data type
+          uint32_t     for declaring 32-bit unsigned integer data type
+          uint64_t     for declaring 64-bit unsigned integer data type
+          uchar_t      for declaring 8-bit  unsigned char    data type 
+
+            
+        -------------------Taking Input a line of String In C Using Scanf()-----------------------
+
+You can take a string as input in C using scanf(“%s”, s). But, it accepts string only until it finds the first space.
+
+In order to take a line as input, you can use scanf("%[^\n]%*c", s); where  is defined as char s[MAX_LEN] where  is the maximum size of . Here, [] is the scanset character. ^\n stands for taking input until a newline isn't encountered. Then, with this %*c, it reads the newline character and here, the used * indicates that this newline character is discarded.
+
+Note: The statement: scanf("%[^\n]%*c", s); will not work because the last statement will read a newline character, \n, from the previous line. This can be handled in a variety of ways. One way is to use scanf("\n"); before the last statement.
+
+When using data type char and int while using scanf statement always use & operator with 2nd parameter i.e. scanf("%c",&num) 
+and scanf("%i",&i) in case with character data type scanf stores ASCII equivalent code of the inputted value insteead of the original one.
+Moreover it should be noted that character data is stored in the form of ASCII Codes in memory so any comparison operation needs to be 
+performed on those values for e.g character data 0 is stored as 48,1 as 49 and uptil 9 as 57.
+
+Example program 
+char a;
+int i;
+scanf("%c %i",a,i);
+if(a==49){     Here we are checking whether entered value is 1 by comparing equivalent ASCII Code of 1. 
+printf("1");
+}
+
+
+***************Accessing Structure Member Character Array***************
+
+https://stackoverflow.com/questions/37225244/error-assignment-to-expression-with-array-type-error-when-i-assign-a-struct-f
+
+To assign a value to character member of a structure we use strcpy command because array type name[10] member in strucure is not assignable for e.g.
+
+struct Person{
+char name[10];
+};
+int main(){
+struct person p1;
+strcpy(p1.name,"usman");
+return 0;
+}
+
+
+ 
+--------------------Structure Padding In C------------------------
+
+Dummy bytes are added in between a structure members to align a structure causing the size of structure to increase than the original thus leading to increase usage of occupied memory. To avoid this memory wastage we can use pragma pack(1) pre processor directive to instruct the compiler not to add empty bytes. For Example the following program prints 5 in bytes as size of structure when pragma pack(1) or __attribute__((packed)) directive is added and prints 8 in bytes when not i.e.size of int data byte is of 32 bits and of char is 8 bits now after padding the char it's size also becomes of 32 bits so in bytes total size of structure becomes equal to 8 bytes i.e. 64 bits.
+
+#include <stdio.h>
+#include <stdlib.h>
+#pragma pack(1)
+struct tcp_ip{
+int packet_num;
+char seq_num;
+};
+int main(void) {
+struct tcp_ip p1;
+printf("Size of tcp_ip %i",sizeof(p1));
+return EXIT_SUCCESS;
+}
+
+or we can also do :
+
+#include <stdio.h>
+#include <stdlib.h>
+struct tcp_ip{
+int packet_num;
+char seq_num;
+};__attribute__((packed)); 
+// Attribute informing compiler to pack all members
+int main(void) {
+struct tcp_ip p1;
+printf("Size of tcp_ip %i",sizeof(p1));
+return EXIT_SUCCESS;
+}
+
+-------------------Function Pointers In C------------------
+
+Function Pointers are like normal pointers found in C except that they point to address towards piece of code present inside a function. They are very helpful when we want a specific function to execute upon an event like that inside of GUI and we need to pass address of a specific function rather than function name as parameter. These function pointers can also be returned from other functions.
+Syntax of declaring a function Pointer is :
+
+void (*fptr)(void or value to be passed to function)=definedfunctionname
+
+OR
+
+void (*fptr)(void or value to be passed to function)=&definedfunctionname
+
+Both above statements will produce the same result as evident from the following image.
+References : https://lnkd.in/eGQsMZDV
+https://lnkd.in/ecyjdABt  
+
+
+----------------Teritiary Operator ?----------------
+
+The operator ? works equivalently like if else statement except that it squeezes all of that in one line for e.g.
+Example : 
+int num,tmp,min,a,b;
+num = (tmp>min)?a:b;   /* Here if tmp>min then a will be assigned to num and if false then b will be assigned to num 
+
+
+----------------Calloc() Dynamic Memory Allocation Function--------------------
+
+In C as we are familiar with malloc() C for memory allocation similarly calloc() function is used to allocate memory but unlinke
+malloc() that assigns single block of memory for data calloc() assigns multiple contigous blocks of memory for storing data such as arrays,structures,variables, and other complex data types but calloc has two paramters while malloc has one but both returns a void pointer pointing to first memory location and that can be casted later on accordingly and moreover both malloc and calloc do dynamic memory allocation meaning that assiged memory size could be changed later on during program execution by using realloc() and the function
+calloc() is defined in stdlib.h library header file.
+
+Syntax Of Calloc is : 
+
+ptr=(cast_type*)calloc(n,size); /* Where n paramter defines number of memory locations and size indicates the size of each memory location. */
+
+We get the size normally by sizeof(datatype) statement.   
+
+
+---------------Realloc() Dynamic Memory ReAllocation Function----------------------
+
+In C as we know we can allocate dynamically memory either in a single or multiple bolcks by using respective malloc() or calloc() functions so similarly if we have allocated more or lesser memory by using either or both of these functions and then later we would like to increase or decrease the allocated memory according to the requirement then in order to do that we will use realloc() function that takes two paramters i.e.one pointer holding the base/1st address of that memory and second is the size that we want to reassign to that memory location residing in single or multiple blocks of memory while returning a void pointer pointing to address of the newly resized memory location.
+
+
+Syntax of Realloc is : 
+
+nptr=realloc(ptr,size);
+
+
+Example 1 : 
+
+struct student *ptr;
+struct student *nptr;
+ptr=malloc(n x sizeof(student) );
+nptr=realloc(ptr,(sizeof(student)-1));
+
+Example 2 : 
+
+struct student *ptr;
+struct student *nptr;
+ptr=(struct*)calloc(n,sizeof(student));
+nptr=realloc(ptr,(sizeof(student-1)));
+
+
+-------------------------------Variadic Functions In C---------------------------------------
+
+
+Variadic functions in C allow a function whether it's main or other to take a random number of arguments without declaring them inside  the function definition and prototype. The variadic function just takes one argument that defines the number of arguments to be passed to it and to access these passed arguments to it we need to include header file stdarg.h in our code i.e. include <stdarg.h>.
+
+Syntax of declaring Variadic Function Is : return_data_type function_name(data_type variable_name,...) {
+ 
+                                           /* Program logice */
+                                           
+                                           }
+ 
+The methods to access, iterate and traverse over variadic functions arguments are defined in stdarg.h header file and they are : 
+
+Methods                                Description
+
+va_start(va_list ap, argN)	        This enables access to variadic function arguments.
+va_arg(va_list ap, type)	        This one accesses the next variadic function argument.
+va_copy(va_list dest, va_list src)	This makes a copy of the variadic function arguments.
+va_end(va_list ap)	                This ends the traversal of the variadic function arguments.
+
+Here, va_list holds the information needed by va_start, va_arg, va_end, and va_copy and in va_list ap  the ap is the pointer that points to the arguments.
+
+Example For Using Variadic Functions Is : 
+
+int sum(int n,...){
+
+int sum,a;
+
+va_list ptr;
+
+va_start(ptr,n);
+
+for(int i=0;i<n;i++){
+
+a=va_arg(ptr,int);
+
+sum=sum+a;         /* we can also write it as sum+=a; */
+
+}
+
+va_end(ptr);
+
+return sum;
+
+}
+
+-----------------------------Dangling Pointer & Void Pointer---------------------------------- 
+
+Dangling pointer: A pointer pointing to a memory location that has been deleted (or freed) is called a dangling pointer. There are three different ways where Pointer acts as a dangling pointer:
+
+By deallocating memory
+Function Call
+When the variable goes out of scope
+
+Void pointer: Void pointer is a specific pointer type – void * – a pointer that points to some data location in storage, which doesn’t have any specific type. Void refers to the type. Basically, the type of data that it points to can be any. If we assign the address char data type to a void pointer, it will become a char Pointer, if int data type, then int pointer, and so on. Any pointer type is convertible to a void pointer. Hence, it can point to any value. Below are some important points regarding void pointers:
+
+void pointers cannot be dereferenced. However, it can be done using typecasting the void pointer.
+Pointer arithmetic is not possible on pointers of void due to lack of concrete value and size.
+
+Tabular Difference Between Dangling Pointer and Void Pointer:
+
+             Dangling Pointer                                                       Void Pointer
+
+A dangling pointer is a pointer that occurs at the time when       A void pointer is a pointer that can point to any data type.
+the object is de-allocated from memory without modifying 
+the value of the pointer.	
+
+It points to the deleted object.	                            A void pointer can be assigned the address of any data type.
+
+It usually occurs at the object destruction time.	             The representation of a pointer to the void is the same as the  
+                                                                   pointer of the character type.
+                                                                  
+Dangling pointer errors can only be avoided just by initializing   A void pointer can store an object of any type.
+the pointer to one NULL value.
+	
+The dangling pointer will be with a free() function in C.	     It is also called a general-purpose pointer.
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
