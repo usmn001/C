@@ -29,6 +29,9 @@ Abbreviations/Shortkeywords/Notations Used For Declaring Data types In C :
           uint32_t     for declaring 32-bit unsigned integer data type
           uint64_t     for declaring 64-bit unsigned integer data type
           uchar_t      for declaring 8-bit  unsigned char    data type 
+          size_t       for declaring unsigned integer data type , value 
+                       of this data type is returned by sizeof and 
+                       alignof operators. 
 
             
         -------------------Taking Input a line of String In C Using Scanf()-----------------------

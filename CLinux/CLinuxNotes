@@ -166,9 +166,14 @@ gcc -std=c11 -Wall -Wextra -fmax-errors=10 weatherstats.o program.c -o program
 
 ----Modify Object Files------
 
-Whenever we want to make a change either in our main source code file or in other function code file we have to recompile and link using gcc compiler that is if the change has been made in a function code then we have to recompile it to generate it's object file from it's source code and then relink it with our main source code file to form a signle executable file for e.g : 
+Whenever we want to make a change either in our main source code file or in other function code file we have to recompile and link using gcc compiler 
+that is if the change has been made in a function code then we have to recompile it to generate it's object file from it's source code and then relink 
+it with our main source code file to form a signle executable file for e.g : 
 
-If program.c is our main source code file and weatherstats.c is our function code if we make a change in program.c independent of function code then we have to recompile it as : gcc -Wall -c -o program.o program.c
+If program.c is our main source code file and weatherstats.c is our function code if we make a change in program.c independent of function code then we 
+have to recompile it as : 
+
+gcc -Wall -c -o program.o program.c
 
 If we make a change in weathestats.c file then again we have to recomile it and produce it's object file and then link it with main source code file as : 
 gcc -Wall -c -o weatherstats.o weatherstats.c

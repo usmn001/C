@@ -1,0 +1,673 @@
+In C we can disintegrate a very large program into multiple files of code instead of keeping a signle source 
+code file which is difficult to be updated and maintained.
+
+This approach of breaking a lerger program into groups of multiple files is called modular approach offering
+benefits such as : 
+
+Teams of programmers can work on different sections or parts of a program for e.g. one developer will be developing
+UART interface code and another for SPI and another working on main embedded application thus allowing a highly 
+parallelized approach to development enabling all the codes to be combined by using header files through
+#include preprocessor directive. Moreover we can also link different source code files through object files 
+by using gcc or clang compiler or anyother again we will need to include the relevant header files into our main 
+source code i.e. 
+
+gcc -c -o main.o main.c
+gcc -c -o func_obj.o func_src.c   function object file is generated from it´s source code.
+gcc -o  main main.o func_obj.o    main source code and function object files are linked to form a single executable.
+
+Another way to link a submodule/function object file with our main source code and generate executable code  is to compile and link
+
+gcc (-compilation flags or options -Wall,-std,-Wextra -fmax-errors) func_obj.o main_src.c -o main_execfile
+
+Where -std flag defines which version of C language we want to compile in this case it´s c11 so we make -std=c11
+      -Wall flag is used to turn on additional warnings about potential bad code practices.
+      -Wextra flag is used to turn on more warnings than the -Wall flag alone will activate.
+      -fmax-errors=10 flags indicates listing of maximum of 10 errors
+      -o option flag sets the compiler optimiztion level
+
+
+Normally this approach of combining and linking multiple object files of sub modules works well however if we have numerous ones then we can merge them
+into a library file which can be linked either statically or dynamically with main source code file , it should be noted that 
+each static and dynamic linking have it´s own advantages and disadvantages alongwith specific syntax to be used with relevant compiler.
+
+
+                                 ----------------------------Makefiles--------------------------------
+
+
+Makefiles allow us to do building and compiling of our program with lot´s of dependancies such as libraries and other function object files in 
+a organized way such that freeing us from executing tirelessly each compiler command in the command line.
+
+#define the C Compiler to use 
+CC	= gcc
+#define compiler flags
+CFLAGS	= -std=c11 -Wall -fmax-errors=10 -Wextra
+#define library paths in addition to /usr/lib
+LFLAGS	= 
+#define libraries to use
+LIBS	=
+#define the object files that this project needs
+OBJFILES	= program.o weatherstats.o
+#define the name of executable file
+MAIN	= program
+
+# all of the below is generic - are typically only adjusts the above
+
+all: $(MAIN)
+
+$(MAIN): $(OBJFILES)
+	$(CC) $(CFLAGS) -o $(MAIN) $(OBJFILES)
+	
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+	
+clean:
+	rm -f $(OBJFILES) $(MAIN)
+
+
+-------Communication Between Two Files-------------
+
+Two or more files containing code can pass information either through function methods and through extern variables
+(a extension of global variables) while in case of function menthods it should be noted that we include respective 
+header files in a program file from where a specific function is called thus arguments can be passed
+and returned for e.g. 
+
+main.c : #include <stdlib.h>
+         #include "sum.h"
+         void main(void) {
+         uint8_t a ;
+         uint8_t b ;
+                        
+         b=sum(a,b);
+         }   
+ 
+sum.c : int sum(uint8_t sa,uint8_t sb) 
+        {   
+         return sa+sb;
+        }
+
+sum.h : int sum(uint8_t,uint8_t);
+
+Normally when we have multiple modules then we have function definitions of each module in .c file and 
+function prototypes in .h file enabling us just to attach each module .h header file in our main source code 
+file.
+
+If we are using compiler from command line then we need to make sure that we compile all the multiple module 
+files correctly such that relevant object codes are generated and linked with main source code file smoothly.
+
+To use external variables in our sorce code files we use the keyword extern with global variable and it becomes
+accessible in all of our program files provided that it´s also defined in all of the module files with same 
+definiton.
+
+
+For example : 
+
+main.c : #include <stdlib.h>
+         extern int num=0;
+         void main(void){
+         
+         num +=1;
+ 
+         }
+
+mod.c :  extern int num;
+         void mod { 
+         num = num*2 
+         }
+
+Or 
+
+main.c : #include <stdlib.h>
+         extern int num;
+         void main(void){
+         
+         num +=1;
+ 
+         }
+
+mod.c :  extern int num =2;
+         void mod { 
+         num = num*2 
+         }
+
+Notice here we can access num extern variable outside of our files in both scenarios.
+
+
+-----static global variable--------
+
+If we want a global variable to be only accessed inisde one specific source code file then we use static keyword with it at the time of it´s
+declaration, this is very useful if we want to avoid repeatitive decalarition error. Static is just the opposite of extern.
+
+To do it just write  : 
+
+static int num = 1;
+
+For example : 
+
+main.c : #include <stdlib.h>
+         static int num = 1;
+         void main(void){
+         
+         num +=1;
+ 
+         }
+
+mod.c : #include <stdlib.h>
+        int num =2;
+        void mod() {
+        num = num *2;  
+}
+
+
+Notice here that both global variables have same names but they cannot be outside of both files. 
+
+------Enum (Enumeration)----------
+
+It´s a user defined data type in C allowing us to assign names to integers thus improving program readablity. For example : 
+
+enum Week {Mon, Tue, Wed, Thu, Fri, Sat,Sun};
+
+Now to utilize the above enumeration definition in our program we do 
+
+
+enum Week Day;
+
+Day = Wed;
+
+printf(" Today is %i nd day of the week",Day);  Output : Today is 2nd day of the week 
+
+When we have multiple enumeration then the constants present in all must be unique in their names otherwise compilation error will be generated.
+
+
+             ------------Mmeory Types Available To Us In C-----------
+
+
+There are three types of memory available to us i.e. Static, Stack and Heap.
+
+
+Static memory persists throguh entire lifecycle of our program used to store global variables or variables 
+declared with static cluase.
+
+----------Stack Memory-------
+
+Managed By the CPU.
+
+All local variables of a function are placed in stack, these variables are pushed onto the stack as long 
+as the function is in exection after that they are popped out of the stack and no longer exists.
+
+Stack memory shrinks and expands as variables get created in a function as discussed earlier why it happens.
+
+Stack memory is limited in size if we push to much variables on it then it overflows occuring mostly 
+in recursion case.
+
+Stack memory is divided into successive frames each time when a function is called it allocates itself a fresh 
+stack frame.
+
+Stack has fast access time as compared to heap.
+
+Use stack when we have small variables.
+
+Stack cannot be resized i.e. we cannot assign more mory to local variables once they are pushed on the stack.
+
+---------Heap Memory---------
+
+Not Managed CPU but by the programmer.
+
+Opposite of stack.
+
+Large pool of memory used dynamically.
+
+Accessed by pointers.
+
+Allocate memory through malloc() and deallocates through free() , failure to deallocate memory results in
+memory leaks i.e. same heap memory cannot be used by other processes and part of our program.
+
+Heap can be accessed anywhere in the program through the use of pointers.
+
+Global varfaibles are placed in heap memory.
+
+Heap is used when we need to store large block of data such as large data structure or big array.
+
+and also if we have some global variable which we want to keep for longer period of time.
+
+Allocated Heap memory can also be resized using realloc().
+
+
+--------------------------------------------------------------------------Section 5:Storage Classes In C------------------------------------------------------------------
+
+Storage classes in C determine scope, visibility and lifetime of a variable existing in a memory enabling us to trace it´s existence while a program 
+executies.
+
+By scope of a variable we mean from where it can be referenced or accessed in a program like for example some varaibes are global and some are local.
+
+Visbility or linkage of a variable determines in case of a multiple source file program whether identifier is known only in current source file or in any source file with proper declarations.
+
+By default all local variables have auto storage class as they exists only inisde body of a function or Block of code (inside a conditionla statement ) and get´s destroyed when we step out of a function or block of code.
+
+C Provides following four storage classes :
+auto
+register
+extern
+static
+
+These storage classes are split further into automatic storage duration and static storage duration.
+
+Storage class of a variable is specified as : storage_class data_type variable_name;
+
+------- Auto storage class----
+
+In auto storage class we have automatic storage duration i.e. here variables are created and destroyed 
+automatically. Auto storage class variables are created when we enter a block of memory where they are defined is entered, These variables exist while the block is active and destroyed when we exit the block.
+
+By default All local variables in C are automatically managed and are of auto storage class. 
+These local variables exist when we enter a function where they are defined and we exit a function they are destroyed and this process repeats whenever we enter and exit a function.
+
+In C++ auto keyword has a different use rather than using it for storage class.
+
+------------extern storage class----------
+
+extern storage class allows us to access and modify global variables outside of a source code file.
+If we have defined a global variable in one file for e.g. in main.c then we don´t need to define it again in 
+second source file for e.g. sec_code.c , Consider the following example
+
+In main .c code file : 
+
+int num =1;
+int main() {
+
+
+}
+
+In sec_code.c : 
+extern int num;     // This informs the compiler that num is defined somewhere else and now both source code files
+                // can access and modify variable values same hlds true for arrays and structures and data types.
+int func() {
+
+
+}
+
+Example : Using extern with arrays
+
+main .c : 
+int num_arr[30];
+int main() {
+return 0;
+}
+
+sec_code .c : 
+extern int num_arr[];
+int num() {
+return 0;
+}
+ 
+However when we´ve multiple dimmensional arrays then we may need to specify second dimmension in sec_code.c file
+can´t leave it blank.
+
+
+--extern specifier on functions----
+
+Normally when a function we can call a function from outside of a source code file by just including the header
+file where it´s declared but when we use extern keyword with it then we don´t need to use header files where
+it´s declared
+
+
+main.c : 
+int count;
+extern void add();
+int main()
+{
+add();
+} 
+
+sec_code.c : 
+extern int count ;
+void add(){
+count +=1;
+}
+
+
+So it means in order to bring scope and visibility of a variable , array , function from a code file where it´s defined to a source code file where we want to access or reference it then we use extern keyword with it.
+
+-----static storage class---------
+
+static is opposite of extern.
+
+When we have static local variables then their values remain same during entire execution of program. No new
+memory get´s allocated in case of static local variables unlike automatic local variables. syntax of defining
+static local variable is : static data_type var_name ; 
+
+When we have static global variables then those global variables can´t be accessed outside of a program source code file.
+
+Static variables are allocated memory on heap not on stack.
+
+Static functions can be called only from within same source file where they are defined. Syntax : 
+static return_type func_name(data_type arguments){
+
+}
+
+Example : static local variables
+static int a = 1;
+main.c : int main()
+{
+a+=1;    // Here value of a variable a will remain same no matter how many times it get´s called, variable a will be initialized from it´s last value.
+printf("Value of a %i",a);
+return 0;
+}
+
+-----static and structures------
+
+static variables should not be declared inside a structure as C compiler requires entire structure elements placed together.
+
+It is possible to declare a strucutre : 
+ Inside a function (stack segment)
+ allocate memory dynamically (heap segmnet)
+ it can even be global.
+
+The value for structure element is fetched by counting the offset of the element from beginning address of
+structure.
+
+Separating out one memebr alone to a data segment defeats the purpose of a static variable.
+
+It is possible to have an entire structure as static.
+
+------register storage class------
+
+register storage class is used to define local variables that should be stored in a CPU register instead of RAM memory, we do this when want to access a particular value of variable very fast as we know CPU registers are the
+fastest memory.
+
+register storage class is used with variables that are most frequently used in a C program.
+
+it´s the compiler choice to put a variable in a register or not. 
+
+lifetime of a register variable remains only within block of code.
+
+we cannot obtain address of a register variable using pointers i.e. it cannot have unary &operator applied to it.
+as registers don´t have memory addresses.
+
+register storage class variables can only be local i.e. they can only exist in a function.
+
+Syntax of using register storage class is : register data_type var_name
+
+-------------------------------------------------------------------Section 6: Advanced Data Types-----------------------------------------------------------------------
+
+#define is a pre processor directive used to assign names,symbols to different values. for e.g :
+
+#define PI 3.14
+#define PI ss
+
+Te typedef keyword is used to assign names to existing data types present in C for e.g. 
+typedef int jj;
+jj a is equivalent to int a;
+
+typedef int* i_ptr;
+typedef struct {
+  int code;
+  char name[]; 
+}state;
+
+typedef is handled by compiler.
+
+use typedef for the data types used for arrays,structs, pointers and functions.
+use typedefs for portable types i.e.
+  when we need a data type of at least 20 bytes then we make it a typedef.
+  when we port the code to different platforms then we need to select right type i.e. short,int,long so instead
+  of changing the data types everywhere in the program due to change in architecture we just change the datatype
+  in typdef statement i.e. typedef int aa;  new--> typedef long aa; 
+
+
+------Variable Length Arrays---------
+
+Arrays where we define the size of array at compile time instead of making it constant, normally user or some
+other part of program will define the size of array. for e.g.
+
+size_t arr_sz;
+scanf("%i",&arr_sz);
+
+C11 compiler does not provide support for variable lenght arrays because it is an optional feature, to check support we use the preprocessor directive ifdef as : 
+#ifdef __STDC_NO_VLA__
+ printf("Variable length arrays are not supported.\n");
+
+Instead of using variable length arrays it´s preferred to use heap memory where we can use pointers.
+
+Moreover instead of using character arrays for storing strings we can also use character pointers for e.g.
+char ptr* = "Hello World"  instead of char arr[] = "Hello World";
+
+In this case char ptr*  compiler allocates 12 consecutive bytes for string literal "Hello World" and 4 extra bytes for pointer variable ptr. And assigns the address of the string literal to ptr. So, in this case, a total of 16 bytes are allocated.
+
+In case char arr[]  compiler allocates 12 consecutive bytes of memory and associates the address of the first allocated byte with arr.
+
+-----Flexible array members-----
+
+flexible array memeber is a feature introduced in the C99 standard of the C programming language, it allows us to
+declare an array without any dimmension and whose size is flexible in nature and flexible array members size is
+variable(can be changed at run time)
+
+struct s{
+int arraysize;
+int array[];
+}; 
+
+so if weant to allocate memory on heap for the above struct then we do 
+int main(){
+struct s *ptr;    
+int des_size = 5;
+ptr = (struct)malloc(sizeof(struct s) + des_size * sizeof(int) ); // where des_szie is providing dimmensions of array
+}
+
+A flexible array member can be declared only a last member of a struct.
+Each struct can contain at most one flexible array member.
+
+A flexible array cannot be the only member of a struct, struct must also have one or more fixed members.
+
+Any struct containing a flexible array member cannot be a member of another struct.
+
+A struct with flexible array member cannot be statically initialized, it must be allocated dynamically.
+
+A struct with a flexible array member reduces number of allocations for by 1/2.
+ instead of 2 allocations for one struct object you just need 1. 
+    meaning less effort and less memory occupied.
+    save the storage for one additional pointer.
+
+----------------Complex number types----------
+
+complex numbers like this : a+bi ; where a is eal part and b with i is imaginary part. (bi means b*i)
+
+In c to use complex numbersin our code we first need to include header file 
+complex.h in our code and then we can use functions 
+
+--complex functions----
+creal() for getting real part of a value of type double complex passed as argument.
+cimag() for getting imaginary part of a value.
+
+we append an f to thee function names when we are working with float complex values i.e. crealf() and cimagf().
+similarly l when working with long double complex values i.e. creall() and cimagl().
+
+conj() function for returns complex conjugate of it´s double complex argument.
+we use conjf() and conjl() functions for returning complex conjugate for other two complex types as mentioned earlier.
+
+-----Creating comlex numbers----
+
+#include <complex.h>
+
+#define __STDC_WANT_LIB_EXT1__1
+
+int main() {
+
+#ifdef __STDC_NO_COMPLEX__                           // Checking if complex numbers are supported or not
+ printf ("Complex numbers are not supported. \n");
+#else
+ printf("Complex numbers are supported.\n");
+
+double complex cx = 1.0 + 3.0*I; // here cx is variable name and double is data type of complex variable.
+double complex cy = 1.0 - 4.0*I;
+double complex 
+
+printf("Complex number values are : cx = %.2f%+.2fi  cy = %.2f%+.2fi\n", creal(cx), cimag(cx),creal(cy),cimag(cy) );
+
+// to add the two complex numbers we do similarly we can perform other operations that is *,/,- 
+double complex sum = cx + cy ;
+
+// to take conjugate of a complex number we do
+double complex conjugate = conj(cx);
+printf("\n The conjugate of cx = %.2f%+.2fi \n",creal(conjugate),cimag(conjugate));
+
+double complex c = 3.0 + 2.0 *I;
+double complex pwr = cpow(a,c);
+printf("a ^ b is : %f + %fi \n ",creal(pwr), cimag(pwr));
+
+#endif
+  
+}
+
+-------Designated Initializers---------
+
+Designated initializers allows us to assign initialization values to elements of array,structure or union either
+these values are following an array index or a field by name (struct and union).
+
+c90 standard requires elements of an initializer in fixed order.
+c99 standard requires us to initialize elements in random
+
+Initializing array elements : 
+int a[6] = { [4]=29, [2]=1};   //Here array 4th element is assigned value 29 and 2 index has value 1
+
+For initializing a range of array indexes or elements we can do [first...last] = value for e.g.
+int a[] = {[0..9]=1,[10.99]=2};
+
+
+If we want to intialize a structure memebrs then we can do : 
+struct point{
+int x,y,z;};
+
+int main(){
+struct point p1 = {.x=1, .y=2, .z=3};
+// For an array of structures we do
+struct point pts[5] = { [2].y=5, [2].x =6; [0].x=2   
+// here [2].x means that we have assigned pts[2].x=6 and pts[0].x =2
+return 0;
+}
+
+
+------------------------------------------Section : 7 Type Qualifiers-------------------------
+
+Type qualifiers are used with variables data types giving the compiler more information about intended use of
+variables thus they perform compiler optimization leading to less execution time of code and e.t.c.
+In C99 we´ve three type qualifiers : const , volatile and restrict 
+
+-----const qualifier--------
+const qualifier variables (incl.arrays,structs) have fixed values , assigned values cannot be changed during program run time.
+const qualifier also enables us to make addresses assigned to pointers fixed similarly to case of variables.
+const qualifier enables us to place variable in read only memory .
+
+Syntax : const data_type variable_name
+
+Example : const int a =1;
+          const int grades[5] = {0,1,2,3,4};
+          const struct country{
+              char name[];
+              int area;
+          };
+
+In case of pointers we can do
+const data_type *ptr;         // Value pointed by pointer address remain constant this can also be written as 
+                              // data_type const *ptr;
+data_type * const ptr;        // Address of pointer remains constant
+const data_type * const ptr ; // Value pointed out by pointer and Pointer Address both remain constant.  
+
+We can use constant with global variables in order to avoid variable syncronization
+In ANSI C standard if a pointer is used only to give access to a function values then that pointer needs to be declared with const qualifier for e.g. : void display(const int array[],int limit)
+
+Library function strcat also uses const i.e. char *strcat(char *restrict s1, const char * restrict s2); // Here second paramter will remain constant only first get´s modified that´s why it´s not with const qualifier.
+
+we can also put const qualfier static storage variables in a header file and share them among source code files.
+
+If we analyze differences between const and define then we find : 
+#define a pre processor directive can be used anywhere in a program and it´s not scope controlled unlike
+const which is scope controlled and needs to be used in a function.
+
+---------volatile type qualifier------------
+
+this qualifier informs compiler explicitly that specific variable will change it value therefore compiler
+get´s prevented from caching it.
+
+volatile type quailifier is mainly used in cases of real timeand embedded systems programming where their´s
+ a lot of threading and programs resources are scarce.
+
+Hence we can say that variable should be declared volatile when it´s value could change unexpectedly.
+
+Noramlly three types of variables use volatile
+             . Memory mapped peripheral registers.
+             . global variables (non stack variables) modified by an interrupt service routine.
+             . global variables accessed by multiple tasks within a multi threaded application.
+
+Syntax : volatile data_type loc1;  // loc1 is a volatile location, where loc1 holds a volatile value
+         volatile data_type *ploc; // ploc pointer points to a location holding a volatile value 
+
+Example 1 : val1 = x;
+          /******* 
+               code doing something 
+
+            ****/
+           val2 = x;       
+         
+           Smart optimizing compiler notices that we are using x twice without changing it´s value
+           and would temporarily store the value of x in cpu register and when it´s value is needed for
+           val2 it will just fetch it from COU register instead of it´s original memory location.
+       
+    So this above optimization is not required if x is changed between two statements by some other agency
+    and we would use volatile keyword to ensure that compiler doesnot optmize and instead has a stored value
+    for each variable that´s why we use volatile keyword in order to prevent this optimization.
+
+
+Example 2 : We´´ve a ouput port pointed out by a pointer *outPort and we are writing two letters to it for e.g.
+            *outPort = ´O´;
+           /******* 
+               code doing something 
+
+            ****/
+            *outPort = ´N´;
+           Now a smart compiler will notice these successuive assignments to the same memory location and in case
+           if outPort is not modified in between then the comiler would have removed the first assignment from the
+           program and placed the value pointed out by it in CPU register so next time if it get´s changed then
+          it will provide it to us from cpu register instead of the newest one.
+
+          To prevent this we use volatile type qualifier i.e. volatile char *outPort;
+
+We can also use volatile with const when we want one entity to be not modified by any code section of program however we want it to be modifiable by any external agency outside of the program that can be a thread or other process.
+
+For e.g. volatile const int loc or const volatile int *ploc; // both have effect
+
+---------restrict type qualifier-----------
+
+Restrict type qualifier is used in pointer declarations informing the compiler that : 
+             Value pointed out pointer is not refeenced by other pointers or variables within the scope.
+             The pointer is the only one providing access to the pointed value.
+     Compiler does not need to add any additional checks and free to look for computational shortcuts.
+If both restric and volatile qualifiers are used then result is indefined behavior.
+
+Compiler can choose to ignore restrict type qualifier as it´s just a optimization hint to it.
+
+C++ also does not support it.
+
+Syntax : data_type *restrict ptr_name 
+    
+Example 1 : int main(void) {
+    int array [10]; 
+    int * restrict restar = (int *) malloc(10*sizeof(int));
+    int *par = array;
+    for(int i=0; i<10 ; i++) {
+    par[i] +=5;    
+    restar[n] +=5;
+    array[i] *=2;
+    par[i] +=3;
+    restar[i] += 3;     // The compiler will now optimize the statements with restar pointer and will comibine 
+                           them to restar[i] +=8;
+    }
+}
+
+In C library we´ve two functions memcpy and memmove where restric qualifier is used i.e.
+void * memcpy(void * restrict s1, const void * restrict s2, size_t n);  // Here s2 is the only pointer pointing to  const value of void data type i.e. at the passing pointer address it will be defined here void is used so all data type values can be passed to it.
+void * memmove(void * s1,const void * s2,size_t n);
+
+
+   
+
+

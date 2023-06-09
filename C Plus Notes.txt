@@ -1,0 +1,79 @@
+
+
+                                  ******************************Course 1 ************************************
+
+
+iostream library header file containing cout and cin definitions.
+
+Unlike C library header files in C++ don´t require .h suffix after their name when
+including them using preprocessor directive include for e.g.
+
+#include <iostream>
+
+.cpp and .cc are common extensions used alongwith names c++ files.
+
+To compile c++ program from command line or linux terminal we use gcc compiler
+and to do it we use command  "g++ codefilename.cpp" then we get executable file with .out
+extension. We can also use a flag while compiling for defining name of output executable file
+and we do it by using -o flag as g++ -o executable_name source_code.cpp
+
+
+Clang compiler
+clang is also a compiler apart from gnu g++ compiler it providing more diagnostics and also consuming less memory.
+
+To use clang compiler in terminal we similary execute following command in terminal : 
+clang++ source_code_filename.cpp 
+
+To use a specific standard or version of C++ we use -std flag and also with g++ compiler at the time of code
+compilation as :
+clang++ -std=c++11 code_file.cpp 
+g++ -std=c++11 code_file.cpp
+
+Just like we enable errors and diagnostics by using gcc compiler with Wall when compiling c code here in 
+case of c++ code we also do same i.e.
+clang++ -std=c++11 -Wall source_code.cpp
+g++ -std=c11 -Wall source_code.cpp
+
+And similarly for enabling the compilers clang++ and g++ to show more warning we use one extra flag that is 
+-Wextra at the time of compilation i.e.
+clang++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
+g++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
+
+
+endl keyword is used with cout command for moving to the next line and it also flushes the output moreover
+we can also use \n for performing the same operation depending upon our team coding style.
+
+C++ Build process involves : Preprocessing done by preprocessor, Compilation done by compiler and linking done by linker just like it´s done with case 
+of C Program Build Process.
+
+The relational operators == , != returns true or false depending upon whether the condition is satisfied or not and these return values are defined are in bool.h 
+header file.
+
+
+Variable Declaration in c++ is similar to c where we had char, int, float, double,long,short data types for storing a certain value.
+
+In c++ there is also a keyword auto used when we want the compiler to decide the data type of varaible through the assigned value for e.g. 
+like in this variable declaration auto n{64} the compiler is has assumed that n is a integer variable as assigned value to variable n is of int data type.
+
+To avoid garbage random value to be assigned at the time of compilation to variables we should initialze our variable like this : 
+
+int n=0 or int n{}, we can say that data_type var_name{} or data_type var_name=0,
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
