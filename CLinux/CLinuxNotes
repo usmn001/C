@@ -563,7 +563,15 @@ int main(int argc, char *argv[]) {
 }
 
 
+The functions : 
+isupper(character ch), 
+islower(character ch),
+tolower(character ch),
+toupper(character ch),
 
+are used for converting and detecting upper case and lowercase characters provided to us by fgetc() function.
+These conversion functions are available to us in ctype.h header file so to use them we will need to include these files.
+ 
 
 
 

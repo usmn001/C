@@ -668,6 +668,564 @@ void * memcpy(void * restrict s1, const void * restrict s2, size_t n);  // Here 
 void * memmove(void * s1,const void * s2,size_t n);
 
 
+-----------------------------Section 8 : Bit Manipulation---------------------------------------
+
+conversion of a -ive decimal number : 
+add 1 to decimal number.
+express the -ive value in binary
+take 1s complement
+
+conversion of -ive binary number back to decimal
+take 1s complemment
+convert binary number to decimal
+change sign of result
+subtract 1
+
+
+------------------------------Section 9 : Advanced Control Flow--------------------------------
+
+-------goto statement----------
+goto statment causes program control to jump to a particular line of code in our program.
+To identify where in the program the jump needs to be made, a label is needed. 
+Label needs to be placed directly before the statement to which jump is to be made and must appear in 
+the same function as goto.
+
+Syntax : 
+label : statement
+goto label;
+
+
+
+
+------null statement-----
+null statement is useful when syntax of language calls for a statement but no expression evaluation.
+
+Examples : while((*text++=getchar())!='\n')
+;
+Here in above example we are using null statement denoted by ; informing compiler that statement following 
+looping expression is not inside the body of loop without null statement ; the compiler will be considering the
+preceding statment as part of while loop.
+
+ 
+--------comma operator--------
+
+comma , operator acts like a binary operator evaluating first operand and discarding the result, then evaluates
+the second operand and returns it´s value and type because all operators in C produce a value, value of
+comma operator is that of rightmost expression.
+
+comma (,) operator allows us to separate multiple expressions anywhere inside a valid program starement.
+
+Example : int main() {
+         while(i<100)
+          sum+= data[i], ++i;  // here first array data index i value is assigned and incremented to sum and then 
+                               // index of array is incremented 
+
+         int i(5,10);  // here i is assigned value 10
+         x = (y=3, (z= ++y +2) + 5);   // here first value of y = 3 is assigned to x 
+                                       // then value of z = 11 gets assigned to x
+         int houseprice = 249,500;     //Here similarly first 249 will be assigned then value 500 will be assigned
+                                       //to variable houseprice       
+
+ return 1;
+
+}
+
+------------------------------Section 10 : Input and Output----------------------------
+
+Originally, input/output functions were not part of the definition of C.
+  . Their development was left to C implementations.
+  . Unix implementation of C has served as a model for these functions.
+
+When a C program is executed, following three files are automatically are opened by the system for use by the
+program i.e. stdin, stdout and stderr (defined in <stdio.h>) that´s why we include this file for i/o operations.
+
+    .stdin identifies the standard input of the program and is normally associated with your terminal window.
+      .all standard I/O functions that perform input and  do not take a FILE pointer as an argument get their
+       input from stdin.
+      .stdout refers to standard output, which is normally associated with our terminal window.
+      .stderr identifies standard error file where most of the error messages produced by the system are written
+       and is also normally associated with our terminal window. 
+
+
+------Char Input Functions-----------
+
+getc function : used to read a single character from a file or from user input provided through standard terminal.
+
+syntax : getc(FILE *fp); return _type : ASCII integer value, when returns EOF it means End of file.
+         getc(stdin);    here we are taking input from the user in terminal.
+
+Example : 
+int main(){
+char ch = '\0';
+if(fp=fopen("user.txt","rw)!=NULL){
+while(ch!=EOF){
+ch = getc(fp);
+}
+}
+
+}
    
+getchar function : reads only input characters from standard input terminal
+Syntax : printf("%c\n",getchar());
+Example : 
+int main() {
+int ch = 0;
+while ((ch = getchar())!=EOF)
+printf("%c\n",getchar());
+return 0;
+}// the above program break it´s execution when we hit ctrl + d.
+
+fgetc() : function used to read character from file using , file pointer.
+
+Example : 
+int main(){
+FILE *fp;
+fp = fopen("src.c","r");
+
+while(1){
+  c=fgetc(fp);
+  if(c==EOF)
+   break;
+  printf( "%c",c);
+}
+
+printf("Closing the file test.c");
+fclose(fp);
+return 0;
+}
+
+ungetc() : function that returns back the character read from input stream.
+syntax : ungetc(ch,stdin) or ungetc(ch,FILE *fp);
+Example : 
+int main(){
+char ch = 0;
+while(isspace(ch = (char)getchar()));
+ungetc(ch,stdin);
+
+printf( "char is %c\n",getchar());
+return 0;
+}
+
+---------Char Output Functions-----------
+
+putc() : function writes a single character to a file (or to stdout).
+         File needs to opened in write or append mode.
+Syntax : putc(char var_name, FILE *fp);
+
+putchar() : function writes a single character to standard output(stdout) i.e. terminal
+Syntax : putchar(int ch); where ch is a unsigned character.
+Example : putchar('C'); 
+Example : 
+int main() {
+
+char string [] = "Hello Usman and Mehwish";
+int i=0;
+
+while ( string[i] !=0) {
+
+if(string[i] != '\n') {
+   putchar(string[i]);
+  ++i;
+}
+
+}
+
+
+fputc : Function writes a character to a output file or to standard out tetminal window, 
+        it increments the current write position of character in both file and output window. 
+
+--------string functions---------
+
+---input---
+
+gets() : Function used to read line of strings from input to a buffer until a terminating newline or end of file
+         (EOF) character is found thus causing buffer overflow.
+         Takes one input argument which is a pointer to an array of chars where string is stored.
+         returns str on success and NULL on error or when end of file occurs.
+
+Definition : char *gets(char *str)
+
+This function is deprecated and should never be used, it´s removed from C11 instead use fgets() or getchar()
+
+fgets() : Function retains newline character (\n) unlike gets. It terminates reading a string input when
+          newline character offer protection against buffer overflow problem.
+          
+          When a null character \0 is present in the string it cannot detect it and will be stored in the input
+          buffer with the rest of characters thus this is a problem leading to the conclusion that fgets()
+          should only be used when data read cannot contain a null character therefore use getline function
+          to avoid this problem.
+
+Definition : char *fgets(char *buffer,int n,FILE *stream) 
+             Where : 
+             buffer  a pointer to character array where line that is read will be stored.
+             n  denotes maximum number of characters that can be stored in the buffer including null character.
+             stream is a file pointer or standard input. (stdin).
+Example : 
+
+#include<stdio.h>
+#include <string.h>
+
+int main()
+{
+char buff[255];
+int ch = '\0';
+char *p = NULL;
+
+if (fgets(buf,sizeof(buf),stdin)) {
+p=strchr(buf, '\n');
+if (p) {
+*p= '\0';
+}
+else {
+while (((ch = getchar()) != '\n') && !feof(stdin) && !ferror(stdin) );
+}
+
+}
+
+Note : feof(FILE *fp) or feof(stdin) functions are used to detect end of file or of input , functions 
+       ferror(FILE *fp) or ferror(stdin) detects error in file stream or in the input stream.
+
+       char *strchr(const char *str, int c) function searches for a particluar character in the string pointed out
+       by char *str pointer which is character array or string literal pointed out by a pointer.
+
+
+getline() : This is a Latest function for reading a entire line of string from a stream ,introduced around 2010.
+            Preferred over gets,fgets and scanf input functions which are all unreliable.
+            Reads an entire line up to and including next newline character and takes three parameters.
+
+Syntax : ssize_t getline(char **buffer,size_t *size,FILE *stream)
+         
+        Where 1st parameter is a double pointer to a block of memory allocated by malloc or calloc thus
+         it can automatically enlarge block of memory as needed by using realloc as heap memory is dynamic.
+         1st paramter contains the line read from last paramter  FILE stream pointer.
+         2nd paramter determines the size of memory pointed out by 1st paramter, it´s actually a pointer 
+         pointing to a memory location where value of allocated memory size is present.  
+
+        return type : is -1 when error occurs or end of file is reached without reading any bytes.   
+                      returns number of characters read including the newline but not final null character).
+
+Example : int main()
+{ 
+char *buffer = NULL;
+size_t bufsize = 32;
+size_t characters;
+
+buffer = (char*)malloc(bufsize *sizeof(char));
+
+if(buffer == NULL) {
+exit(1);
+}
+printf("Type something : ");
+characters = getline(&buffer,&bufsize,stdin);
+
+printf("%zu characters were read . \n",characters);
+printf( "You typed : '%s' \n ",buffer);
+return 0;
+}
+
+---output----
+
+puts : used to write a line to oputput screen similar to printf.
+definition : int puts(const char *string). 
+
+fputs : function to write string on a file .
+defintion : int fputs(const char *buffer, FILE *fp);
+
+
+ --------------Formatting Functions----------------
+
+                                      
+        
+sprintf() : Behaves exactly same like printf().
+fprintf() : writes data to a file and can also write error messages to stderr stream for e.g.
+
+           if((inFile=fopen("data","r"))==NULL)
+             {
+            fprintf(stderr,"Can´t open data for reading .\n");
+             ...
+              }
+fscanf() : used to write data on a file similar to fwrite().
+sscanf() : used to read formatted data from a string rather than standard input or keyboard.
+           syntax : int sscanf(const char *str,const char *contro[arg_1,arg_2,...]);
+           example : sscanf(buffer,"%s %d",name,&age); // reading data from pointer buffer and placing
+                                                          according to specified format in name variable
+                                                          and age pointer         
+
+rewind() : function used to set position of file in the begining through file pointer provided by fopen() .
+fflush() : function used to flush/clean a file or buffer, causes any unwritten data in output buffer
+           to be sent to the output file this process is called flushing.
+   
+      
+--------------------------Section 11: Advanced Function Concepts------------------------
+
+-----------Variadic Functions--------------
+
+Variadic functions are used to take varying number of inputted arguments unlike normal functions having a fixed number of arguments . printf() is a variadic function as we can pass any number of arguments to it. Similar to
+printf we can also create our own functions that will be able to get varying number of arguments.
+
+A variadic function has two parts : 
+   .Mandatory arguments : where at least one is required and is first one listed normally this first argument
+                          informs the variadic function how many arguments are being passed it´sa good practice
+                          enabling us to limit a operation performed inside variadic function for a fixed number
+                          of iterations.
+
+To reference the varying number of arguments we use macros defined in stdarg.h header file. These are follows and
+also used in creating a variadic function 
+
+va_list() : used in situations where we need access to optional parameters and it is an argument list.
+            represents data object holding parameters corresponding to ellipsis (...) part of the parameter list.
+
+va_start() : connect our argument list with argument pointer
+             list specified in va_list is first argument and second argument is last fixed paramter.
+
+va_arg()   : will fetch current argument connected to argument list however we also need to provide
+             datatype of argument we are reading.
+
+va_end()   : used when we want to stop reading and using variable argument list.
+
+va_copy()  : used for saving our current location.
+              
+1 .First we create a function prototype with ellipsis .... with a return type as : 
+void f1(int n,...) or int f2(const char*s,int k,...); 
+
+2. Create a va_list type variable in the function definition and initialize it to an argument list i.e.
+double average (double a1, double a2,...){
+
+va_list parg;   // Where parg is pointer for variable argument list.
+
+va_start(parg, a2)   // Specifying parg to point to the first variable argument passed to the function when it is
+                     // called
+}
+
+3. access the contents of argument list using : va_arg(parg,data_type), va_arg() returns first item when it is
+                                                called for first time and returns second one when it is called 2nd
+                                                time and so on till nth argument.
+4. clean up using va_end() i.e va_end(parg);
+
+ 
+Example : 
+
+double average(double v1,...) {
+va_list parg;
+double sum = v1 + v2;
+double value = 0.0;
+int cnt = v1;
+va_start(parg,v2);
+
+while((value = va_arg(parg,double)) != 0.0) {
+  sum += value;
+  ++cnt;
+} 
+va_end(parg);
+
+return sum;
+}
+
+
+int sum(int v1,...) {
+va_list parg;
+int val = 0,sum = 0,cnt = 0;
+va_start(parg,v1);
+while(cnt<v1){                    // Using first argument as a limiter.
+        val = va_arg(parg,int);
+	sum +=val;
+        cnt+=1;
+}
+va_end(parg);
+
+return sum;
+}
+
+
+int main(void)
+
+{
+double v1,v2;
+printf("\n Using variadic function Sum = %i",sum(2,2,4));
+printf("\n Average = %.2lf",average(v1,3.5,v2,4.5,0.0));
+}
+
+In summary variadic function should have at least one fixed paramter.
+We should have a way to detect which data type is passed for that we can have a paramter in the varadic function.
+    
+--------------va_copy-------------
+
+This macro enables us to cmake a copy of variable argument list. Syntax : va_copy(args1,args2); or va_copy(parg1,parg2).     Here argument list pointed out by second paramters args2 or parg2 gets copid into the 
+                          first ones i.e. arg1 or parg1.   
+
+Example : 
+
+int add(int a,...) {
+va_list args1;
+va_start(args1,a);
+/*****Some codes for logic operation
+int val1= va_arg(args1,int); 
+***************/
+
+va_list args2;
+va_copy(args2,args1);
+va_start(args2,a)
+/************Some codes for logic operation
+int val2 = va_arg(args2,int);
+*********/
+
+return val1;
+}
+
+
+
+}
+                   
+---------------Recursion----------------
+
+
+In recursion a function calls itself continously until a certain condition is met. We can also implement
+recursion using loops.
+
+Example : Fictorial Calculation Function
+
+int factorial (int n){
+
+if(n==0)
+ result =1;
+else
+  result = n * factorial(n-1);
+return result;
+}
+
+void main() {
+int num = 0;
+for( num = 0; num <8; num++)
+{
+printf("%d!= %d),num, factorial(num));
+
+Iteration terminates when loop continuation condition fails.
+Recursion terminates when a base case is recognized.
+Iteration keeps on modifying(increment/decrement) loop counter variable until a certain defined termiation value is reached where loop ends.
+Recursion keeps producing simpler versions of original problem until base case is reached.
+
+Avoid using recursion if performance is a metric as it consumes a lot of resources CPU and stack.
+
+
+----------in line Function--------
+
+C99 introdunced this concept of inline functions.
+
+inlining a function is a compiler optimization technique in which a suggestion is provided to compiler thus that
+the compiler will normally go for placing the entire code of function being called in the function that is caller
+instead of going through the entire process of passing arguments, jumping to function code and returning and
+context switching.
+
+The compiler can choose to ignore inline declaration of a function or compiler chooses to perform some other sort of optimization.
+
+inline fuctions may improve performance of code however it´s not guaranteed.
+
+inlning a fucntion requires more memory space as instead of calling a function a copy of it is placed in the caller again and again.
+
+It´s preferred to do inlning on short and frequently called functions.
+
+To make a fucntion inline just use inline keyword along with static storaage class specifier with it´s declaration and definition for e.g.
+
+inline static void sum(int a);
+
+inline static void sum(int a) {
+// do some operations
+return 0;
+}
+
+
+To share inline function amoong multiple files we can place it´s definition in a header file, this is a exception
+only applicable to inline function because inline functions has internal linkage so its multiple definitions 
+in several files does not cause problems.
+
+---------_Noreturn Functions----------
+
+C11 added a second function specifier (in addition to inlne) function.
+
+The specifier _Noreturn informs the user that and compiler that specific function will not be returning control
+to the calling program when it completes execution.
+
+_Noreturn function just like inline specifier is a hint to the compiler and the compiler
+can opt to ignore it.
+
+Using _Noreturn function specifier does not stop a function from returning to its caller.
+
+Only a promise made by programmer to compiler allow it some more degree of freedom to generate optmized code. 
+
+exit() function is an example of _Noreturn function.
+
+_Noreturn is different from void functions.
+
+When a function specified with _Noreturn specifier violates its promise and returns
+to it´s caller(by using an explicit return statement or by reaching end of function body the
+our program code behavior becomes : 
+      .Undefined
+      . We should try our best to avoid returning from that function.
+
+Compilers are not required to produce warnings or errors when _Noreturn function appears
+to be capable of returning to its caller. 
+
+How _Noreturn is used : 
+
+_Noreturn keyword appears in a function declaration.
+This specifier _Noreturn may appear more than once in same function declaration however it will be counted still one time.
+
+_Noretun specifier is typically used through convenience macro noreturn and it´s provided in header file <stdnoreturn.h>
+
+Use of _Noretun or noreturn is equivalent. 
+
+Syntax : _Noreturn or noreturn void function_name() {
+
+         
+          }   // we will not use return statement but at end of function we need to use exit() or abort().
+
+Example 1 : When using noreturn
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdnoreturn.h>
+
+
+noreturn void my_exit(void);
+
+/* calls exit() and doesn´t return to its caller ¨*/
+
+void my_exit(void){
+printf("Exiting...\n");
+exit(0);
+}
+
+int main(void){
+my_exit();
+return 0;
+}
+
+Example 2 : Using _Noreturn
+
+#inlcude <stdio.h>
+£inlcude <stdlib.h>
+
+_Noreturn void foo() {
+abort();
+}
+
+int main (void) {
+printf("Ready \n ");
+foo();
+return 0;
+}
+
+
+   
+
+
+
+
+
+
+
+
+
+
 
 
