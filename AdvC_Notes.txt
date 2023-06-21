@@ -1410,6 +1410,102 @@ Directive is used for multiple choice statements, similar to elseif statement.
 
 Syntax : #elif constant_expression (with relational and logical operators)
 
+-----------include guards and #undef---------
+
+The include guards make sure that a header file is not repeatedly inlcluded in a source code file.
+Standard C header files use the #ifndef technique to avoid multiple inclusions. 
+Make sure that the indetifier being tested should not be defined elsewhere among the source code files.
+
+Example : 
+#ifndef THINGS_H_
+ #define THINGS_H_
+  /* rest of include file */
+#endif
+
+---------#undef--------
+
+Directive let´s us to undefine a directive previoulsy defined identifier.
+
+syntax : #undef identifer 
+
+---------------#pragma and #error------------------
+
+
+------#pragma--------
+
+#pragma directive lets us to place compiler instructions in our source code.
+
+#pragmas are used : 
+ To control amount of memory set aside for automatic variables.
+ Set strictness of error checking.
+ Enable nonstandard language features.
+
+pragma standing for (pragmatic  information)directive depends upon software implementation of standard thus every compiler has it´s own set of pragmas thus to use pragmas we may need check documentation
+of a specific compiler.
+
+Syntax : #pragma token_name
+  Where token_name represents a command for the compiler to obey.
+
+We will be studying following pragmas supported by gcc compiler.
+   #pragma GCC dependency
+   #pragma GCC poison
+   #pragma GCC system_header
+   #pragma once
+   #pragma GCC warning
+   #pragma GCC error
+   #pragma message
+
+#pragma GCC dependency : Directive allows us to check relative dates of current file and another file.
+                         If the other file is more recent than current file then a warning is issued.
+                         Here by current file we mean where the source file where this pragma is used.
+                         Example : #pragma GCC dependency "parse.y"
+                                   #pragma GCC dependency "/usr/include/time.h" rerrun fixincludes (this is a warning message)
+
+#pragma GCC poison : Directive used to completely remove an identifier from the program, if any of the
+                     identifier is completely removed and then it appears again in the program then a 
+                     error is displayed by the compiler.
+    Example : #pragma GCC poison printf sprintf fprintf (removing identifiers printf sprintf fprintf)
+              sprintf(some_string,"hello"); // Now it will be producing a error
+
+#pragma GCC system_header : Directive tells the compiler that the code after this directive to be
+                            considered as system header (files that come with OS).
+                            code that comes before #pragma in the field is not affected. 
+                            All warnings get suppressed while GCC is processing a system header.
+                            Macros defined in a system header are immune to a few warnings wherever 
+                            they are expanded.
+
+#pragma once : Just like include gurards instructs the compiler to incude header file only once but this
+               directive offers less portability so include gurads should be used for this purpose.  
+
+#pragma GCC warning "message" : causes the pre processor to issue a warning diagnostic message with the
+                                text "message". This message should be a string literal.
+
+#pragma GCC error "message" : causes pre processor to issue an error with text message, again text in
+                               message should be string literal  
+  
+#pragma message "message"   : prints string as a compiler message on compilation (information message).  
+
+
+-------#error----------
+
+Preprocessor directive causing the preprocessor directive to issue an error message including any text in the directive. Error message is a squence of characters separated by spaces, we don´t need to enclose this text in quotes and this is a optional message.
+
+Example : #if __STDC_VERSION__!=201112L  // should fail if compiler used is an older standard and succeed
+          #error Not C11                 // when it uses c11 
+          #endif
+
+
+Some other directives are #warning, #line linenum, #line linenum filename
+
+
+
+
+
+
+
+
+
+
 
 
 
