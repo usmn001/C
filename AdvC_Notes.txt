@@ -956,7 +956,7 @@ fflush() : function used to flush/clean a file or buffer, causes any unwritten d
            to be sent to the output file this process is called flushing.
    
       
---------------------------Section 11: Advanced Function Concepts------------------------
+----------------------------------------Section 11: Advanced Function Concepts------------------------
 
 -----------Variadic Functions--------------
 
@@ -1215,16 +1215,200 @@ foo();
 return 0;
 }
 
+-----------------------------------Section 12 : Union---------------------------------
 
-   
+Union is similar to structure. 
+
+In Union all memebers reside in same memory space unlike structures. Size of this allocatedmemory is equal to the size of largest member residing in union.
+
+We need to make sure that data in union is referenced with relevant data type, referencing data in a union
+with a variable of wrong type is a logic error.
+
+Operations that can be performed on a union are : 
+ Assigning a union to another union of same type.
+ Taking address of a union variable.
+ Accessing union members.
+
+Some use cases of union are representing a file containing different record types and a network interface 
+containing different request types.
+
+We use union when our construct can be of many different things i.e. objects but only one at a time.
+
+In union only first member can be initialized and only one member can be accessed at a time.
+
+---------Defining a Union---------
+
+union [union tag]{
+type_1 identifier1;
+type_2 identifier2;
+....
+....
+type_N identifier_N;
+}optional_variable_definitions;
+
+Union tag is optional and each member definition is a normal variable definition.
+
+At the end of union definition before final semicolon we can specify one ormore union variables but its optional.
+
+Union definition is placed in a header file just like strucutres if we weant to share it among several files.
+
+Example 1 : union Data {
+          int i; 
+          float f;
+          char str[20];
+          }data; 
+
+Mmeory is allocated by compiler when we create variables to access it i.e. union Data d1 . where d1 is variable. and in the above example data also is.
+
+structures and arrays both can contain unions.
+
+pointers to unions can also be declared just like the same way we do with strcutres.
+
+Anonymous union does not have any name and it can only be created inside a structure.
+
+Example 2 : Anonymous union in a structure
+
+struct {
+  
+  char *name;
+  enum symbolType type;
+ union {
+   int i;
+   float f;
+   char c;
+} data;
+
+}table;
+
+The above example is an array of structures, where entries variable defined somewhere.
 
 
 
+Example 3 : In the following example we have a anonymous union
+
+struct car_data{
+   char make[15];
+   int status;
+   union {
+   struct owner owncar;
+   struct leasecompany leasecar;
+        };
+};
+
+----------Accessing a Union--------------
+
+Unions are accessed just like structures with a dot notation . using variable and with -> nusing pointers.
+
+We can also initialized a union member using a . notation for e.g. 
+
+union number {
+int i;
+float f;
+double aa;
+} 
+
+void main(){
+union number n1 = {.i = 0,f = 1.1, aa = 22.2234};
+}
 
 
 
+----------------------------------------Section 13 : The Preprocessor------------------------------------------
+
+A C program passes through following stages before becoming a executable. 
+Preprocessor
+Compilation
+Assembler
+Linker
+Loader
+
+Preprocessor not a part of C compier is invoked before compiler, performing following three main tasks : 
+
+Removal of all comments.
+Includes the source code of the header files in the main program wherever the #include directive is used.
+Expand Macro definitions ( Macros are small functions).
+
+------------Conditional Compilation----------
+
+Conditional Compilation is a feature offered by C preprocessor enables us to 
+
+Create a program that can be compiled to run on different computer systems (varyng architecture and OS´s).
+
+It is also used to turn on and off various debugging statements and for tracing flow of program execution.
+
+Condtional compilation also allows us to control execution of preprocessor directives and compilation of 
+program code by : 
+     Evaluation of each conditional preprocessor directive against an identifier or constant integer 
+     expression.
+     Cast expressions, sizeof expressions and enumeration constants cannot be evaluated  in preprocessor
+     directives.
+
+Conditional compilation commands are : #if , #endif (for ending #if block), #ifdef, #ifndef, #elif and #else , They are totally similar to if , else if , else , #if defined(name) and if !defined(name) 
 
 
+------#ifdef----
+This directive checks whether a identifier is defined or not using #define directive (#define identfier val or #define identifier) . Some compilers also allows us to define an identifier using -D option at compile time in terminal i.e. 
+gcc -D UNIX program.c
+
+Syntax : #ifdef identifier
+
+         #endif
+
+Where as mentioned earlier #endif ends the scope of preprocessor directives : #if,#ifdef,#ifndef,#else,#elif. 
+
+------#ifndef--------
+Directive checks if an identifier is undefined , it´s just the opposite of #ifdef, it´s often used to define a identifier which is previously not defined in conjunction with #define directive for e.g.
+
+#ifndef SIZE
+ #define SIZE 100
+#endif
+
+-------#if-------
+
+We use #if directive to test the value of a constant expression specified by #define statement or thorugh command line using -D option.
+
+Syntax : #if constant_expression 
+
+The constant expression if it´s integer cannot contain any increment(++),decrement(--),sizeof,pointer(*),address(&) and cast operators.
+
+Just like if statement we can also use relational and logical operators with #if directive
+
+Example : 
+
+#include <stdio.h>
+
+#define MYDEF 5
+#define MYOTHERDEF 2
+
+int main(void) {
+
+#if MYDEF == 5 && MYOTHERDEF == 2
+ printf("Hello");
+#endif
+
+return 0;
+}
+
+---------#else---------
+
+#else directive works exactly the same way as else statement in case of if .
+This directive identifies a group of directives or statements execution in case when #if , #ifdef, #ifndef conditions fails.
+
+Example : 
+
+#ifdef UNIX
+#define DATADIR "/uxn1/data"
+#else
+#define DATADIR "\usr\data"
+#endif
+
+we can also define DATADIR at command line during compilation i.e. gcc -D DATADIR=/c/my_data
+
+-------------#elif---------------
+
+Directive is used for multiple choice statements, similar to elseif statement.
+
+Syntax : #elif constant_expression (with relational and logical operators)
 
 
 

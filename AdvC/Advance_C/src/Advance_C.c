@@ -33,7 +33,7 @@ printf("\n In main thread a = %i",a);
 //typedef int dty;
 
 
-
+/********** Variadic Function****************/
 
 int sum(int v1,...) {
 va_list parg;
@@ -49,7 +49,29 @@ va_end(parg);
 return sum;
 }
 
+/************ Unions***********/
 
+union Person {
+	int age;
+	char *name;
+
+};
+
+
+int entries =5;
+enum symbolType{i,f,c};
+
+struct table{
+
+  char *name;
+  enum symbolType type;
+ union {
+   int i;
+   float f;
+   char c;
+} data;
+
+};
 
 /*double average(double v1,double v2,...) {
 va_list parg;
@@ -134,8 +156,24 @@ long num3 = 12L, num4 = 20L;*/
 //printf("Average = %.2lf\n@",average(v1,3.5,v2,4.5,0.0));
 
 
-printf("\n Using variadic function Sum = %i",sum(2,2,4));
+printf("\n Using variadic function Sum = %i \n ",sum(2,2,4));
+
+
+//----------------Union-----------------------
+
+union Person p1;
+p1.age=15;
+printf("Person Age = %i\n",p1.age);
+p1.name = "USMAN";
+printf("Person Name = %s\n",p1.name);
+
 //printf("\n Average = %.2lf",average(v1,3.5,v2,4.5,0.0));
+entries =1;
+struct table t[entries];
+
+t[0].name = "USMAN";
+
+
 
 
 
