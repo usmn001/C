@@ -1497,13 +1497,62 @@ Example : #if __STDC_VERSION__!=201112L  // should fail if compiler used is an o
 
 Some other directives are #warning, #line linenum, #line linenum filename
 
+-----------------------------------Section 14 : Macros-----------------------------------------
 
 
+Macros are similar to functions except they are created using #define pre processor directive.
 
+Syntax : #define MACRO macro_body
+            where  MACRO represents the macro name
+                   macro_body is replacement list or body which will replace the section of code where
+                   macro is called as this replacement is done by preprocessor
 
+Example 1 : #define PX printf("x is %d.\n",x)
+                   where PX is macro name 
+                         printf statement is macro body
 
+Capital letters should be used for macro names.           
+Macros run until first newline following the #. 
+Use continuation operator \ for expanding macro body to more lines.
+If macro is based upon expression then everything after #define directive is considered as macro body.
 
+Example 2 : 
 
+#include <stdio.h>
+
+#define PI 3.14       // This is a symbolic constant macro
+#define PRNT(a,b)\
+        printf("val 1 = %d\n",a);\
+        printf("val 2 = %d\n",b);
+
+int main(){
+int x =2;
+int y =3;
+PRNT(x,y); // now when code is pre processed, the line where macro is invoked pre processor replaces 
+           // this statment with printf statements
+}
+
+ 
+ macro inside a nested loop is a much better candidate for speed improvements, we can use program profilers to know where our program is spending most time.
+
+Macros don´t have to worry about variable types unlike functions.
+
+As macros are at pre processor level so it´s not possible to debug them so what can we do is use
+gcc -E source_file.c command in in termial so our compiler gcc expands everything to us.
+
+inline functions are the best alternate to macros however as inline keyword is just a hint to compiler
+it´s not a strict rule while macros don´t.
+
+Example : Function Macros
+
+#include <stdio.h>
+#define PI 3.14
+#define CIRCLE_AREA(x) ( (PI) * (x) * (x))
+
+int main(){
+int area = CIRCLE_AREA(4);  // Now this text will be replaced by ((PI) * (x) *(x))
+printf(" Area is %d\n",area);
+}
 
 
 
