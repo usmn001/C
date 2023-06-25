@@ -1554,6 +1554,379 @@ int area = CIRCLE_AREA(4);  // Now this text will be replaced by ((PI) * (x) *(x
 printf(" Area is %d\n",area);
 }
 
+We can also have variadic macros 
+
+Example : Variadic Macros 
+
+#include <stdio.h>
+#define Warning(...) fprintf(stderr,__VA_ARGS__)
+
+int main() {
+Warning ("%s : this is here \n","jason")
+return 0;
+}
+
+
+Examples : 
+#include <stdio.h>
+#define FOO BAR
+#define BAR(12)
+#define MISC(x) (puts("incrementing",(x)++)
+#define Max(a,b) ((a) > (b) ? (a) : (b))
+
+
+-------Preprocessor Operators-------------
+
+# and ## operators are used for concatenation, it is useful to merge two tokens into one while
+expanding macros, called token pasting or token concatenation.
+
+# operator is used within a macro definition
+
+## operator performs token pasting 
+   concatenates two tokens
+   when a macro is expanded two tokens on either side of each ## operator are combined
+   into a single token.
+
+\ operator is used for expanding macros.
+
+defined() operator : It´s used in constant expressions to determine if an identifier is defined using #define directive or not, it´s similar to #ifdef.
+
+   If specified identifier is defined then it´s evaluated to true(non zero)
+   If identifier is not defined then it evaluates to false.(zero).
+
+Example : #if defined (DEBUG)
+          // program statements
+          #endif
+
+Example : 
+
+#if defined (WINDOWS) || (WINDOWSNT)
+# define BOOT_DRIVE "C:/"
+#else
+#define BOOT_DRIVE "D:/"
+#endif
+
+int main(void) {
+printf( "Here is boot drive path : %s\n",BOOT_DRIVE);
+return 0;
+}
+
+Above will display as output "C:/" if either WINDOWS or WINDOWSNT is defined
+     .output will be "D:/" otherwise
+
+This use of pre processor operator with #if is similar to if else if statements.
+
+
+-------#operator-------
+
+# operator creates a constant string out of macro argument and places double quotes around macro argument.
+
+Example 1 : 
+#define str(x) #x
+str(testing) // This line replaced by macro as "testing".
+
+so if we do printf(str(Programming in C is fun.\n)) then it becomes printf("Programming in C is fun.\n").
+
+Example 2: 
+#define HELLO(x) printf("Hello,"#x"\n");
+when HELLO(john) appears then macro expands to printf("Hello, John\n");
+
+-------##operator------------
+
+Operator used in macro definitions to jon two tokens together.
+  Preceded or followed by name of a paramter to macro.
+  Takes actual argument to macro supplied when macro is invoked and creates a single token out of
+  argument and whatever toekn follows (or precedes the) ##.
+
+Examples : 
+
+#define make_function(name) int my_##name(int foo){}
+when we call this macro as make_function(bar) // where we are passing bar as argument to macro make_fucntion then here on the line where macro is invoked preprocessor pastes int my_bar(iny foo)
+
+#define eat(what) puts ("i am eating "  #what "today")
+
+when invoked as eat(fruit) results into puts("i am eating" "fruit" "today"); interprested as single string constant.
+
+-------------Pre defined Macros------------
+
+standard C provides predefined symbolic constants
+  begin and end with two underscores.
+  They cannot be used with #define or #undef directives
+
+These standard predefined preprocessing macros are specific to a compiler so we should consult
+their documentation as well.
+
+.___FILE___ : Macro represent current file name(string).
+
+.__LINE__   : Macro represent current line number of current source code (integer constant).
+
+.__func__   : Macro provides name of any function when placed inside a function of current file.
+
+.__DATE__ : Macro provies the date when source file was compiled in form of string("MMM dd yyyy" such as 
+            "Jan 19 2002" )
+.__TIME__ : Macro provides the time whens ource file was compiled (a string literal of the form
+            "hh:mm:ss")
+
+.__STDC__ : used to indicate if compiler suports standard C by returnig value 1.
+
+Example : #include <stdio.h>
+int main(void) {
+#if(__STDC__==1) 
+ printf("Implementation is ISO-conforming.\n");
+#else
+ printf("Implementation is not ISO-conforming.\n");
+#endif
+return 0;
+}
+
+
+__FILE__and__LINE__ : __FILE__ macro represents name of current source file as string literal comprising
+                               entire file path i.e. "C:\\Projects\\Test\\MyFile.c"
+
+                     __LLINE__ macro results in an integer constant corresponding to currentl line
+                               number
+so that´s file why we can use both of these macro in combination inside our program for debugging purposes as well for tracking in which file error has occurred and at what line.
+
+Example : 
+if(fopen(&pfile,filename,"rb"))   {
+fprintf(stderr,@Faild to open file in %s line and %d \n",__FILE__,__LINE__);
+return -1;
+}
+so if fopen fails then there will be a message specifying source file name and the soure file linenumber where the error has occured thus we don´t need to use printf statement.
+
+------------------Section 15 : Advanced Debugging,Analysis and Compiler Options----------------------
+
+---------GCC Compiler Options----------
+
+When we invoke gcc, it normally performs preprocessing,compilation,assembling and linking.
+
+We use gcc compilation flags for getting debugging and other information.
+
+gcc -E src_file.c > file     : For visualizing preprocessng stage output.   
+
+gcc -save -temps src_file.c  : provides us all the intermediate files (.i file at preprocssing level,.s
+                               file for assembly code) used during the process of generating
+                               a signle executable file.
+
+gcc -Wall -ansi src_file.c :    makes sure that we are complying ansi standard if not it generates
+                                warnings.
+
+gcc -Wall -funsigned-char src_file.c : if we want to consider char data type as unsigned.
+
+gcc -Wall -fsigned-char src_file.c : If we want to consider char data type as signed.
+
+gcc -g src_file.c : For generating debugging information.
+
+Compiler optimization flags allow compiler to improve performance and /or code size at the expense of increased compilation time and possibly effecting the debugging ability of program.
+
+We can invoke gcc with -Q --help=optimizers to find exact set of optimzations enabled or disabled.
+
+Some levels of optmizations are : -O, -O1, -O2, -O3, -Ofast,-Og
+
+------------GCC Environment Variables-----------
+
+PATH : For searching executables and run time shared libraries.(.dll,.so)
+CPATH : For searching include-paths for headers.
+        searched after paths specified in -l<dir> options.
+        C_INCLUDE_PATH  can be used to specify C headers if specific langage was indiacted 
+        in pre processing.
+
+LIBRARY_PATH : For searching library-paths for link libraries.
+               Searched after paths specified in -L<dir> options.
+
+ldd : utility examining executable and displaying a list of shared libraries required.
+      Syntax : ldd a.out or ldd ./a.out where a.out is executable.
+
+nm : utility used for viewing functions defined in a object file. where under T column we have functions
+     defined. 'U' column where functions are undefined.     
+
+-----------Debugging With Preprocessor--------------
+
+By using a preprocessor identifier we can use inserted debugging code in our program, and also enable or
+disbale this debugging by checking whether or not the preprocessor identifier is defined or not using
+#ifdef.
+
+Example : 
+#define DEBUG
+
+int process (int i, int j, int k) {
+return i+j+k;
+}
+
+int main(void) {
+int i,j,k, nread;
+nread = scanf("%d %d %d",&i, &j,&k);
+
+#ifdef DEBUG
+ fprintf(stderr,"Number of integers read = %i\n",nread);
+ fprintf(stderr, "i = %i, j = %i, k= %i\n",i,j,k);
+#endif 
+
+printf("%d\n",process(i,j,k));
+return 0;
+}
+
+----------Debugging With GDB Debugger------------
+
+GDB Debugger commands that we can use are : 
+
+gdb executable_name : starts gdb debugger in terminal
+list : command shows code.
+list line_num : shows code before 5 lines and after 5 llines from specified line number.
+set var variable_name = value : command allows us to assign values to specific variable used in code.
+print variable_name : gdb command shows variable assigned value.
+
+For specific variables local to a function just include function name in above commands after the variable_name  i.e. gdb_command function::variable_name and similarly you can assign values to relevant
+variables.
+
+
+
+infor source : provides us information about source code file currently being under debugging.
+break line_num : puts break point at specified line number.
+break func_name : put break point in the start of function.
+break src_file.c :func_name : put break point at specific fucntion present in src_file.c
+
+run : command runs program in gdb debugger after we have placed break points.
+c : continue command which moves the program forward after break point is encontered.
+info break : lists all the breakpoints
+clear : command disables all break points.
+clear line_num : disables beak points at line number.
+clear function : disables break point in function.
+
+
+-------------core files-------------
+
+Core files are generated by core dump when a program crashes or is terminated abnormally due to segmentation.
+
+Segemenation fault occurs when we try to access memory restrcited to us.
+
+Core dump is also called memory or storage dump.
+
+Core files contain a snapshot of contents of the process memory at the time when program got terminated thus these core files can be used for debugging purposes more specifically tracing what went wrong during program execution similar to white and black box recording technique.
+
+Core dumps cann also be used for capturing data during dynamic memory allocation.
+
+A core dump is contained in a file named simlar to core.<process_id>
+
+On some systems core dump may be disabled due to large size of the core files which we can enable using ulimit -c unlimited command.
+
+For viewing core dump files we will need to use a debugger allowing us to 
+  examine state of process.
+  include listing stack traces for all threads of the process.
+  we can also print the values of variables and registers.
+
+we will also need to add debugging information to executable by gcc-g.
+
+----steps,commands for viewing core file------
+
+In windows using cygwin : 
+gcc -g src_file.c
+gdb exec_file.exe exec_file.exe.stackdump
+
+In linux
+
+gdb ./src_file.out core : command for starting analysis of core file using debugger
+info locals : command for visualizing the variables.
+
+-----------Profiling-----------
+
+Profiling a program allows to measure consumption of : 
+  Mmeory while it´s running.     
+  Time complexity (efficiency)
+  Usage of particular instructions.
+  Frequency and duration of function calls.
+
+We do profiling through a tool using either program executable or it´s source. Profiling information
+serves to aid program optimization.
+
+Profilers use a number of techniques such as event-based,statistica, instrumented and similation methods.
+
+--------GNU Profilers gprof and valgrind--------
+
+gprof profiler uses hybrid approach of compiler assisted instrumentation and sampling.
+
+gprof gathers profiling information by probing program counter at regular intervals through
+operating system interrupts thus resulting profiling data is not exact but statistical approximation.
+
+gprof is more preferred in multithreaded applications.
+gprof is unable to profile shared libraries used in our source code maaking it unsuitable for
+today´s real world projects.
+
+gcc -pg src.c -o exec_name .
+./exec_name
+gprof exec_name gmon.out > file.txt : command for running gprof profiler in linux and acquring output in
+                                       file.
+
+
+valgrind is also a profiler and also provides us information about memory leaks through memcheck tool.
+
+valgrind --leak-check=yes ./exec_name
+
+valgrind takes a lot of time to execute which is a big downsize to it however it´s very effective in detecting memory leaks.
+
+
+
+Google also provides profiler took gperftools which has very little runtime overhead. 
+gperftool also enables us to do selective profiling of certain sections of code and also has no
+problem with multi-threaded applications.
+
+ 
+---------------------------Static Analysis-------------------------
+
+Static analysis : A method of debugging program code without actually running it opposite to dynamic analysis done by profilers . This analysis is performed by an automated tool.
+
+Software engineering and reverse engineering can be described as forms of static analysis.
+
+Both static and dynamic analysis detects defects.
+
+Static analysis is done between coding and unit testing.
+
+static code analysis tools offer speed,depth and accuracy in comparison to manual code reviews and many more benefits.
+
+Static code analysis have constraints : 
+          .limited in understanding developer intent.
+          .may detect a possible overflow in calculation
+          .rules that are not statically enforceable as some coding rules depend upon documentation,
+          .some rules are open to subjective interpretation.
+          . possible defects lead to false positives and false negatives.
+
+Many open source and propritary static code analyser tools are available such as : 
+
+Coverity
+CodeSonar integrated AI
+SonarCube
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                         
+
+  
+ 
+
+
+ 
+                  
+
+
+
+
+
+
 
 
 

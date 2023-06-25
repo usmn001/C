@@ -174,6 +174,8 @@ struct table t[entries];
 t[0].name = "USMAN";
 
 
+//--------------------- Macros----------------------
+
 
 
 
