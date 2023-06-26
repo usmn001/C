@@ -1896,6 +1896,60 @@ Coverity
 CodeSonar integrated AI
 SonarCube
 
+---------------------Section 16 : Advanced Pointers------------------
+
+Pointer to a Pointer is known as double pointer for e.g. 
+
+data_type var_name = val_assigned;
+
+data_type ptr1_name = &var_name;
+
+data_type ptr2_name = &ptr1_name;   
+
+Use cases For Double pointers : 
+
+Biggest reason for using a double pointer is when we need to  change the value of pointer passed
+to a function as the function argument.
+  
+If we pass a signle pointer in as argument : 
+    We will be modifying local copies of pointer not original pointer in calling scope.
+    With a pointer to a pointer we modify original pointer.
+
+We use a double pointer as an argument to a function when we want to preserve memory allocation or
+assignment even outside of function.
+
+When we are passing address of a pointer to a function having a local pointer as it´s paramter then we
+can change the value stored at the passed address however we cannot change the passed address inside the function.
+   
+Example : 
+
+void foo(int *ptr){
+
+int a = 5;
+*ptr = a;      // As discussed above here we are modifying value stored at address passed from main
+               // And now it will have effect when we execute print statement in main() unlike to
+                  result produced by modifying address i.e. ptr = &a limited to only function.
+
+               // To change passed address we need to make ptr as double pointer then we can do 
+               // *ptr = &a and now printf statement in main will print 5      
+}
+
+int main(){
+int *ptr = NULL;
+ptr = (int *) malloc(sizeof(int));
+*ptr = 10;
+foo(ptr);         // When we have double pointer as paramter in foo function then we do foo(&ptr)
+
+printf("%d\n",*ptr);
+return 0;
+}
+
+
+/* Solve Double Pointers Challenge Later On */
+
+
+
+
 
 
 

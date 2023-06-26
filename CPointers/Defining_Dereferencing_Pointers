@@ -65,7 +65,7 @@ The printf format specifier for :                                             Da
                                    
 As we know pointers store memory addresses of variables,structures and other memory locations allocated and point their , just like we can assign a certain memory address we can also change contents stored memory location copied in the pointer from mentioned memory sources for e.g. in case of variable 
                               int a = 1; 
-                              int *ptr = &a or *ptr=&a;  
+                              int *ptr = &a or ptr=&a;  
                               *ptr = 2 ;      
                               
                            now variable a will have value 2 instead of 1 thus we can say that generally 

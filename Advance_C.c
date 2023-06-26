@@ -24,7 +24,6 @@ static struct{
 	char name[];
 }Person;
 
-
 void add(){
 
 printf("\n In main thread a = %i",a);
@@ -88,6 +87,11 @@ va_end(parg);
 
 return sum/cnt;
 }*/
+
+
+
+
+
 
 int main(void) {
 
@@ -175,6 +179,18 @@ t[0].name = "USMAN";
 
 
 //--------------------- Macros----------------------
+
+
+/***********Double Pointers*********/
+union Person *ptr1 = &p1;
+int aa =1;
+int *ptr2 = NULL; int **ptr3 = NULL;
+ptr2 = &aa;
+ptr3 = &ptr2;
+printf("Pointer to union address : %p,%p,%i,%p,%i ",ptr1,ptr2,*ptr2,*ptr3,**ptr3);
+
+char *ptr4 = NULL;
+foo(&ptr4);
 
 
 
