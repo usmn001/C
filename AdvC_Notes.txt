@@ -1902,9 +1902,16 @@ Pointer to a Pointer is known as double pointer for e.g.
 
 data_type var_name = val_assigned;
 
-data_type ptr1_name = &var_name;
 
-data_type ptr2_name = &ptr1_name;   
+data_type *ptr1_name = &var_name;
+data_type **ptr2_name = &ptr1_name;
+
+
+2nd way of declaring pointers is : 
+
+data_type *ptr1_name = NULL, **ptr2_name = NULL;
+ptr1_name = &var_name;
+ptr2_name = &ptr1_name;   
 
 Use cases For Double pointers : 
 
@@ -1945,7 +1952,9 @@ return 0;
 }
 
 
-/* Solve Double Pointers Challenge Later On */
+---------Function Pointers--------
+
+
 
 
 
