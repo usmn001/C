@@ -1954,6 +1954,177 @@ return 0;
 
 ---------Function Pointers--------
 
+Functions contain addresses and thus we can use pointers to point towards them so basically function names are just like array names which contain addresses.
+
+
+Pointers to functions i.e. Functions can be : 
+   Passed to functions.
+   Returned from functions.
+   Stored in Arrays.
+   Assigned to other function pointers.
+
+A function pointer can be used direclty as we call a function using it´s name.
+
+Function pointers don´t require us to allocate and deallocate memory.
+
+---------Common Use of Function Pointers--------------
+
+Function pointer can be used as an argument to another function just like we pass paramters to functions.
+
+qsort() function from C library is designed to work with arrays of any kind as long as we tell it
+what function to use to compare elements.
+qsort() function takes a pointer to a function as one of it´s arguments for sorting.
+
+We can use function pointers for processing different commands entered by user in a way that we put 
+all the relevant function pointers in a lookup table and when the user enters a command then we can
+match it with corresponding function pointer which can be used to invoke corresponding function to handle the particular command.
+
+menu-driven systems use function pointers.
+can be used to replace switch/if statements.
+can be used to realize our own late-binding.
+can be used to implement callbacks.
+function pointers are useful when alternatice functions maay be used to perform simialr tasks on data.
+
+--Syntax-- 
+
+Like we used to do with normal pointers here in addition to just passing addresses we need to provide number and type of arguments to be supplied and type of return value to be expected.
+
+A function as holds address of a function so it also needs to define a prototype.
+
+Function pointers are dereferenced similar to other pointers in order to use pointed function.
+   
+--Declaration--  
+When declaring a function pointer we provide pointed function return type and type of it´s paramters as well. i.e.
+
+return_type (*pfunction) (paramters_data_type);
+
+Example : int (*pfunction) (int);
+
+--Assignment--
+
+Assigning function address : We can assign any relevant function address returning same data type 
+and with same number of paramters as they are with function pointer i.e. for e.g.
+
+int look(int);  // look is a function with one int parameter.
+pfunction = look; 
+
+
+--Invocation---
+
+we can invoke or call the function using function pointer as : 
+
+int ret_val = ptr_function(func_paramter);
+
+Example : 
+int read(int);
+int (*pread)(int);
+pread = read;
+int ret_val = pread(5);
+
+-----------------Common Convention----------
+
+As mentioned previously, function pointers can be passed as paramters in function calls and can be returned as function values, this use of function pointers as paramters provides flexibility for flexible functions and programs.
+
+So if we use typdef keyword then it will allow us to declare function pointers more easily and they will become more readable as we can assign name to the function pointer return type i.e.
+
+Normally we do : return_type (*func_ptr)(param_dta_type); so if we use typedef with function pointers we do : 
+ 
+          typedef return_type (*func_ptr)(para_dta_type); // Hence we have created a new type enabling us 
+to create relevant function pointers more easily instead of again and again typing the complete declaration and defining statement for e.g. 
+
+typedef float (*fptr)(float);
+
+fptr func1 = NULL; // where func1 is a pointer to a function returning float and have one argument of 
+                      float and so on similarly we can create other function pointers easily.
+
+Example 1 : 
+
+int display(){
+printf("\n--Displaying some texts--\n");
+return 0;
+}
+
+int main() {
+     
+int (*func_ptr)();       
+
+func_ptr = display;
+
+printf("Address of func_ptr = %p ",func_ptr);
+
+(*func_ptr)();
+
+return 0;
+}
+
+
+Example 2 : Using Typedef 
+int display(){
+printf("\n--Displaying some texts--\n");
+return 0;
+}
+
+int main() {
+     
+typedef int (*func_ptr)(); 
+
+func_ptr fp1;      
+
+fp1 = display;
+
+printf("Address of func_ptr = %p ",func_ptr);
+
+(*fp1)();
+
+return 0;
+}
+                      
+--------------Void Pointers--------------
+
+A void pointer is a pointer that does not have any data type. A void pointer can point to any other address of memory holding containing data of any other type. For e.g.
+
+int a = 1;
+float fv = 0.0;
+float *fptr;
+void *ptr;
+
+fptr = &fv;
+ptr = &a;
+ptr = fptr; // So we can also assign address of another pointer to void pointer easily.
+
+To cast a void pointer into another data type we do : (data_type*)v_ptr;
+
+-------Dereferencing A Void Pointer--------               
+To dereference a void pointer we follow this approach *(data_type_casted*)v_ptr;  For e.g. in relation to above code we do : 
+int a = 1;
+vptr = &a;
+*(int*)vptr +=1 ; Here we are dereferencing and adding 1 to void pointer value.
+
+Void pointers used a lot in C like memory management functions malloc,memcpy,calloc e.t.c and with other functions in a way such that the function can take different types of paramters. For e.g.
+
+void send(void *pData, int nlength);
+
+we should avoid performing operations on void pointers without first casting them.
+
+
+   
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
 
 
 
