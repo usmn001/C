@@ -682,6 +682,9 @@ change sign of result
 subtract 1
 
 
+data_type variable : number_of_bits_assigned ;
+
+
 ------------------------------Section 9 : Advanced Control Flow--------------------------------
 
 -------goto statement----------
@@ -1317,10 +1320,10 @@ union number n1 = {.i = 0,f = 1.1, aa = 22.2234};
 
 A C program passes through following stages before becoming a executable. 
 Preprocessor
-Compilation
-Assembler
-Linker
-Loader
+Compilation : Produces Assembly language equivalent code.
+Assembler : Produces Object Code. 
+Linker : Comibines object files into a single machine executable file.
+Loader : Executable file loads into memory.
 
 Preprocessor not a part of C compier is invoked before compiler, performing following three main tasks : 
 
@@ -1866,7 +1869,7 @@ valgrind takes a lot of time to execute which is a big downsize to it however it
 
 
 
-Google also provides profiler took gperftools which has very little runtime overhead. 
+Google also provides profiler tool gperftools which has very little runtime overhead. 
 gperftool also enables us to do selective profiling of certain sections of code and also has no
 problem with multi-threaded applications.
 
@@ -2105,6 +2108,73 @@ Void pointers used a lot in C like memory management functions malloc,memcpy,cal
 void send(void *pData, int nlength);
 
 we should avoid performing operations on void pointers without first casting them.
+
+
+-----------------------Section 17: Libraries and Shared Objects-----------------------
+
+Library is a collection (group) of header files and implementation files exposed for use by other programs.
+Library function prototypes or inshort interfaces are present in header file. (shared with pther programmers besides .o object files)
+Library function definitions are in .c file.
+
+Libraries enable : SW reuse,version management, component specialization.
+
+-------Linking-------
+
+As we already know that Linking is process of collecting and combining multiple object files.
+
+To make library code available to our program linker does : static linking and dynamic linking.
+
+Static Linking : In static linking linker makes copy of all used library functions to executable file.
+Dynamic Linking : Linker places name of library in binary file of executable code and linking happens when program is run and both program and library files are in memory.
+
+  
+----Static vs Dynamic Libraries Or (Static Linking Vs Dynamic Linking) In C----
+
+
+Static Library or Static Linking
+
+i).   Linker finds all used functions(sqrt(),printf() e.t.c) codes and puts them together into our single executable file.
+ii).  Library files have extension .a in linux and .lib in windows.
+iii). Generated Executable is a larger file and needs more storage space. 
+iv).  If their is change in library file with .a extension then still executable does not automatically updated and needs to be relinked
+      with library file.
+v).   If library becomes incompataible then generated executable will still run unless it's not relniked with updated library file code.
+vi).  Static library access is faster as compared with that of dynamic library access time. 
+
+
+Dynamic Library or Dynamic LInking
+
+i).   Linked dynamically at run time by the os,every program that accesses the library uses the same copy.
+ii).  Library files  have the extension .so in linux and .dll in windows.
+iii). Executable only contains the name of a link to the library.
+iv).  If library file changes then executable will contain newer library file updated code. 
+v).   If library file becomes incompatabile with our main source code then previously generated executable won't run.
+vi).  Dynamic querying of symbols takes time so dynamic library files access is slower.
+
+
+Library                               Static                                           Dynamic          
+
+Compiled Command 	       gcc -c part1.c part1.o                          gcc -c -fpic part1.c part1.o    (fpic is compiler flag)
+To Create Library             ar rcs libmylib.a part1.o part2.o               gcc -shared -o libmylib.so part1.o part2.o
+Compile main program          gcc -c program.c -o program.o                   gcc -c program.c -o program.o
+To link with main program     gcc -o program program.o -L. -lmylib            gcc -o program program.o -L. -lmylib
+                                         or                                   Add library path to environment variable  
+	                      gcc program.c libname.a -o program              export LD_LIBRARY_PATH:$PWD:$LD_LIBRARY_PATH  
+	                                 or
+	                   gcc (compiler-flags) program.c -L. -lmylib -o program           
+	In above comparative scenarios of both static and dynamic we have assumed that library files are placed in
+	the same path or folder where main program executbale is present.
+	
+	
+
+libweather.a: weatherstats.o weatherio.o
+        ar rcs libweather.a weatherstats.o weatherio.o
+
+
+
+
+
+
 
 
    

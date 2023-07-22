@@ -44,7 +44,8 @@ git pull repo_link.git or git pull           " Command for updating or syncing l
      
 git remote add origin master (url)           " Command for adding new remote repo to current repo "
 git remote -v                                " Command for verifying new remote "
-    
+git stash                                    "Command temporarily shelves (or stashes) changes we've made to our working copy so we can work on something else, 
+                                              and then come back and re-apply them later on."  
 
 
 **************Setting Up Git SSH Keys********************
