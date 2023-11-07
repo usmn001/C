@@ -10,7 +10,7 @@ I have developed device drivers for following peripherals in KEIL MDK ARM.
 18 -  Gyroscope/Accelrometer x 1 : MPU9150
 19 -  GPS module RAW x 1 : S1315f8
 
-Following Peripherals are lefted 
+Following Peripherals drivers were not developed
 
 1  - motor wheels x 2
 2  - cutting motor x 1
