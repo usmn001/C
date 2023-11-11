@@ -1,0 +1,80 @@
+
+DEB files are installation files for Debian based distributions. RPM files are installation files for Red Hat based distributions. Ubuntu is based on Debian's package manage based on APT and DPKG. Red Hat, CentOS and Fedora are based on the old Red Hat Linux package management system, RPM.
+
+lsb_release -a                                    /* Command provideing complete information about linux kernel distribution and version.*/
+
+uname -a                                          /* Command for finding Linux Kernel Architecture */ 
+
+getconf LONG_BIT                                  /* Command for finding whther linux kernel is 32 bit or 64 bit*/
+
+sudo apt install executable_package               /* Command for installing sw executable or package*/
+
+sudo dpkg -i packagename.deb                      /* Command for installing deb package */
+
+sudo dpkg -r PACKAGE_NAME.deb                     /* Command for removing deb package  */ 
+
+dmesg | grep tty                                  /* Command for listing available serial ports */
+
+sudo chmod ugo+w /dev/ttyUSB0                     /* Command For Enabling Read Write Operations By A User On Serial Port */
+
+sudo chmod 666 /dev/ttyUSB0                       /* Command For Enabling Read Write Operations By A User On Serial Port  */              
+
+sudo -H pip3 install --upgrade pip                /* For Upgrading pip after installing an old version */  
+sudo -H pip2 install --upgrade pip
+
+sudo apt-get purge code                           /* Command for removing visual studio code */
+
+sudo apt-get upgrade package_or_program_name      /* Command for updating an indvidual package or program */
+
+$cd ~ && rm -rf .vscode && rm -rf .config/Code    /*Command for Removing visual studio code settings*/
+
+sudo su                                           /* Command for making user as super user */
+
+su username                                       /* Command for switching to user defined by user name */
+
+chmod -R <permissionsettings> <dirname>           /* Coomand for changing permission on entire directory */ 
+
+mv source destination                       /* Command for moving contents of a source folder/directory to destination folder/directory */
+                                            /* Same command could be used for renaing source file or directory with of destination */
+                                            
+whereis executable_name                           /* Command for finding binary executable location */
+
+sudo apt purge code                               /* Command for un installing visual studio code */
+
+
+tar xf archive.tar -C location for extraction  /* Command for extracting tar archive at target location */
+
+********************chmod command in linux*******************
+
+https://www.pluralsight.com/blog/it-ops/linux-file-permissions
+
+syntax of chmod is numeric value defining permissions for user,group and others. 
+
+Numeric value defines read,write and execute permissions for the user,group and others.
+
+0 value stands for no permission
+1 value stands for execution.
+2 value stands for write.
+4 value stands for read. 
+
+Any numeric combination can be used for giving multiple permission to user,group and others for e.g. chmod 700 filename/directory means
+that user has read,write and executable permission for certain file and directory and same applies for group and others.
+
+
+
+*********************Defining environment variables in .bashrc file for all sessions**********************
+
+To define environment variables for all terminal/programs sessions define them in .bashrc file through export command for example we are defining environment variables "ZEPHYR_TOOLCHAIN_VARIANT" and "GNUARMEMB_TOOLCHAIN_PATH" as follows.
+
+export ZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb
+export GNUARMEMB_TOOLCHAIN_PATH=/home/musman/gnuarmemb/gcc-arm-none-eabi-10.3-2021.10/bin
+
+Similarly we can also add paths of different executables in path variable at .bashrc file as 
+export PATH=$PATH:~/opt/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux/gcc-arm-none-eabi-10-2020-q4-major/bin
+ 
+
+
+
+
+
+

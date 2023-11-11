@@ -1,0 +1,104 @@
+emai = m_usman010@yahoo.com
+	name = usmn001
+	password = P@ssWo0rd1
+	email = m_usman010@yahoo.com
+
+git ssh old passphrase : Usm@n00!1&
+git ssh new passphrase : p@sUsm001%
+
+musman bit bucket app password : rcfzz8fPNnxPW7SmyMv8
+
+
+
+Git  is a  distributed version control system.  This video shows How to Get Started with Git and Github and teaches The Basics of Git and GitHub.
+
+************************Git : Setting Up Credentials Commands*********************
+
+git config --global user.name "Your Name"
+git config --global user.email "youremail@domain.com"
+git config --global user.password "yourpassword"
+
+
+
+************************************Git : Repo Commands********************************
+git init                                      " Creates a new repository at the local and remote system"
+git clone (url)                               " Cloning a repository "
+git add (file names)                          " For adding/staging file names for committing "
+git commit -m "(committed message)
+git push -u origin master
+git rm file_name                              " For removing files from the repo "
+git show SHA-1 Commit ID --stat               " Showing Deatils (Author,Date e.t.c 
+                                                of commit specified by ID "
+                                                In later point of time we can use these commit ID´s to check who and 
+                                                when made certain changes on a specific file.
+
+git log                                       " Shows metadata list of some of the commits made on a certain branch".
+ 
+git remote show "repo name of fellow remote worker"   " For tracking Changes on the remote repo of fellow worker".   
+
+
+**************************Git : Branch commands********************************
+
+We can use git branch and git switch commands for creating a new branch for pushing to remote as illustrated below : 
+
+git switch -c new_branch_name                " Command for creating new branch for pushing to remote "
+git checkout -b new_branch_name              " Command for creating new branch for pushing to remote and also to switching to the branch from main or current "
+git branch new_branch_name                   " Command for creating new branch for pushing to remote "
+git branch                                   " Command for checking which branch currently is used "  
+git push --set-upstream origin branch_name   " Command For pushing to a new branch for first time when it's created "
+git push origin masterbranch:sub branch      " Command For Pushing Changes to Master Branch".
+git checkout branch_name                     " Command for switching to another branch or main, for main it will be git checkout main "
+git branch -d lte_modem                      " Command for deleting a branch "  
+git push origin :branch_name                 " Command for updating remote about branch deletion"
+git pull repo_link.git or git pull           " Command for updating or syncing local repo and working directory from remote repo "
+git fetch                                    " Command for copying changes into your local repo from remote repo ". 
+     
+git remote add origin master (url)           " Command for adding new remote repo to current repo "
+git remote -v                                " Command for verifying new remote "
+git stash                                    "Command temporarily shelves (or stashes) changes we've made to our working copy so we can work on something else, 
+                                              and then come back and re-apply them later on."  
+
+
+
+******************Commands For Resolving Merge Conflicts In Git***************************
+
+git merge
+ 
+git diff ( Example git diff origin-branch/SHA1 Commi new-branch)       Enables us to see what is the difference in between the two
+
+git rebase 
+
+
+
+
+
+**************Setting Up Git SSH Keys********************
+
+ssh-keygen -t ed25519 -C "your email address" /* Command for generating ssh key */
+
+eval "$(ssh-agent -s)"        /* Command for starting SSH agent */
+
+ssh-add ~/.ssh/id_ed25519     /* Command for adding ssh key where ~/.ssh/id_ed25519 is the path where ssh key is stored in id_ed25519.
+                               This path could be changed at the time of key creation*/
+                               
+                               
+cat ~/.ssh/id_ed25519.pub   /* Command for viewing,copying the ssh key stored at ~/.ssh/id_ed25519.pub to git account 
+                                */                                  
+
+ssh -T git@github.com         /* Command for testing your Github ssh connection */   
+
+     
+
+ssh -vT git@github.com        /* Command for checking which ssh key is accepted or refused */
+
+Your identification has been saved in /home/musman/.ssh/id_ed25519
+Your public key has been saved in /home/musman/.ssh/id_ed25519.pub
+
+
+
+
+
+
+
+
+
