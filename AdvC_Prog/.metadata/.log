@@ -1,0 +1,217 @@
+!SESSION 2023-08-07 21:51:10.831 -----------------------------------------------
+eclipse.buildId=4.28.0.20230608-1200
+java.version=17.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.embedcpp.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.embedcpp.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2023-08-07 21:52:50.836
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\m_usm'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2023-08-08 19:51:08.252 -----------------------------------------------
+eclipse.buildId=4.28.0.20230608-1200
+java.version=17.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.embedcpp.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.embedcpp.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2023-08-08 19:53:34.319
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\m_usm'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2023-10-28 16:11:38.960 -----------------------------------------------
+eclipse.buildId=4.28.0.20230608-1200
+java.version=17.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.embedcpp.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.embedcpp.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2023-10-28 16:12:15.197
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\m_usm'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2023-10-29 12:29:15.789 -----------------------------------------------
+eclipse.buildId=4.28.0.20230608-1200
+java.version=17.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.embedcpp.product -product org.eclipse.epp.package.embedcpp.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.embedcpp.product -data C:\CPP_C\AdvC_Prog -product org.eclipse.epp.package.embedcpp.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2023-10-29 12:29:25.288
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\m_usm'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.cdt.core 1 0 2023-10-29 12:30:06.865
+!MESSAGE Indexed 'Pointers' (1 sources, 10 headers) in 0.945 sec: 880 declarations; 1,719 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.embedcdt.packs.core 1 1 2023-10-29 12:31:00.806
+!MESSAGE File .repos.xml does not exist, using defaults.
+
+!ENTRY org.eclipse.cdt.core 4 0 2023-10-29 16:14:59.233
+!MESSAGE Error: Cannot run program "rm": Launching failed
+!STACK 0
+java.io.IOException: Cannot run program "rm": Launching failed
+	at org.eclipse.cdt.utils.spawner.Spawner.exec(Spawner.java:450)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:147)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:134)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory$Builder.start(ProcessFactory.java:273)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory.exec(ProcessFactory.java:366)
+	at org.eclipse.cdt.core.CommandLauncher.execute(CommandLauncher.java:189)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.CommandBuilder.build(CommandBuilder.java:112)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.StepBuilder.build(StepBuilder.java:96)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.cleanWithInternalBuilder(CommonBuilder.java:1225)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1121)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1070)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:1023)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:247)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:303)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:392)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:395)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:506)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:454)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:536)
+	at org.eclipse.core.internal.resources.Workspace.buildInternal(Workspace.java:524)
+	at org.eclipse.core.internal.resources.Workspace.build(Workspace.java:420)
+	at org.eclipse.ui.actions.BuildAction$1.runInWorkspace(BuildAction.java:291)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2023-10-30 08:04:32.065 -----------------------------------------------
+eclipse.buildId=4.28.0.20230608-1200
+java.version=17.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.embedcpp.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.embedcpp.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2023-10-30 08:05:08.105
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.egit.ui 2 0 2023-10-30 08:05:17.006
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\m_usm'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.cdt.core 4 0 2023-10-30 08:08:52.943
+!MESSAGE Error: Cannot run program "rm": Launching failed
+!STACK 0
+java.io.IOException: Cannot run program "rm": Launching failed
+	at org.eclipse.cdt.utils.spawner.Spawner.exec(Spawner.java:450)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:147)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:134)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory$Builder.start(ProcessFactory.java:273)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory.exec(ProcessFactory.java:366)
+	at org.eclipse.cdt.core.CommandLauncher.execute(CommandLauncher.java:189)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.CommandBuilder.build(CommandBuilder.java:112)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.StepBuilder.build(StepBuilder.java:96)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.cleanWithInternalBuilder(CommonBuilder.java:1225)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1121)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1070)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:1023)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:247)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:303)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:392)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:395)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:506)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:454)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:536)
+	at org.eclipse.core.internal.resources.Workspace.buildInternal(Workspace.java:524)
+	at org.eclipse.core.internal.resources.Workspace.build(Workspace.java:420)
+	at org.eclipse.ui.actions.BuildAction$1.runInWorkspace(BuildAction.java:291)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2023-10-30 08:10:57.075 -----------------------------------------------
+eclipse.buildId=4.28.0.20230608-1200
+java.version=17.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.embedcpp.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.embedcpp.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2023-10-30 08:11:08.609
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\m_usm'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.cdt.core 4 0 2023-10-30 08:11:34.559
+!MESSAGE Error: Cannot run program "rm": Launching failed
+!STACK 0
+java.io.IOException: Cannot run program "rm": Launching failed
+	at org.eclipse.cdt.utils.spawner.Spawner.exec(Spawner.java:450)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:147)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:134)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory$Builder.start(ProcessFactory.java:273)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory.exec(ProcessFactory.java:366)
+	at org.eclipse.cdt.core.CommandLauncher.execute(CommandLauncher.java:189)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.CommandBuilder.build(CommandBuilder.java:112)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.StepBuilder.build(StepBuilder.java:96)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.cleanWithInternalBuilder(CommonBuilder.java:1225)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1121)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1070)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:1023)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:247)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:303)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:392)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:395)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:506)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:454)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:536)
+	at org.eclipse.core.internal.resources.Workspace.buildInternal(Workspace.java:524)
+	at org.eclipse.core.internal.resources.Workspace.build(Workspace.java:420)
+	at org.eclipse.ui.actions.BuildAction$1.runInWorkspace(BuildAction.java:291)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.cdt.core 4 0 2023-10-30 08:12:09.114
+!MESSAGE Error: Cannot run program "rm": Launching failed
+!STACK 0
+java.io.IOException: Cannot run program "rm": Launching failed
+	at org.eclipse.cdt.utils.spawner.Spawner.exec(Spawner.java:450)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:147)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:134)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory$Builder.start(ProcessFactory.java:273)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory.exec(ProcessFactory.java:366)
+	at org.eclipse.cdt.core.CommandLauncher.execute(CommandLauncher.java:189)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.CommandBuilder.build(CommandBuilder.java:112)
+	at org.eclipse.cdt.managedbuilder.internal.buildmodel.StepBuilder.build(StepBuilder.java:96)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.cleanWithInternalBuilder(CommonBuilder.java:1225)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1121)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.clean(CommonBuilder.java:1070)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:1023)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:247)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:303)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:392)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:395)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:506)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:454)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:536)
+	at org.eclipse.core.internal.resources.Workspace.buildInternal(Workspace.java:524)
+	at org.eclipse.core.internal.resources.Workspace.build(Workspace.java:420)
+	at org.eclipse.ui.actions.BuildAction$1.runInWorkspace(BuildAction.java:291)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)

@@ -1,0 +1,26 @@
+08:17:39 **** Incremental Build of configuration Debug for project Pointers ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Double_Pointers.o" "..\\src\\Double_Pointers.c" 
+..\src\Double_Pointers.c: In function 'main':
+..\src\Double_Pointers.c:39:20: warning: variable 'ptr2' set but not used [-Wunused-but-set-variable]
+ int *ptr1 = NULL,**ptr2 = NULL;   // In 2nd way we do it later on in preceeding program statements without using *notation.
+                    ^~~~
+gcc -o Pointers.exe "src\\Double_Pointers.o" 
+Info: Nothing to build for Pointers
+08:18:14 **** Incremental Build of configuration Debug for project Pointers ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Double_Pointers.o" "..\\src\\Double_Pointers.c" 
+..\src\Double_Pointers.c: In function 'main':
+..\src\Double_Pointers.c:59:8: warning: passing argument 1 of 'printf' makes pointer from integer without a cast [-Wint-conversion]
+ printf(b);
+        ^
+In file included from ..\src\Double_Pointers.c:11:0:
+c:\mingw\include\stdio.h:454:38: note: expected 'const char *' but argument is of type 'uint16_t {aka short unsigned int}'
+ _CRTIMP __cdecl __MINGW_NOTHROW  int printf (const char *, ...);
+                                      ^~~~~~
+..\src\Double_Pointers.c:39:20: warning: variable 'ptr2' set but not used [-Wunused-but-set-variable]
+ int *ptr1 = NULL,**ptr2 = NULL;   // In 2nd way we do it later on in preceeding program statements without using *notation.
+                    ^~~~
+gcc -o Pointers.exe "src\\Double_Pointers.o" 
+Info: Nothing to build for Pointers
+Info: Nothing to build for Pointers
