@@ -1,14 +1,3 @@
-emai = m_usman010@yahoo.com
-	name = usmn001
-	password = P@ssWo0rd1
-	email = m_usman010@yahoo.com
-
-git ssh old passphrase : Usm@n00!1&
-git ssh new passphrase : p@sUsm001%
-
-musman bit bucket app password : rcfzz8fPNnxPW7SmyMv8
-
-
 
 Git  is a  distributed version control system.  This video shows How to Get Started with Git and Github and teaches The Basics of Git and GitHub.
 
