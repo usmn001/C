@@ -73,8 +73,22 @@ A = 0011 , B = 0101          A|B = 0111     (Bitwise | )
 Relational : <,<=, >, =>, == , !=
            
                    
+-----------------------String Functions : For Performing Operations On Strings----------------------------
 
+The following functions are defined in string.h header file , so include that in your code.
 
+strcmp() : compares two strings character by character. If the strings are equal, the function returns 0. 
+            Function Prototype : int strcmp (const char* str1, const char* str2);
+
+strcat() : Function concatenates the destination string and the source string, and the result is stored in the destination string.
+            Function Prototype : char *strcat(char *destination, const char *source)  
+
+strcpy() : Function copying the string pointed by source (including the null character) to the destination.
+             Function Prototype : char* strcpy(char* destination, const char* source);
+
+strlen() : Function takes a string as an argument and returns its length. The returned value is of type size_t 
+           (an unsigned integer type).  
+             Function Prototype : size_t strlen(const char *s);
             
         -------------------Taking Input a line of String In C Using Scanf()-----------------------
 
