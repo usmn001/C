@@ -30,40 +30,6 @@ Normally this approach of combining and linking multiple object files of sub mod
 into a library file which can be linked either statically or dynamically with main source code file , it should be noted that 
 each static and dynamic linking have it´s own advantages and disadvantages alongwith specific syntax to be used with relevant compiler.
 
-
-                                 ----------------------------Makefiles--------------------------------
-
-
-Makefiles allow us to do building and compiling of our program with lot´s of dependancies such as libraries and other function object files in 
-a organized way such that freeing us from executing tirelessly each compiler command in the command line.
-
-#define the C Compiler to use 
-CC	= gcc
-#define compiler flags
-CFLAGS	= -std=c11 -Wall -fmax-errors=10 -Wextra
-#define library paths in addition to /usr/lib
-LFLAGS	= 
-#define libraries to use
-LIBS	=
-#define the object files that this project needs
-OBJFILES	= program.o weatherstats.o
-#define the name of executable file
-MAIN	= program
-
-# all of the below is generic - are typically only adjusts the above
-
-all: $(MAIN)
-
-$(MAIN): $(OBJFILES)
-	$(CC) $(CFLAGS) -o $(MAIN) $(OBJFILES)
-	
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-	
-clean:
-	rm -f $(OBJFILES) $(MAIN)
-
-
 -------Communication Between Two Files-------------
 
 Two or more files containing code can pass information either through function methods and through extern variables
@@ -534,14 +500,16 @@ int a[] = {[0..9]=1,[10.99]=2};
 
 
 If we want to intialize a structure memebrs then we can do : 
+
 struct point{
-int x,y,z;};
+int x,y,z;
+};
 
 int main(){
 struct point p1 = {.x=1, .y=2, .z=3};
 // For an array of structures we do
-struct point pts[5] = { [2].y=5, [2].x =6; [0].x=2   
-// here [2].x means that we have assigned pts[2].x=6 and pts[0].x =2
+struct point pts[5] = { [2].y=5, [2].x =6; [0].x=2 }   
+// here [2].x means that we have assigned pts[2].x=6 and pts[0].x =2 where pts[2] is our pointer to 2nd struct and pts[0] is pointer to 1st struct
 return 0;
 }
 
@@ -655,7 +623,7 @@ Example 1 : int main(void) {
     int *par = array;
     for(int i=0; i<10 ; i++) {
     par[i] +=5;    
-    restar[n] +=5;
+    restar[i] +=5;
     array[i] *=2;
     par[i] +=3;
     restar[i] += 3;     // The compiler will now optimize the statements with restar pointer and will comibine 
@@ -2171,12 +2139,19 @@ libweather.a: weatherstats.o weatherio.o
         ar rcs libweather.a weatherstats.o weatherio.o
 
 
+-----------------------------------------Section 20 : Data Structures----------------------------------------
 
 
+------------Linked List---------------
 
+Linked list is a linear data structure and it´s dynamic.
+Linked lists are accessed through a pointer pointing to the first node of list.
 
+In Linked list each node contains : data, 
+                                    connection to next node in the list through next pointer, 
+                                    may contain prev pointer for connection to previous node in case of a doubly linked list.
 
-
+In Order to traverse a linked list we follow pointer from each node to next node.
    
 
 
