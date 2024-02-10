@@ -1,0 +1,53 @@
+General Purpose Registers : R0-R12.  
+
+The ARM Architecture Procedure Call Standard, AAPCS, part of the ARM Application Binary 
+Interface (ABI), uses registers R0, R1, R2, and R3 to pass input parameters into a C function. Functions must preserve the values of registers R4–R11.  
+Also according to AAPCS we place the return parameter in Register R0
+
+ 
+Link Register : R14 
+Used to store the return location for functions. The LR is also used in a special way during
+exceptions, such as interrupts.
+
+
+Stack Pointer(SP)(PSP)  : R13 
+
+Program Counter : R15. : Points to the next instruction to be fetched from memory. The processor fetches
+an instruction using the PC and then increments the PC 
+
+----Special Purpose Registers----- 
+Program Status Register : PSR  
+
+
+Control Register : CONTROL
+
+Exception Mask Registers : 
+PRI MASK ,
+FAULT MASK,
+BASE PRI.
+
+There are three status registers named Application Program Status Register (APSR), the Interrupt Program Status Register (IPSR), and the
+Execution Program Status Register (EPSR) as shown in Figure 3.3. These registers can be accessed individually or in combination as 
+the Program Status Register (PSR). The N, Z, V, C, and Q bits give information about the result of a previous ALU
+operation. In general, the N bit is set after an arithmetical or logical operation signifying whether or
+not the result is negative. Similarly, the Z bit is set if the result is zero. The C bit means carry and is
+set on an unsigned overflow, and the V bit signifies signed overflow. The Q bit indicates that
+“saturation” has occurred. 
+
+The T bit will always be 1, indicating the ARM ® Cortex™-M processor is executing Thumb ® 
+instructions. The ISR_NUMBER indicates which interrupt if any the processor is handling. Bit 0 of
+the special register PRIMASK is the interrupt mask bit. If this bit is 1, most interrupts and exceptions
+are not allowed. If the bit is 0, then interrupts are allowed. Bit 0 of the special register
+FAULTMASK is the fault mask bit. If this bit is 1, all interrupts and faults are not allowed. If the bit
+is 0, then interrupts and faults are allowed. The nonmaskable interrupt (NMI) is not affected by these
+mask bits. The BASEPRI register defines the priority of the executing software. It prevents interrupts
+with lower or equal priority but allows higher priority interrupts. For example if BASEPRI equals 3,
+then requests with level 0, 1, and 2 can interrupt, while requests at levels 3 and higher will be
+postponed. A lower number means a higher priority interrupt.
+
+The processor knows whether it is running in the foreground (i.e., the main program) or in the
+background (i.e., an interrupt service routine). ARM processors define the foreground as thread
+mode, and the background as handler mode. Switching between thread and handler modes occurs
+automatically. The processor begins in thread mode, signified by ISR_NUMBER=0. Whenever it is
+servicing an interrupt it switches to handler mode, signified by setting ISR_NUMBER to specify
+which interrupt is being processed

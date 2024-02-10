@@ -4,23 +4,34 @@
 In C the Data Types are used for storing or holding data in memory ram and rom(using const keyword) either through variables,arrays or through structures(defined by keywords typedef & struct). Each data type is defined by specific keyword and hold a specific number of bits/ bytes in memory and these are character(signed & unsigned), integer(signed & unsigned), short(signed & unsigned), long(signed & unsigned), float and double. While there are also special data types in C as well alongwith custom definition of certain data types through
 structures and one special data types in C is of file pointers defined by keyword "FILE" for e.g. FILE *fptr; where fptr is our file pointer pointing to the address of a file. 
 
+Derived Data Types in C are : Function, Array, Pointer , Reference.
 
-Printf/Scanf/sizeof Format Specifier      Data Type                    Range                 Size In Bits/Precision
+Userdefined Data Types in C are : Typedef,enum, union, structure, Class.
+
+There are four Primitive Data types In C : char(8-bit) , int(32-bit), long(32-bit) ,  short(16-bit) , float (64-bit) , double(64-bit), bool.
+Type Modifiers in C are : unsiged, signed, short , long these type modifiers are used with data types to modify their properties such as range of values or sign.
  
-          %c                       unsigned char                0 to +255                8 bits
-          %c                       signed char                 -128 to + 127             8 bits
-          %i                       int                          32-bit in keil           compiler dependent
-          %u                       unsinged int                 32-bit in keil           compiler dependent
-          %hi/%hd                  unsigned short               0 to +65535              16 bits   unsigned
-          %hi/%hd                  short                       -32768 to +32767          16 bits   signed
-          %lu                      unsigned long                0 to 4294967295L         32 - bit  unsigned 
-          %li                      long                   -2147483648L to 2147483647L    32 - bit  signed              
-          %f                       float                       +-10^-38 to +-10^+38      64 - bit float
-          %lf                      double              +-10^-308 to -10^+308         64 - bit float    
-          %p                       for printing address stored in a pointer. 
-          %d                       decimal                      similar to int but differ when used with scanf();      
-          %zu                      size_t  returned by sizeof()                                   
-
+Printf/Scanf/sizeof Format Specifier      Data Type                    Range                         Size In Bits/Precision
+ 
+                                          bool                         0 or 1                        1
+          %c                              char                        -128 to + 127                  8 bits
+          %i                              int               -2,147,483,648 to 2,147,483,647          32-bit in keil (compiler dependent)
+          %hi/%hd                         short                       -32768 to +32767               16 bits   signed
+          %f                              float                        +-10^-38 to +-10^+38          64 - bit float
+          %lf                             double                       +-10^-308 to -10^+308         64 - bit float          
+          %li                             long                        -2147483648L to 2147483647L    32 - bit  signed 
+          %c                              unsigned char                0 to +255                     8 bits       
+          %hi/%hd                         unsigned short               0 to +65535                   16 bits   unsigned
+          %u                              unsinged int                 0 to 2,147,483,647            32-bit in keil(Compiler Dependent)
+          %lu                             unsigned long                0 to 4294967295L              32 - bit  unsigned 
+            
+ 
+          %p                              for printing address stored in a pointer. 
+          %d                              decimal                      similar to int but differ when used with scanf();      
+          %zu                             size_t  returned by sizeof(), sizeof() returns size in bytes. 
+                                          sizeof(ptr) returns size of pointer address                                  
+                                          sizeof(*ptr) returns size of data type pointed by pointer address.
+ 
 Abbreviations/Shortkeywords/Notations Used For Declaring Data types In C : 
 
 
@@ -32,6 +43,36 @@ Abbreviations/Shortkeywords/Notations Used For Declaring Data types In C :
           size_t       for declaring unsigned integer data type , value 
                        of this data type is returned by sizeof and 
                        alignof operators. 
+
+
+Operators In C : 
+
+Arithmetic Operators : +, - , * , / , %, ++, -- 
+ % Operator Returns Remainder value 
+/ Operator  Returns Divisor 
+
+Logical Operators : ||, &&, !  
+&& (Logical &&) :   Returns True If both conditions are true or operands are non zero.
+|| (Logical OR) :   Returns True If both conditions are true or any one operand is non zero.
+!  (Logical Not) :  Used to reverse the state of operand.
+Example : A = 0011(3) , B = 0101(9)    A&&B =1 as both are nonzero    
+          A=1 , B=0                    A||B=1  as A is one and B is Zero.
+
+Bitsie Operators : >> (Shift Right) , (Shift Left) <<, | (Bitwise OR), & (Bitwise And), ^ (Bitwise XOR) , ~ ( One´s Complement).
+Example :
+
+A = 0011 , B = 0101          A|B = 0111     (Bitwise | ) 
+                             A^B = 0110     (Bitwise XOR )      returns false 0 if both conditions are false or true,
+                                                                        true  1 if any one condition is true. 
+                             A&B = 0001     ( Bitwise And &)  
+                              ~A = 1100     (Bitwise Not)
+                             A<<2= 1100     (Bitwise Shift Left)
+                             A>>2= 0000     (Bitwise Shift Right)
+
+Relational : <,<=, >, =>, == , !=
+           
+                   
+
 
             
         -------------------Taking Input a line of String In C Using Scanf()-----------------------
@@ -56,6 +97,386 @@ printf("1");
 }
 
 
+-------------------------------------Memory Architectures, Memory Segments-----------------------------------
+
+
+Application Binary Interface (ABI) provides architecture specific details to compiler/Software Programmer.
+
+Architecture families like ARM Cortex M4 have different chipsets from different vendors with varying Memory Size(RAM,ROM),I/O Pins, and peripheral interfaces(SPI,I2C,UART).
+
+All the code , Data, Peripherals, Device, System Interfaces are present in one unified address space.
+
+Register definistion files provides details on platform specific registers and can be put in C source files called (Register Definition files). This file actually contains
+addresses of all the peripherals and thus we can access these peripherals by using their addresses.
+
+Linker files provides information to locator how an executable is going to be installed, mapped in physical system in short it´s a layout. 
+
+Typical Code Memory Sub Segments are : .intvecs (Segment containing addresses for interrupt vectors)
+                                       .text    (Segment Containing text typed in program code)
+                                       .const   (Segment containing constants)
+                                       .pinint  (Segment containing program initialization data i.e. initialization values for variables)
+                                       .cinit   (Segment containing program initialization data i.e. initialization values for variables)
+
+Typical Data Memory Sub segments are : .data    (Segment containing Non-Zero Initialized Global and Static Variables)  
+                                       .bss     (Segment containing Zero Initialized and Uninitialized global and static Variables)
+                                       .heap    (Segment containing Heap memory contents, data this memory is managed by programmer) 
+                                       .stack   (Segment containing stack variables, data such as local function variables)     
+
+--------------------------Data Memory--------------------------------
+
+There are three main types of memories available to us inside a microcontroller they are : 
+
+Flash     ( Non Volatile Memory)
+RAM       ( Volatile Memory )
+Registers ( Volatile Memory )
+
+
+Data Memory store our program operands and it´s the RAM of microcontroller or processor. RAM is classified into SRAM(static RAM) and DRAM(Dynamic RAM).
+
+SRAM contents last as long as the power is delivered.
+DRAM needs to be refreshed 
+
+
+Data in the Data memory can be allocated at compile time i.e. 
+(function static variables,.bss sub segment variables,.data sub segment variables)  and at run time( function local variables).
+
+In data memory we have data segment which is a container for various types of data allocated on it . Following are four main sub segments inside data memory containerized by data segment and they are : 
+
+Stack :                                 Stores temporary Data storage i.e. local variables
+Heap :                                  Dynamic Data Storage, Managed By Programmer.
+
+Data :                                  Non-Zero Initialized Static Local, Global  Data Variables.
+                                        Sub Segment has Static Local and Static Global  Variables/ Data  initialized to Non Zero Value. 
+                                        Sub Segment has Global Non Static Variables/ Data initialized to Non Zero Value.
+
+
+BSS(Block Started By Symbol) :          Zero Initialized and Uninitialized Local,global and Static data,Variables.  
+                                        Sub Segment has Static Local and Static Global  Variables/ Data initialized to 0 or not initialized at all. 
+                                        Sub Segment has Global Non Static Variables/ Data initialized to 0 or not initialized at all.
+
+Example : 
+int A_BSS;
+int B_BSS = 0;
+void  foo(int D_STACK_REG) {
+int E_STACK_REG;
+int F_STACK_REG =1;
+static int G_BSS;
+static int H_BSS = 0;       
+static int I_DATA = 1;    
+
+}
+
+
+The data allocated in data segment can have have varying : Size, Access , Scope, Location, Creation time ,Lifetime.
+Data segment data properties (Size, Access , Scope, Location, Creation time ,Lifetime) are specified by C/C++ : 
+variable types(uint8_t,int,float,double e.t.c), type qualifiers(const,volatile,restrict), Type Modifiers,storage classes(auto,register,static,extern), 
+Compiler attributes (pragma pack(1) e.t.c ), Specialized functions. 
+
+
+------Variable Lifetime and Scope-----------
+
+
+Data in the data memory exist for different lenghts of time i.e.
+During Lifetime of function or block.            ( Function or block Local Variables except local static variables).
+During entire lifetime of program.               ( Global Variables)
+Longer than a function but less than a program.  ( Heap Memory).
+
+Global Variables exist for length of the program and are allocated at compile time. Memory for global variable can be allocated in linker file.
+
+Static variable local to a function will retain it´s content even when they are returned from the function where they are decalred in. So it´s life is more than 
+of function where it´s declared.  
+
+
+---------------Special Keywords (Const,extern,static)-------------------------
+
+Special keywords that can affect data allocation in code and data segment of memory are classified into : 
+Variable types :
+Type Qualifiers : const,restrict,volatile.
+Type Modifiers : Type modifiers modify the size and sign of data type.
+Storage Classes : auto, static, register, extern. The storage classes define lifetime and scope of data type related to a variable.
+
+Static storage class data will persist in memory until end of program, static data is either stored in .bss or .data sub segments of data segment/memory depending upon their initialization value as if it´s non zero then it goes in data and if it´s zero initialized then it goes in .bss sub segment. 
+
+Extern Storage Class Variables will last during entire lifetime of program and can reside either in .bss or .data sub segments of data memory/segment depending upon their initialization value. 
+
+const type qualifier data is read only and is stored in .const or .rodata sub segment of code memory.
+
+Linker file outlines memory segments as data allocation is not only done at compile time but also at run time.
+
+Code Memory is also used for storing constants and initialization values of variables.
+
+Example : Data Segment
+
+int A_BSS;
+int B_BSS = 0;
+int C_DATA = 1;
+const int D_RODATA = 1;
+
+void foo(int D_STACK_REG) {
+int F_STACK_REG;
+int G_STACK_REG = 1;
+static int H_BSS;
+static int I_BSS = 0;
+static int J_DATA = 1;
+char * ptr_STACK_REG;
+ptr_STACK_REG = (char*)malloc(8);
+
+free ((void*)ptr_STACK_REG);
+return;
+}
+
+The BSS or .bss and DATA or .data sub segments of data segment or memory get´s data allocated at compile time and then it exists during entire lifetime of a program.
+
+
+-----------------The Stack-------------------
+
+Stack space is reserved at compile time then data gets allocated at run time.
+Stack is primarily used for tracking the state of a program as different functions, interrupts are call´d more specifically during context switching for saving the current program counter value and current function variable during the context switching.
+
+Calling convention describes a method of how data is passed in and returned from a routine.
+
+
+Stack implementation is architecture dependent , Typical stack data includes : 
+Previous stack info  
+Return value 
+Input parameters 
+Return address 
+Stack Pointer/Frame Pointer
+Local Variables.
+Saved Registers.
+Unused Stack Space.
+Special function registers.
+
+Every function or called routine has it´s own stack frame,  these stack frames are part of stack and they are create.
+Each new stack frame has data dependent on the implementation of function and current state of CPU as soon as functions are returned , stack frame data get´s removed.
+
+Stack pointer points to end of used stack.
+Stack frame pointer(FP) points to begining of stack frame(previous SP)
+Stack either grows upwards or downwards normally it grow downwards.
+
+
+
+----------------The Heap------------------
+
+Heap Space is a sub segment of data memory that is reserved at compile time with a set size however heap can be resized during run time by programmer.
+
+
+
+----Heap Lifetime and Scope------
+
+Heap data can have a lifetime longer than a function but less than the program.
+Heap data can have a local scope or global scope.
+Heap Memory allocation/deallocation adds execution overhead.
+
+
+--------Heap Functions For Allocating/Deallocating Data-----------
+
+void *malloc(size_t size);                      // Assigns contigous block of Memory to heap.
+
+void *calloc(size_t nitems,size_t item_size);   // same as malloc except initializes heap section with zeros unnlike malloc,  calloc() is defined in stdlib.h library header file.
+                                                // assigns multiple contigous blocks of memory for storing data such as arrays,structures,variables, and other complex data types
+   Syntax : ptr=(cast_type*)calloc(n,size);     // Where n paramter defines number of memory locations and size indicates the size of each memory location,depending upon data type we want to allocate to heap. //
+
+void *realloc(void *ptr,size_t size);           // Where ptr is pointer of heap memory from previous allocation, size is defining memory region size that we want to reallocat.
+                                                // Realloc() Resizes existing heap memory region either by allocating adjusting memory or by assigning another memory section.
+                                                // It may move existing heap space to new memory region and free old space of memory occupied in previous allocation.
+Example 1 : 
+
+struct student *ptr;
+struct student *nptr;
+ptr=malloc(n x sizeof(student) );
+nptr=realloc(ptr,(sizeof(student)-1));
+
+Example 2 : 
+
+struct student *ptr;
+struct student *nptr;
+ptr=(struct*)calloc(n,sizeof(student));
+nptr=realloc(ptr,(sizeof(student-1)));
+
+
+
+void free(void *ptr);
+
+malloc(), calloc(), realloc()  : Returns a void pointer pointing to the begining of heap memory region. This void pointer can be casted easily to the data type which we want to store in heap.
+                                  Returns NULL pointer if heap memory allocation fails could be because of fragmentation.
+
+           Note : If we´ve a local pointer containing allocated heap memory address afterwards when exit this block of code where local pointer resides and don´t free heap memory using
+                  free() function then we loose access to heap as local pointer won´t be existing outside of function or block moreover this portion of memory won´t be utilizable by 
+                  other sections of program. So a better approach will be to make this pointer as static or const.   
+   
+-----------------Lecture : Memory Alignment, Compiler Attributes-------------------
+
+
+Structres are high level constructs independent of underlying hardware architecture.
+
+The underlying ISA provides us three types of Load/Store Instructions these are : Byte,Half-Word and Word Load stores instructions.
+
+The load/store instructions for Byte,Halfword,word are designed work on specific memory alignments i.e. they can work on certain addresses efficiently. 
+
+Memory Alignment will have effects on both CPU and Memory Efficiency.
+
+Unused Memory is used to pad empty memory spots(bytes are added/stuffed) until the data type can be aligned. Extra padded bytes are known as padding and this phenomenon in terms of 
+C programming is called Structure padding.
+
+Unaligned memory without padding will force the CPU to do more work to access data at addresses but will pack more data efficiently.
+
+Bytes can be stored at any address in memory and are always aligned.
+
+Half words, words, double words require certain address alignment : Words Need to be aligned at four bytes Boundaries(Addresses with 0x00 &0x04), Can pad maximum of three bytes.
+                                                                    Doble words must aligned at eight byte boundaries or addresses end with (0x00,0x08)...
+                                                                    Half Words Can only be stored at even addresses, (0x00,0x02..) thus will require one extra padded byte.
+
+Instructions in ARM Cortex M Architecture can vary from 16 to 32 bits and are forced to be aligned at least a half word boundary and cannot support unaligned accesses. So if we
+have a 16 bit instruction for storing 16 bits of data at word location and another 32 bit instruction for 32 bit data at 32 bit location then extra 16 bits will be added to the 
+data stored using 16 bit instruction because we cannot have half word in remaining upper 16 bits and the other half in lower 16 bits as it does not support load/store instructions directly. The CPU will be doing multile loads and stores just to combine upper and lower half words into a single location and then perform operation on that word.
+
+Memory alignment is useful if we want to have our program execute efficiently with fewer CPU cycles .
+For Unaligned Memory when we want to pack data in order to reduce memory (Code Memory) consumption then we will be having multiple loads and stores operations in CPU decreasing execution speed of our program . 
+
+--------------------Compiler Attributes-------------------------
+
+We can also align our memory alignments for byte,half-word,word,double word through compiler attributes.
+
+Compiler attributes give specific details on how to compile data for : variables, structures & Structure Memebers and Functions. However attributes are not a part of C standard and not portable to other compilers.
+
+
+
+__attribute__((packed)) : informing compiler not to do padding for aligning data of a struct in most cases.
+                          Inside Paranthesis insted of packed we can also have other attribute.  
+
+__attribute__((aligned(4))) : Aligned attribute specify memory alignment for data in the power of two : 2,4,8,16...
+
+                                                                   
+ 
+Example 1 : int8_t foo __attribute__((aligned(4))); informing compiler to define a word (32-Bits) 
+            size boundary for foo variable whoch otherwise had taken a bondary of byte size.
+            By boundary we mean memory locations provided to data type regardless of it´s original size.
+
+Example 2 : typedef struct {
+            int8_t var1;
+            int32_t var2;
+            int8_t var3;  
+            }str1;
+
+Now if we do alignment of structure members to occupy a boundary of word in memory as : 
+            typedef struct {
+            int8_t var1__attribute__((aligned(4)));  
+            int32_t var2__attribute__((aligned(4)));
+            int8_t var3__attribute__((aligned(4)));  
+            }str1;
+           
+Now structure memebrs will be occupying 12 Bytes (truncated to 16 Bytes) instead of 6 bytes in memory before alignment. 
+
+We can also do alignment on entire structure as :            
+            typedef struct {
+            int8_t var1;  
+            int32_t var2;
+            int8_t var3;
+            }str1__attribute__((aligned));;
+
+Example 3 : To pack our entire strucutre in memory we apply packed attribute in entire structure,now our memory is not aligned
+            not efficient for CPU performance but effective for reducing memory consumption.
+
+            typedef struct {
+            int8_t var1;  
+            int32_t var2;
+            int8_t var3;
+            }str1__attribute__((packed));;
+
+__attribute__((always_inline)) : Informing compiler not to ignore inline keyword which we use at the time of function
+                                  definition i.e.
+Example 4: 
+__attribute__((always_inline)) inline int32_add (int32_t x,int32_y )
+                                 {
+                                 
+                                 } 
+inline keyword placed with function name informs the compiler to place function code at the
+calling section of code instead of doing context switching from caller to the function.
+
+inline keyword is a C99 feature not present in c89 standard.
+always_inline attribute is a GCC attribute not supported inother compilers. 
+
+---------Function Pragmas------------------
+
+They provide special instructions to compiler and we can do it through
+  Push/Pop - Add/Remove extra option for compilation for a part of code.
+  Optimize - Specifies a certain level of optimization for block of code.
+
+Example : 
+#pragma GCC push
+#pragma GCC optimize ("O0") 
+int32_t add(int32_t x,int32_t y) 
+{
+return (x+y);
+}
+#pragma GCC pop  // Disabling use optimize function pragma
+
+
+If we are working in embedded teams with different compilers and architectures then gcc attributes will not be supported so
+to avoid compile time errors we do 
+   #ifndef(__GNUC__)          
+   #define__attribute__(x)  // This preprocessor directive will define as nothing for non GCC compilers 
+   #endif
+
+
+---------------------------------------Lecture : Function Pointers-----------------------------------------------
+
+Function Pointer : Pointer that points to functions.
+                   Defined just like a function, Has : 
+                       Return Type.
+                       Function Paramters.     
+                       Pointer Name
+Dereferencing a function pointer will call a function.
+
+
+Function Pointer Declaration Syntax : 
+<type> (*<function_pointer_name>)(<parameters list>) = <function-address>;    // type = int,float ....    ,function_pointer_name = fptr, function address = &func_name;
+
+The type of function pointer is the return type of function pointed by function pointer.
+            paramters list are the values to be passed t othe function being pointed.
+
+Example : 1 
+
+uint8_t add(int a,int b){
+uint8_t sum = a+b;
+return sum;
+}
+
+int main(){
+int ret_sum;
+uint8_t(*fptr)(int,int);
+*fptr=&add;
+
+ret_sum=fptr(1,2);    //calling add function through function pointer very similar to if we had call´d add function as add(1,2);
+
+
+return 0;
+}
+
+Example 2 : We can also use typedef to create a new type used for creating function pointers i.e.
+
+typedef int(*fptr_TYPE)(int a,int b);
+
+fptr_TYPE fptr1 = &foo;
+fptr_TYPE fptr2 = &bar;
+
+Example 3 :  We can also have an array of function pointers as :
+
+typedef int (*fptr_t[2])(int a,int b)
+
+fptr_t example = 
+{
+foo,
+baa
+};
+
+to call or invoke function pointers in array we do : 
+
+example[1]();   // Calling foo function pointer function, Where in brackets () we can also pass paramters.
+example[2]();   // Calling baa function pointer function,
+
+
 ***************Accessing Structure Member Character Array***************
 
 https://stackoverflow.com/questions/37225244/error-assignment-to-expression-with-array-type-error-when-i-assign-a-struct-f
@@ -72,99 +493,12 @@ return 0;
 }
 
 
- 
---------------------Structure Padding In C------------------------
-
-Dummy bytes are added in between a structure members to align a structure causing the size of structure to increase than the original thus leading to increase usage of occupied memory. To avoid this memory wastage we can use pragma pack(1) pre processor directive to instruct the compiler not to add empty bytes. For Example the following program prints 5 in bytes as size of structure when pragma pack(1) or __attribute__((packed)) directive is added and prints 8 in bytes when not i.e.size of int data byte is of 32 bits and of char is 8 bits now after padding the char it's size also becomes of 32 bits so in bytes total size of structure becomes equal to 8 bytes i.e. 64 bits.
-
-#include <stdio.h>
-#include <stdlib.h>
-#pragma pack(1)
-struct tcp_ip{
-int packet_num;
-char seq_num;
-};
-int main(void) {
-struct tcp_ip p1;
-printf("Size of tcp_ip %i",sizeof(p1));
-return EXIT_SUCCESS;
-}
-
-or we can also do :
-
-#include <stdio.h>
-#include <stdlib.h>
-struct tcp_ip{
-int packet_num;
-char seq_num;
-};__attribute__((packed)); 
-// Attribute informing compiler to pack all members
-int main(void) {
-struct tcp_ip p1;
-printf("Size of tcp_ip %i",sizeof(p1));
-return EXIT_SUCCESS;
-}
-
--------------------Function Pointers In C------------------
-
-Function Pointers are like normal pointers found in C except that they point to address towards piece of code present inside a function. They are very helpful when we want a specific function to execute upon an event like that inside of GUI and we need to pass address of a specific function rather than function name as parameter. These function pointers can also be returned from other functions.
-Syntax of declaring a function Pointer is :
-
-void (*fptr)(void or value to be passed to function)=definedfunctionname
-
-OR
-
-void (*fptr)(void or value to be passed to function)=&definedfunctionname
-
-Both above statements will produce the same result as evident from the following image.
-References : https://lnkd.in/eGQsMZDV
-https://lnkd.in/ecyjdABt  
-
-
 ----------------Teritiary Operator ?----------------
 
 The operator ? works equivalently like if else statement except that it squeezes all of that in one line for e.g.
 Example : 
 int num,tmp,min,a,b;
 num = (tmp>min)?a:b;   /* Here if tmp>min then a will be assigned to num and if false then b will be assigned to num 
-
-
-----------------Calloc() Dynamic Memory Allocation Function--------------------
-
-In C as we are familiar with malloc() C for memory allocation similarly calloc() function is used to allocate memory but unlinke
-malloc() that assigns single block of memory for data calloc() assigns multiple contigous blocks of memory for storing data such as arrays,structures,variables, and other complex data types but calloc has two paramters while malloc has one but both returns a void pointer pointing to first memory location and that can be casted later on accordingly and moreover both malloc and calloc do dynamic memory allocation meaning that assiged memory size could be changed later on during program execution by using realloc() and the function
-calloc() is defined in stdlib.h library header file.
-
-Syntax Of Calloc is : 
-
-ptr=(cast_type*)calloc(n,size); /* Where n paramter defines number of memory locations and size indicates the size of each memory location. */
-
-We get the size normally by sizeof(datatype) statement.   
-
-
----------------Realloc() Dynamic Memory ReAllocation Function----------------------
-
-In C as we know we can allocate dynamically memory either in a single or multiple bolcks by using respective malloc() or calloc() functions so similarly if we have allocated more or lesser memory by using either or both of these functions and then later we would like to increase or decrease the allocated memory according to the requirement then in order to do that we will use realloc() function that takes two paramters i.e.one pointer holding the base/1st address of that memory and second is the size that we want to reassign to that memory location residing in single or multiple blocks of memory while returning a void pointer pointing to address of the newly resized memory location.
-
-
-Syntax of Realloc is : 
-
-nptr=realloc(ptr,size);
-
-
-Example 1 : 
-
-struct student *ptr;
-struct student *nptr;
-ptr=malloc(n x sizeof(student) );
-nptr=realloc(ptr,(sizeof(student)-1));
-
-Example 2 : 
-
-struct student *ptr;
-struct student *nptr;
-ptr=(struct*)calloc(n,sizeof(student));
-nptr=realloc(ptr,(sizeof(student-1)));
 
 
 -------------------------------Variadic Functions In C---------------------------------------
