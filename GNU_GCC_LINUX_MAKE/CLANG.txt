@@ -1,0 +1,21 @@
+-----------Clang compiler---------------
+clang is also a compiler apart from gnu g++ compiler it providing more diagnostics and also consuming less memory.
+
+To use clang compiler in terminal we similary execute following command in terminal : 
+clang++ source_code_filename.cpp 
+
+To use a specific standard or version of C++ we use -std flag and also with g++ compiler at the time of code
+compilation as :
+clang++ -std=c++11 code_file.cpp 
+g++ -std=c++11 code_file.cpp
+
+Just like we enable errors and diagnostics by using gcc compiler with Wall when compiling c code here in 
+case of c++ code we also do same i.e.
+clang++ -std=c++11 -Wall source_code.cpp
+g++ -std=c11 -Wall source_code.cpp
+
+And similarly for enabling the compilers clang++ and g++ to show more warning we use one extra flag that is 
+-Wextra at the time of compilation i.e.
+clang++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
+g++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
+
