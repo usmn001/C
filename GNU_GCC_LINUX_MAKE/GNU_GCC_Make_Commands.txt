@@ -32,7 +32,7 @@ gcc src.c - o executable_name -Xlinker -map=mapfilename.map
 
 -------------Generating Preprocessed Output From File-----------
 
-gcc -E -o src.c src.o
+gcc (Compiler Flags) -E  src.c -o src.i
 
 
 --------------GCC Architecture Specific Compiler Flags-------------------
@@ -83,8 +83,158 @@ gcc -o program program.o
 
 
 
----------------------Make File System Variables-------------------
+----------*****************-----------Make File System Notes -**********************------------------
 
+Makefiles allow us to do building and compiling of our program with lot´s of dependancies such as libraries and other function object files in 
+a organized way such that freeing us from executing tirelessly each compiler command in the command line.
+
+------Makefile Syntax--------
+
+We will need to document our make file at top using comments.
+
+Makefile comments start with a # unlike // or /* in c files .
+Makefiles can also include other make files using 
+include.
+Line continuation in makefile is done by backward slash \ similar to it´s use of macro.
+We can create and use variables.
+Command lines start with a tab indent .
+Targets can depend on ohter targets.
+
+----Makefile Variables--------
+
+Varaibles can be set to strings of text and can include other variables.
+  Variable access is done with $(variable-name) syntax.
+
+Two types of variables we use in our make files are : 
+Recursively expanded variables defined with =
+   These variables wherever they are used similar to
+    macors
+
+Simply expanded variables defined with :=  
+  Expands once at the time of definition for e.g. : - 
+
+We use variables like for compiler flags we use CFLAGS and
+for linker flags we use LDFLAGS
+
+    ARCH := $(shell arch)   
+    CWD := $(shell pwd)
+    OS  := $(shell uname) 
+CFLAGS = -g -std = $(CSTD) -mcpu = $(CPU) -mthumb
+
+We can use variables such as INCLUDES and SRCS that point
+to our source files and include files such as follwos where includes provide path to code (absolute or relative paths) and sources determine what needs to be built.
+
+INCLUDES =    \            SRCS =       \
+    -I./libs  \              ./main.c   \
+    -I./modem \              ./memory.c \ 
+    -I./uart  \              ./uart.c   \
+    -I./arch                 ./data.c   \
+
+
+------------Automatic Variables---------
+
+In makefiles we also have automatic variables for reducing
+amount of typing for a particular rule they are $@ for "Target" and $^ for all preeqisites i.e 
+
+Without Using Automatic Variables : 
+$(TARGET) : $(OBJS)
+   $(CC) $(CFLAGS) $(INCLUDES) $(ldflags) -O $(TARGET) $(OBJS)
+
+
+After using Automatic variables our rule becomes short to as follows :
+§(TARGET) : $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(INCLUDES) -o $@ $^
+
+-----------Pattern Matching------------
+
+Make allows us to use variables for defining a build rule
+without repeatedly using the same commands instead we just use variables similar to C Programming. 
+
+However if we have multiple source and include files then we will need to define two variables one for source and one for object files and we will also need to track changes in our prequisites or dependecies for each target leading to generation of separate individual targets.
+
+To resolve this issue make provides us pattern matching opertor % enabling us to match every source file with relevant object file i.e. 
+
+%.o : %.c
+      $(CC) -C $@ -o $< $(CFLAGS)  , Where $< Prequisite Name, $@ Target Rule Name
+
+So we don´t need to mention the names of src and target files like we did previously as : 
+main .o : main.c
+          $(CC) -C main.c -o main.o $(CFLAGS)   where CC and CFLAGS are recrursively expanded variables. 
+
+To further improve upon we can have variables OBJS for all object files and SRCS for src files using pattern matching thus all src files are mapped to object files i.e.
+
+             OBJS := $(SRCS:.c=.o)      --------> This line is associating every .c src file with .o object files
+                       SRCS : = main.c      \
+                              my_file.c   \
+                              my_memory.c \
+
+                       OBJS : = main.o      \
+                              my_file.o   \
+                              my_memory.o      
+
+-----------Target Suggestions---------------
+
+If we don´t want to generate a certain executable instead we want to generate all files i.e. object files , final executables then we use make all command 
+but to do that we need to use a make directive .PHONY which specifies make what to do 
+
+.PHONY : all
+all : main.out
+main.out = $(OBJS)
+         gcc $(CFLAGS) -o main.out $(OBJS)
+
+
+.PHONY : clean
+clean : 
+      rm main.map $(OBJS) main.out
+
+some make suggested targets besides final executable can be : all -----builds final exectable
+                                                              clean----removes all generated object files or else as specified according to the recipe. 
+                                                              debug----builds a debug image with debug symbols enabled.
+
+
+-----------Function and dynamic variables------------------
+
+We can have make file supporting multiple architectures that we can do by using make functions such as shell  functions $(shell arch) for architecture, $(shell pwd) for present working directory, $(shell uname) and then use if statements similar to preprocessor directives in src files i.e.
+
+ARCH := $(shell arch)
+CWD  := $(shell pwd) 
+OS   := $(shell uname)
+
+ifeq($(OS),Linux)
+   CC = gcc
+endif
+
+So we can use specific compilers and flags for specific architecture.
+
+Furthermore we can also pass input parameters to alter build defining specific feature (ARCHITECTURE,CPU,BOARD/PLATFORM,Compiler instance,
+Compiler/Linker Options) just like we pass macro definition at compile time with gcc i.e. 
+
+make all PLATFORM = msp432
+male all CPU = cortex-m4
+make all ARCH = arm
+
+then we use ifeq statement just like ifdef directive i.e.
+
+ifeq ($(PLATFORM),MSP)
+  CPU = cortex-m4
+endif
+
+ifeq ($(PLATFORM),FRDM)
+  CPU = cortex-m0plus
+endif
+
+-------Useful GNU Bin Tools------------
+
+There are different GNU tools besides compiler, linker, assembler and GNU make but there are other tools which GNU offers known as GNU Bin utilities which are compiled and in executable form and can be used. They are such as : 
+
+Assembler and linker are part of GNU Bin Utilities, Other GNU Bin utilities that we can make use of are : 
+
+size : listing section sizes for object and executable files     arm-none-eabi-size
+nm : listing the symbols from object files.                      arm-none-eabi-nm
+objcopy : copies and translates object files.                arm-none-eabi-objcopy
+objdump : displays information from object files             arm-none-eabi-objdump      
+readelf : displays information from elf files.               arm-none-eabi-readelf
+gdb : GNU projet debugger                                                      gdb
 
 
 

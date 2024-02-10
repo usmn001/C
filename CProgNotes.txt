@@ -62,6 +62,7 @@ Bitsie Operators : >> (Shift Right) , (Shift Left) <<, | (Bitwise OR), & (Bitwis
 Example :
 
 A = 0011 , B = 0101          A|B = 0111     (Bitwise | ) 
+                            
                              A^B = 0110     (Bitwise XOR )      returns false 0 if both conditions are false or true,
                                                                         true  1 if any one condition is true. 
                              A&B = 0001     ( Bitwise And &)  
