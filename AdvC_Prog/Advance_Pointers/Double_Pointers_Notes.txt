@@ -1,0 +1,87 @@
+A pointer ptr has three things associated with it :  Own address (&ptr) , 
+                                                     Address of value pointed (ptr), 
+                                                     Pointed value(*ptr)
+
+
+A double pointer is a pointer containing the address of another pointer (&ptr2).
+
+int **dptr = NULL;
+int *sptr = 1;
+
+*dptr = &sptr;      // This statement means we are copying the address of sptr not the value which it has.
+
+printf("%i",**dptr);     // Now dptr->sptr->1 , this statement will print 1.
+printf("%p",*dptr);      Now dptr->sptr, statement will print the address of sptr;
+
+
+The reason to use a double pointer is when we need to change the value of pinter passed to a function as the function argument 
+as if we don´t do it then the change made to the value of pointer inside the function will get lost once we return to the caller as the local pointer value gets popped out of stack.
+
+
+Example 1 : 
+
+void foo(int **ptr2)  // &ptr2 = 0xFEEE , ptr2 => (&ptr1) = 0xFABCD , *ptr2 => *(&ptr1) = 0xFFFA 
+                      
+{
+int a = 5;            //  Address of a 0xAFGHK has 0xAFGHK : 5               
+*ptr2 = &a;           //  0xFEEE : 0xFABCD : 0xAFGHK         
+}
+
+int main()
+{
+int *ptr1 = (int*)malloc(sizeof(int));    // &ptr1 = 0xFABCD(Compiler Allocated), ptr1 = 0xFFFA(Heap Address) , *ptr1 = NULL (if initialized to NULL)
+                                          // 0xFABCD : 0xFFFA
+                  
+*ptr1 = 1;                                // Value stored at heap address 0xFFFA becomes 1,  &ptr1 remains same.  
+                                          // 0xFABCD : 0xFFFA 
+
+foo(&ptr1);                               // Here we are passing the own address of ptr1 i.e. &ptr1 which is 0xFABCD                                           
+}
+
+
+Example 2 : 
+
+
+Case 1 : Using Single Pointer
+
+void allocate_Memory(uint8_t *sptr)        // sptr = &ptr; 
+{
+sptr = (uint8_t*)malloc(sizeof(uint8_t));  // sptr => heap_address 
+}
+
+int main(void)
+{
+uint8_t *ptr = NULL;                       // ptr = NULL
+allocate_Memory(&ptr);                      
+*ptr = 18;                                 // ptr = heap_memory_address , *(ptr) => *(heap_memory_address) = 18
+printf("Value Pointed By Pointer ptr %i",*ptr);
+free(ptr);
+}
+
+Output : Segmentation Fault due to *ptr = 18 as ptr has no address assigned because Address Passed got overriden by malloc
+
+
+Case 2 : Using Double Pointers
+
+void allocate_Memory(uint8_t **dptr)        // dptr = &ptr; 
+{
+*dptr = (uint8_t*)malloc(sizeof(uint8_t));  // *dptr => ptr = heap_address, 
+                                            // When we dereference a double pointer 1 time then it means we are accessing the address stored at the single pointer address   
+}                                           // When we do 2 times dereference of double pointer then it means we are accessing the value stored at single pointer address.
+
+int main(void)
+{
+uint8_t *ptr = NULL;                       // ptr = NULL
+allocate_Memory(&ptr);                      
+
+*ptr = 18;                                 // ptr = heap_memory_address , *(ptr) => *(heap_memory_address) = 18
+
+printf("Value Pointed By Pointer ptr %i",*ptr);
+
+free(ptr);
+
+}
+
+
+
+
