@@ -1,3 +1,5 @@
+----------------------------------------------Advance C Programming Course----------------------------------------------------
+
 In C we can disintegrate a very large program into multiple files of code instead of keeping a signle source 
 code file which is difficult to be updated and maintained.
 
@@ -2141,8 +2143,32 @@ libweather.a: weatherstats.o weatherio.o
 
 -----------------------------------------Section 20 : Data Structures----------------------------------------
 
+We know in C language every data type (char,int,long,short,bool) has a property and it supports a set of operations (add,subtract,multiply).
 
-------------Linked List---------------
+An abstract data type (ADT) is a type whose behavior is defined by a set of value and a set of operations. 
+
+ADT Only mentions what operations are to be performed but : 
+   Does not show how these operations will be implemented.
+   Does not specify how data will be organized into memory nor what algorithms will be used for implementing the operations.
+
+Common abstract data types in C are : linked lists, stacks, queues.
+
+Process of creating a new abstract data type follows a three step process : 
+
+1. Provide an abstract description of the type´s properties and of the operations that can be performed on the type.
+             .Not tied to any particular implementation.
+             .Referred to as an abstract data type (ADT).
+
+2. Develop a programming interface that implements ADT.
+             .Indicates how to store data.
+             .Describe a set of functions that perform desired operations.
+
+3. Write code to imlement the interface.
+   
+ 
+
+
+--------------Linked List--------------------
 
 Linked list is a linear data structure and it´s dynamic.
 Linked lists are accessed through a pointer pointing to the first node of list.

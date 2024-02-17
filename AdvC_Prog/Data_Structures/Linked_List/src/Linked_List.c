@@ -11,51 +11,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 
-uint8_t display();
-
-struct Node{
-     struct Node *next;
-     struct Node *prev;
-     uint8_t data;
+struct X{
+	double d_;
+	short s_;
+	int i_;
+	bool b_;
 };
 
-typedef struct Node Node_t;
+struct Y{
+	bool b_;
+	short s_;
+	int i_;
+	int* ptr_;
+};
 
-Node_t *head;
-Node_t *tail;
-
-void insertNodeStart(uint8_t value){
-	Node_t *new_head = (Node_t*)malloc( sizeof(Node_t) ) ;
-	if(){
-
+int main(){
+	uint8_t c = 0;
+	uint8_t n= 0;
+	n=4;
+	while(n){
+		if(n&1) ++c;
+		n>>=1;
 	}
-
-}
-
-int main(void) {
-uint8_t input;
-uint8_t value;
-input = display();
-
-switch(input)
-
-{
-case 1 : printf ("Enter Value : %i ",value);
-	     insertNodeStart(value);
-	     break;
-
-case 2 : break;
-}
-	return EXIT_SUCCESS;
-}
-
-
-uint8_t display()
-{
-	char input;
-	printf("Press 1 To Inset Node At Begining \n");
-	printf("Press 2 To Insert Node At End \n");
-	scanf("%c",&input);
-    return input;
+printf("%i",n);
 }

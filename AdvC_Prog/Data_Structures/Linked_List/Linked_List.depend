@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1707821027 source:c:\cpp_c\advc_prog\data_structures\code_blocks\linked_list\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+
+1707991010 source:c:\cpp_c\advc_prog\data_structures\linked_list\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+

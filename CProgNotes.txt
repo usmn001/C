@@ -72,6 +72,13 @@ A = 0011 , B = 0101          A|B = 0111     (Bitwise | )
 
 Relational : <,<=, >, =>, == , !=
            
+
+scanf("%c",&c);   /* Whenever we enter a character input in scanf like here then instead
+	                     of itself it's ASCII code is stored in memory, scanf reads
+	                     1 by 1 all entered characters and stores them in subsequent
+	                     memory locations in the form of their ASCII codes.
+	                     To display it's ASCII code stored in memory we can use
+	                     printf statement with %d as output format specifier */
                    
 -----------------------String Functions : For Performing Operations On Strings----------------------------
 
