@@ -1,0 +1,29 @@
+/*
+ ============================================================================
+ Name        : stack.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MXSIZE   10
+
+struct stack{
+	unsigned int stck[MXSIZE];
+	unsigned int top;
+};
+
+typedef stack STACK;
+
+
+
+
+int main(void) {
+	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
+	return EXIT_SUCCESS;
+}

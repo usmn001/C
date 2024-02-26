@@ -1,0 +1,111 @@
+/*
+ ============================================================================
+ Name        : stack.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdint.h>
+
+#define MXSIZE   10
+void push();
+void pop();
+
+struct stack{
+	unsigned int stck[MXSIZE];
+	unsigned int top;
+};
+
+typedef struct stack STACK;
+
+STACK s;
+
+
+
+
+void display(){
+	printf("\nPress 1 To Push\n");
+	printf("Press 2 To Pop \n");
+	printf("Press 3 To Display Linked List \n");
+	printf("Press 8 Exit \n");
+	printf("Enter your choice : \n");
+}
+
+
+void push(){
+
+	if(s.top!=MXSIZE-1){
+		printf("Enter the element to push");
+		s.top=s.top+1;
+		scanf("%u",s.stck[s.top]);
+	}
+	else
+		printf("Stack is full");
+
+}
+
+
+void pop(){
+	if(s.top!=-1){
+		s.top=s.top-1;
+	}
+	else
+		printf("Stack is empty");
+
+}
+
+void peek(){
+
+}
+
+bool isEmpty()
+{
+
+uint8_t state;
+
+if(s.top==-1){
+	state=1;
+}
+else
+	state =0;
+return state;
+
+}
+
+
+
+
+int main(void)
+{
+
+unsigned int choice;
+s.top=-1;
+
+while(choice!=8)
+{
+display();
+scanf("%u",&choice);
+
+switch(choice){
+case 1 : push();
+         break;
+
+case 2 : pop();
+         break;
+}
+
+
+
+
+}
+
+
+return 0;
+}
+
