@@ -56,13 +56,11 @@ void dequeue()
 
 }
 
-
-
 void peek()
 {
 	if(isEmpty()==false)
 	{
-printf("Top Of Queue : %i",queue[front]);
+    printf("Top Of Queue : %i",queue[front]);
 	}
 
 }
@@ -83,7 +81,62 @@ return state;
 }
 
 
-int main(void) {
-	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
-	return EXIT_SUCCESS;
+
+void display()
+{
+
+	if(isEmpty()==false)
+	{
+        printf("Stack Elements : \n");
+		for(int index=front;index<=rear;index++)
+		{
+
+		printf("%u  ",queue[index]);
+		}
+
+	}
+
+	else if(isEmpty()==true)
+	{
+	printf("\n Stack is empty");
+	}
+
+}
+
+
+int main(void)
+{
+	unsigned int choice;
+
+	while(choice!=8)
+	{
+			printf("\nPress 1 To Enqueue\n");
+			printf("Press 2 To Dequeue \n");
+			printf("Press 3 To Peek the Top \n");
+			printf("Press 4 to Display Queue \n");
+			printf("Press 8 Exit \n");
+			printf("Enter your choice : \n");
+			scanf("%u",&choice);
+
+			switch(choice)
+			{
+
+			case 1 : enqueue();
+			         break;
+
+			case 2 : dequeue();
+			         break;
+
+			case 3 : peek();
+			         break;
+
+			case 4 : display();
+			         break;
+
+	}
+
+  }
+
+return 0;
+
 }

@@ -1,15 +1,15 @@
-16:32:46 **** Incremental Build of configuration Debug for project Queue ****
+12:34:01 **** Incremental Build of configuration Debug for project Stack ****
 make all 
-Building file: ../src/Queue.c
+Building file: ../src/Stack.c
 Invoking: GCC C Compiler
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Queue.d" -MT"src/Queue.o" -o "src/Queue.o" "../src/Queue.c"
-Finished building: ../src/Queue.c
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Stack.d" -MT"src/Stack.o" -o "src/Stack.o" "../src/Stack.c"
+Finished building: ../src/Stack.c
  
-Building target: Queue
+Building target: Stack
 Invoking: GCC C Linker
-gcc  -o "Queue" ./src/Queue.o   
-Finished building target: Queue
+gcc  -o "Stack" ./src/Stack.o   
+Finished building target: Stack
  
-16:32:52 **** Incremental Build of configuration Debug for project Queue ****
+12:34:07 **** Incremental Build of configuration Debug for project Stack ****
 make all 
 make: Nothing to be done for 'all'.
