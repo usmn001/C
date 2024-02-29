@@ -1,6 +1,0 @@
-eclipse.preferences.version=1
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.3282824/PATH/delimiter=;
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.3282824/PATH/operation=replace
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.3282824/PATH/value=${MINGW_HOME}\\bin\\;${MSYS_HOME}\\bin;${MSYS_HOME}\\usr\\bin;C\:/Eclipse/eclipse//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.7.v20230425-1502/jre/bin/server;C\:/Eclipse/eclipse//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.7.v20230425-1502/jre/bin;C\:\\windows\\system32;C\:\\windows;C\:\\windows\\System32\\Wbem;C\:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C\:\\windows\\System32\\OpenSSH\\;C\:\\MinGW\\bin\\;C\:\\Users\\m_usm\\AppData\\Local\\Microsoft\\WindowsApps;C\:\\Users\\m_usm\\AppData\\Local\\GitHubDesktop\\bin;C\:\\Users\\m_usm\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C\:\\Eclipse\\eclipse
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.3282824/append=true
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.3282824/appendContributed=true
