@@ -32,6 +32,8 @@ Printf/Scanf/sizeof Format Specifier      Data Type                    Range    
                                           sizeof(ptr) returns size of pointer address                                  
                                           sizeof(*ptr) returns size of data type pointed by pointer address.
  
+                                          wchar_t                                                    16                           
+
 Abbreviations/Shortkeywords/Notations Used For Declaring Data types In C : 
 
 
