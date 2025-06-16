@@ -2443,6 +2443,204 @@ When enqueing first element we set the value of FRONT to 0.
 When dequeing the last element we rest the values of FRONT and REAR to -1.
 
 
+---------------------------------------------------Section 20 : Interprocess Communication and Signals------------------------------------------------------------------------
+
+A process is a program in execution, when we start exection of the program it is loaded into RAM and starts execution.
+
+Each process has it´s own address space and usually with one thread of control.
+
+We can have multiple processes executing same program but each process has it´s own address space and executes it independently of the other copies.
+
+Processes are organized hierarchically where each process has a parent process. Every process has itś own unique ID.
+
+Processes created by a given parent are called child processes, a child inherits many of itś attributes from the parent process.
+
+We can use system calls provided by a operating system kernel to access a service, programmers don´t have to concern with these system calls because these system calls
+are made available through GNU C library functions as these functions work by making systems themselves.
+
+The system call getpid() returns process ID of calling process.
+  . this call is always successful and returns no value indicating an error.
+
+Header file sys/types.h contains getpid() system call function.
+            unistd.h is a operating system header file.
+
+Example : #include <sys/types.h>
+          #include <unistd.h>
+
+          pid_t getpid(void);
+
+-------------Interprocess Communication(IPC)----------
+
+.A process can be of two types 
+    . Independent process : not affected by exection of pther processes
+                            does not interact with other programs.
+    
+    . copperating process : affected by other executing processes
+                            can be used for increasing computational speed, convenience and modularity.
+
+IPC letś processes work tegether enalbing programs to be more powerful by interacting with each other.  
+
+
+If any process wants to communicate some information  from itś address space to other process then it needs to use IPC techniques.
+
+This commuincation between multiple processes can be seen as a method of cooperation between them, this can be done between parent and child proceeses or in between unrelated 
+processes.
+
+
+IPC (Interprocess Communication ) Methods : 
+
+	Pipes (Used For Same Processes i.e. parent and child) 
+   		first process communicates with second process allows flow of data in one direction only ( half duplex )
+
+	Named pipes ( different processes, FIFO ) 
+  		first process can communicate with second process and vice versa at the same time ( full duplex ).
+
+        Message Queues : 
+                Processes will communicate with each other by posting a message and retrieving it out of a queue (full duplex).
+
+        Shared Memory : 
+                Communication between two or more processes is achieved through a shared piece of memory among all processes.
+
+        Sockets : 
+                Mostly used to communicate over a network between a client and server.
+
+        Signals : 
+                Communication between multiple processes by way of signalling.
+
+-----Pipes (named and anonymous)-----
+
+Pipe is a communication mechanism bewteen two or more related or interrelated processes.
+   .communication can be either within one process or a communication between child and parent process.
+System calls are used for creating and using pipes.
+
+Steps to utilize pipes for IPC are : 
+   . create a pipe.
+   . send a message to the pipe.
+   . retrieve message from the pipe and write to standard output.
+   . send another message to the pipe.
+   . retrieve message from pipe and write to standard output. 
+
+                  
+------------Message Queues-----------------
+
+All processes can exchange information through access to a common system message queue.
+
+Message queues are a sort of mix between signals and sockets.
+   Allows us to create a data stream of messages which can allow one or multiple processes to communicate between them.
+   Sending and Receiving can be achieved by using a simple function.
+
+Sending process places a message (via some OS message passing module) onto a queue which can be read by another process.
+   Each message is given an identification or type so that processes can select appropriate message.
+   process must share a common key in order to gain access to the queue in the first place.
+
+System calls are used for creating and using message queues.
+
+To perform communication using message queues, we follow these steps 
+   . ftok() function is used to generate a unique key.
+   . create a message queue or connect to an already existing message queue (msgget())
+   . write into message queue (msgsnd()).
+   . read from message queue (msgrcv()).
+   . perform control applications on message queue (msgctl()).
+
+--------------Shared Memory---------------
+
+IPC through shared memory is done so changes made by one process can be viewed another process.
+Communication is done via this shared memory where changes made by one process can be viewed by another process.
+Communication between processes requires processes to share some variables and it completely depends on how programmer will implement it.
+System calls allows us to create a memory segment which can be accessed and modified by multiple processes
+ 
+To perform communication through shared memory we follow these stpes : 
+     .Create a shared memory segment or use an already created shared memory segment (shmget()).
+     .Attach the process to the already created shared memory segment (shmat()).
+     .Detach the process from already attached shared memory segment (shmdt()).
+     .control operations on the shared memory segment( shmctl() ).   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               
+                  
+           
+
+
+
+
+
+
+
+
 
 
 
