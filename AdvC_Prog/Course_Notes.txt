@@ -2839,6 +2839,7 @@ void (*sa_sigaction)(int,siginfo_t *, void*);
 Field 2 : Set of signals to be blocked
 
 int sa_mask : This variable specifies the mask of signals that should be blocked during execution of signal header.
+sigaddset(&new_action.sa_mask, SIGINT);  // Where SIGINT is the signal to be blocked.
 
 Field 3 : Special Flags
 
@@ -3059,11 +3060,1076 @@ printf("parent process is done");
 }
 
 
+-----------------------------------------------------------Section 21 : Threads--------------------------------------------------------
+
+Problem with creating separate processes lies in the fact that every process will require a spearate address space, they can´t communicate directly need to use IPC 
+mechanisms ( shared memory, signals, message queues e.t.c ) and also we need to create specific code for each process to execute as well.
+
+Threads solve all of the above issues of processes.
+
+Threads provide a way to divide a single process into sub runnable parts.
+   Separate path of execution inside a program.
+   Sometimes called lightweight process.
+
+Threads have own unique ID, A program counter, a register set and a stack space just like a process.
+
+Threads share memory across each thread by having the same address space (unlike multi processes )
+   .Two threads have access to the same set of variables and can alter each others variable values.
+     .If one thread changes a global variable, all of the other threads will see the change immediately.
+
+Using multithreading several tasks can execute concurrently.
+
+Threaded applications offer potential performance gains and practical advantages over non threaded applications in several ways : 
+    The creation of a thread is much faster ( much less operatin system overhead)
+    Faster context switching.
+    Faster termination of a thread.
+
+
+If one thread accesses the value to change it and the second thread does the same before the first thread has stored the modified value.
+   You will have inconsistent data.
+
+
+--------------Multithreading In C----------
+
+
+C is a language that runs on one thread by default (main), which means that the code will only run one instruction at a time.
+
+C does not contain any built in support for multithreaded applications, only C11 standard has this support but those threads are not very portable.
+
+In 1995, POSIX became the standard interface for many system calls in UNIX including the threading environment.
+
+POSIX threads are known as pthreads and implementation is available with the gcc compiler.
+
+POSIX threads model is also available in every language (Java, Python e.t.c.).
+
+POSIX threads libraries are a standard based thread API for C/C++
+   allowing one to spawn a new concurrent process flow.
+   can be found on almost any modern POSIX compliant OS.
+
+POSIX threads are most effective on multi processor or mutli core systems where the process flow can be scheduled to run on another processor.
+
+The purpose of using POSIX thread library in our software is to execute software faster.
+
+pthread functions are defined in a pthread.h header/ include file and implemented in a thread library.
+
+
+------------------pthreads API---------------------
+
+The functions comprise the pthreads API can be grouped into three major categories : 
+
+Thread Management : 
+  Routines that work directly on threads - creating, detaching, joining e.t.c
+  Also include functions to set/query thread attributes (joinable, scheduling e.t.c.) 
+
+Synchronization : 
+  Routines that manage read/write locks and barriers and deal with synchronization.
+  Mutex functions provide for creating, destroying, locking and unlocking mutexes 
+
+Condition Variables : 
+  Routines that address communications between threads that share a mutex.
+  Based upon programmer specified conditions.
+
+
+Operations that can be performed on threads include : 
+  .Thread Creation 
+  .Termination
+  .Synchronization
+  .Scheduling
+   Data Management
+   Process Interaction
+
+Threads are not forked from a parent to create a child.
+
+On POSIX operating systems there is a library named pthread.h allowing us to create threads and perform many operations on thread
+Must include this library when creating and using threads.
+
+There are three functions involved in the creation of threads : pthread_create, pthread_exit and pthread_join
+
+pthread_create function is called to create a new thread and make it executable.
+
+The maximum number of threads that may be created by a process is implementation dependent.
+  Once created, threads are peers and may create other threads.
+  There is no implicit hierarchy or dependency between threads.
+
+------pthread_create--------
+
+Function Syntax : int pthread_create(pthread_t *thread, const pthread_attr_t * attr,void*(*start_routine)(void*), void*arg);
+
+pthread_create() takes four arguments : 
+
+First argument is of type pthread_t
+  An integer used to identify the thread in the system.
+  Upon successful completion, pthread_create() stores the ID of the created thread in the location referenced by thread.
+
+Second argument specifies attributes for the thread.
+ We can specify a thread attributes object, or NULL for the default values.
+ Thread attribute that can be specified include detached state, scheduling policy, scope, stack address and stack size.
+
+Third argument is name of function that the thread will execute once it is created.
+
+Fourth argument is used to pass arguments to the function (start_routine)
+  .It is a pointer of type void, It can be NULL if not required.
+  .To pass multiple arguments, we need to use a pointer to a structure.
+
+
+---------pthread_join------------
+
+pthread_join() allows us to analyze when a thread execution is completed or it has exited.
+
+A join is performed when one wants to wait for a thread to finish.
+  Used to link one thread process to another thread.
+  A thread calling routine may launch multiple threads then wait for them to finish to get the results.
+ 
+A call to pthread_join blocks the calling thread until the thread with identifier equal to the first argument terminates.
+   Makes the program stops in orer to wait for the end of the selected thread.
+
+all threads automatically joined when main thread terminates.
+
+
+pthread_join() also receives return value of our thread function and stores it in a void pointer
+   Once both threads are finished our program can exit smoothly.
+
+Syntax : 
+int pthread_join(pthread_t thread, void **value_ptr);
+ First argument is the thread ID of thread you want to wait for.
+ If the second argument is not NULL, value is passed to pthread_exit() by the terminating thread.
+
+---------pthread_exit-------------
+
+Threads can be terminated in a number of ways :
+     . By explicitly calling pthread_exit.
+     . By Letting the thread function return.
+     . By a call to the function exit which will terminate the process including any threads.
+
+pthread_exit() routine is called after a thread has completed itś work and is no longer required.
+
+If main() finishes before the threads it has created finish and exit with pthread_exit() in such a case the created threads will continue to execute otherwise
+they will be automatically terminated when main() finishes.
+
+pthread_exit() is not explicitly required to be called at the end of thread function but it is a good practise to use it and 
+there can be some arbitrary date required to be returned back to the caller via pthread_join() 
+
+Syntax : 
+void pthread_exit(void *value_ptr);
+
+First argument makes the value_ptr available to any successful join with terminating thread.
+
+Sometimes we don´t want a thread to terminate which can be solved by placing thread code in an infinite loop and use condition variables.
+
+-------To compile POSIX thread programs in linux and mac we need to first link our program with pthread library  we do it as gcc main.c -lpthread
+
+
+Example 1 : 
+#include <stdio.h>
+#include <pthread.h>
+
+void * hello_fun() 
+{
+printf("Hello World");
+return NULL;
+}
+
+
+int main(int argc, char * argv[])
+{
+pthread_t thread;
+pthread_create(&thread,NULL,hello_fun,NULL);
+pthread_exit(NULL);
+return 0;
+}
+
+
+Example 2 : Using pthread_join 
+#include <stdio.h>
+#include <pthread.h>
+
+void * hello_fun() 
+{
+printf("Hello World");
+return NULL;
+}
+
+
+int main(int argc, char * argv[])
+{
+pthread_t thread;
+pthread_create(&thread,NULL,hello_fun,NULL);
+pthread_join(thread,NULL);      // Now we are going to wait for our thread function to finish its execution.
+pthread_exit(NULL);
+return 0;
+}
+
+
+-------------------Passing Arguments And Returning Values------------------
+
+pthread_create() function permits the programmer to pass one argument to the thread start routine.
+
+To pass more than one argument to thread routine we can create a structure with arguments and then pass address of structure through pointer to pthread_create() function.
+
+All arguments must be casted to (void*)
+
+Example 1 : Passing A Message To Thread Function
+
+#include<stdio.h>
+#include<pthread.h>
+#include<string.h>
+#include<malloc.h>
+
+int main(void)
+{
+pthread_t thread1, thread2;
+char *msg1_p = "Thread1";
+char *msg2_p = "Thread2";
+int iret1 = 0; int iret2 = 0;
+
+/*Creating independent threads each of which will execute own function */
+
+iret1 = pthread_create(&thread1,NULL,print_message_function, (void*)msg1_p);    // Creating and passing argument to thread routine.
+iret2 = pthread_create(&thread2,NULL,print_message_function, (void*)msg2_p);    // Creating and passing argument to thread routine.
+
+pthread_join(thread1,NULL);
+pthread_join(thread2,NULL);
+pthread_exit(NULL);
+return 0;
+}
+
+void *print_message_function(void *ptr)
+{
+char *msg_p;
+msg_p = (char*) ptr;
+printf("%s \n",msg_p);
+}
+
+Example 2 : Passing Struct To A Thread Function
+
+#include<stdio.h>
+#include<pthread.h>
+#include<string.h>
+#include<malloc.h>
+
+struct thread_data
+{
+int thread_id;
+int sum;
+char *msg_p;
+};
+
+void *print_message_function(void *thread_ptr)
+{
+struct thread_data * st_thread_data_ptr;
+int taskid = 0, sum = 0;
+char hello_msg_ch_arr[255];
+st_thread_data_ptr = (struct thread_data*)thread_ptr;
+taskid = st_thread_data_ptr->thread_id;
+sum = st_thread_data_ptr->sum;
+strcpy(hello_msg,st_thread_data_ptr->msg_p);
+printf("taskid = %d, sum = %d, message = %s\n",taskid,sum,hello_msg_ch_arr);
+}
+
+
+int main(void)
+{
+pthread_t my_thread;
+
+struct thread_data st_thread_data;
+
+st_thread_data.msg_p = (char*)malloc(sizeof(char)*255);
+
+st_thread_data.thread_id = 10;
+st_thread_data.sum = 35;
+st_thread_data.msg_p = "Hello World"
+
+/*Creating independent threads each of which will execute own function */
+
+my_thread = pthread_create(&my_thread,NULL,print_message_function, (void*)msg_p);    // Creating and passing argument to thread routine.
+
+pthread_join(my_thread,NULL);
+pthread_exit(NULL);
+return 0;
+}
+
+
+
+Example 3 : Returning values from a thread function using pthread_join()
+
+#include<stdio.h>
+#include<pthread.h>
+#include<string.h>
+#include<malloc.h>
+
+struct thread_data
+{
+int thread_id;
+int sum;
+char *msg_p;
+};
+
+void *thread_func(void *args)
+{
+char *th_ptr = strdup("Hello From Thread\n");
+return (void*)th_ptr;
+}
+
+
+
+int main(int argc, char *argv[])
+{
+char *str;
+pthread_t my_thread;
+
+
+/*Creating independent threads each of which will execute own function */
+my_thread = pthread_create(&my_thread,NULL,thread_func, NULL);    // Creating and passing argument to thread routine.
+
+
+//wait until thread completes, assign return value to str
+pthread_join(my_thread,(void**)&str);
+printf("%s",str);
+pthread_exit(NULL);
+return 0;
+}
+
+
+--------------------Common Thread Functions----------------
+
+---------pthread_self() : Provides thread ID assinged by OS
+
+Example : pthread_self()
+#include<stdio.h>
+#include<pthread.h>
+void *thread_func(void *args)
+{
+printf("In Thread Function , Thread ID = %d\n",pthread_self()); // Here we are reading thread ID assigned by OS.
+pthread_exit(NULL);
+return NULL;
+}
+
+int main(int argc, char *argv[])
+{
+pthread_t my_thread;
+
+/*Creating independent threads each of which will execute own function */
+pthread_create(&my_thread,NULL,thread_func, NULL);    // Creating and passing argument to thread routine.
+printf("In Main Thread , Created Thread ID = %d\n",thread);
+pthread_join(my_thread,NULL);
+return 0;
+}
+
+-----------pthread_detach : 
+When a thread is created, one of itś attributes defines whether it is joinable or detached.
+  If this second parameter of pthread_creatpthread_t thread1, thread2;
+char *msg1_p = "Thread1";
+char *msg2_p = "Thread2";
+int iret1 = 0; int iret2 = 0;
+
+/*Creating independent threads ee function is defined as NULL the thread will be in a joinable state.
+  Only threads that are created as joinable can be joined.
+  If a thread is created as detached , it can never be joined.
+
+There are two scenarios when we would like to have a thread detached i.e. 
+   When we have thread joined and want to cancel itś joined state then we can make it detached.
+
+Syntax Function : int pthread_detach(pthread_t thread)
+
+
+Example : 
+
+#include<stdio.h>
+#include<pthread.h>
+#include<unistd.h>
+
+void *threadFn(void *arg) 
+{
+pthread_detach(pthread_self());
+sleep(1);
+printf(Thread Function\n");
+pthread_exit(NULL);
+}
+
+
+int main(int argc, char *argv[])
+{
+
+pthread_t tid;
+int ret = pthread_create(&tid,NULL,thread_func,NULL);
+
+if(ret !=0)
+{
+perror("Thread Creation Error\n");
+exit(1);
+}
+
+
+printf("After thread created in Main\n");
+pthread_exit(NULL);
+
+}
+
+-----------Stack Management-----------
+
+POSIX standard does not dictate the size of a threadś stack and itś size is implementation dependent and varies.
+
+Safe and portable programs do not depend upon the default stack limit instead explicitly allocate enough stack for each thread using : pthread_attr_setstacksize function
+
+pthread_attr_getstacksize(attr,stacksize)
+pthread_attr_setstacksize(attr,stacksize)
+
+
+Example : 
+#include<stdio.h>
+#include<stdlib>
+#include<pthread.h>
+
+pthread_attr_t  attr;
+
+void *thread_func(void * threadid)
+{
+long tid;
+size_t mystacksize;
+tid = (long)threadid;
+pthread_attr_getstacksize(&attr,&mystacksize);
+printf("Thread id %ld,stack size = %li bytes \n",tid,mystacksize);
+pthread_exit(NULL);
+}
+
+int main(int arg, char*argv[]) 
+{
+
+pthread_t myThread;
+size_t stacksize;
+pthread_t myID;
+long t;
+
+pthread_attr_init(&attr);              // Here we are initializing the thread attribute type variable attr       
+pthread_attr_getstacksize(&attr,&stacksize); // Function returning default allocated stack size
+printf("Default stack size = %li\n",stacksize);
+stacksize=9000000;
+printf("Amount of stack needed per thread = %li\n",stacksize);
+pthread_attr_setstacksize(&attr,stacksize);
+
+printf("Creating thread with stack size = %li bytes\n",stacksize);
+
+myID = pthread_create(&myThread, &attr,thread_func, (void*)t);
+
+if(myID)
+{
+printf("ERROR,Return Code from pthread_create() %lud\n");
+exit(-1);
+}
+pthread_exit(NULL);
+}
+
+
+-------------------------pthread_equal() and pthread_once()---------------------------
+
+pthread_equal() function compares two thread IDs
+  .If two IDś are different this function returns 0, otherwise non zero value is returned
+  . We should not use == operator to compare two thread ID´s
+  
+Syntax Example : pthread_id(thread1,thread2);
+
+
+pthread_once() function  executes the init_routine exactly once in a process
+  .First call to this function by any thread in the process executes the given init_routine, without parameters.
+  .Any subsequent call will have no effect.
+ 
+Syntax Example : pthread_once(once_control, init_routine)
+
+  Where param init_routine is typically an initialization routine.
+        param once_control parameter is a synchronization control structure requires initialization prior to calling pthread_once
+          pthread_once_t_once_control = PTHREAD_ONCE_INIT; 
+
+
+pthread_cancel() function terminates execution of a thread i.e remaining thread code is not executed from the line it appears.
+
+Example : 
+
+#include<stdio.h>
+#include<pthread.h>
+
+void *thread_func(void*ptr)
+{
+printf("Hello World");
+pthread_cancel(pthread_self());
+return NULL;
+}
+
+int main()
+{
+
+pthread_t thread = NULL;
+
+pthread_create(&thread,NULL,thread_func,NULL);
+pthread_join(thread,NULL);
+
+return 0;
+}
+
+
+---------------------------------------Thread Synchronization Concepts---------------------------------------
+
+
+Thread synchronization is the concurrent execution of two or more threads sharing critical resources.
+
+Race Condition and Deadlocks are the two main issues which occurr due to parallel execution of threads.
+
+----------Race Condition------------
+
+A Race condition occurs when two or more threads need to perform an operation on the same memory area but the results of computations depends on the order in which these operations 
+are performed.
+
+----------Deadlocks----------------
+
+Deadlocks occur when multiple threads are trying to access a shared resource.
+Deadlock is a situation in which two threads are sharing the same resource and effectiviely preventing each other from accessing the resource causing:
+   Program execution to halt.
+   Each thread is waiting for the other thread to finish,
+
+------------Thread Safe Code-----------------
+
+Thread Safe means that there are no static and non static global variables (shared resources) which other threads can corrupt.
+
+Threads safe means that the programs protects shared data through mutual exclusion, atomic operations and condition variables.
+
+Threads unsafe functions may be used by only one thread at a time in a program and uniqueness of thread must be ensured.
+
+
+----------------Mutual Exclusion-----------------
+
+Mutual Exclusion is when a process or a thread is prevented simultaneous access to a critical section
+ A property of concurrency control which is used to prevent race conditions.
+
+Mutual exclusion is the method of serializing access to shared resources.
+
+To access a critical shared resource at first thread gains the mutex by locking it perform read/write operation and then reuturns or unlocks the mutex allowing other threads to access
+the resource.
+
+-------Atomic Operations and Condition Variables-------------
+
+Atomic operations allow for concurrent algorithms and access to certain shared data types without the use of mutexes.
+   One can modify some variable within a multithreaded context without having to go through a locking protocol.
+
+
+
+-------------------------------------------Mutexes--------------------------------------------------
+
+
+Threads library (pthread.h) provides three synchronization mechanisms that we can implement :
+   Mutexes - locks,block access to variables by other threads.
+   Joins - makes a thread wait till others have completed their execution
+   Condition Variables - A way to communicate to other threads.
+
+
+If four threads are updating the same shared data but only one thread uses a mutex the data still can be corrupted.
+
+A safe way to ensure that when several threads update the same variable , the final value is the same as it would be if only one thread performed the update. 
+
+A typical squence in the use of a mutex is as follows : 
+     . Create and Initialize a mutex variable.
+     . Several threads attempt to lock the mutex.
+     . Only one succeeds and that thread owns the mutex.
+     . The owner unlocks the mutex.
+     . Another thread acquires the mutex and repeats the process.
+     . Finally the mutex is destroyed.
+  
+To avoid deadlocks ensure that threads acquire locks in a agreed order i.e. preservation of lock ordering.
+
+----------------Creating and Destroying Mutexes-----------------
+
+Mutex variables must be declared with type pthread_mutex_t and these variables must be initialized/createdbefore they can be used.
+
+There are two ways to initialize/create a mutex variable.
+
+------1.Statically when it is declared.
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+------2.Dynamically With The pthread_mutex_init() function
+
+int pthread_mutex_init(pthread_mutex_t * mutex,const pthread_mutexattr_t*mutexattr)
+
+. This function requires a pthread_mutex_t variable to operate on as the first argument.
+. Attributes for the mutex can be given through second parameter.
+   .To specify default attributex, pass NULL as the second parameter.
+
+.The pthreads standard defines three optional mutex attributes.
+  .protocol - specifies the protocol used to prevent priority inversions for a mutex.
+  .prioceiling - specifies the priority ceiling of a mutex.
+  .process-shared - specifies the process sharing of a mutex.
+
+------Destroying A Mutex
+. The pthread_mutex_destroy(mutex) function should be used to free a mutex object when it´s no longer needed similar to freeing heap memory using free(ptr).
+
+
+
+------------------Locking and Unlocking Mutexes-------------------------
+
+
+Mutex Locking Function   :   int pthread_mutex_lock(pthread_mutex_t * mutex);
+           		     input : mutex variable name i.e. &mutex_lock
+           		     If the mutex is already locked this call will block the calling thread until the mutex is unlocked.
+
+Mutex Unlocking Function :   int pthread_mutex_unlock(pthread_mutex_t * mutex)
+                             input : mutex variable name i.e. &mutex_lock
+                             Returns : Error if the mutex is already unlocked. 
+                                       Error if the mutex is owned by another thread. 
+
+                             This function needs to be called by the thread owning a mutex after it has completed itś execution of critical section.
+
+
+Mutex Try Lock Function  :   int pthread_mutex_trylock(pthread_mutex_t * mutex);
+                             input : mutex variable name i.e. &mutex_lock
+                             Returns busy error code if the mutex tried to be locked is already locked. 
+                             
+                             This function is useful in preventing deadlock conditions as in a priority inversion situation.
+
+Example 1 : Creating Mutex Dynamically
+
+#include <pthread.h>
+#include <stdio.h>
+
+pthread_mutex_t lock = NULL;
+
+int j = 0; 
+
+void do_process()
+{
+pthread_mutex_lock(&lock);
+int i = 0;
+j++;
+
+while(i < 5) {
+printf("%d",j);
+sleep(1);
+i++;
+}
+
+printf("..Done");
+pthread_mutex_unlock(&lock);
+}
+
+
+
+int main(void) 
+{
+
+int err = 0;
+
+pthread_t t1,t2;
+
+if (pthread_mutex_init(&lock,NULL) != 0) {  // Here we are initializing and creating mutex dynamically
+printf("Mutex Initialization Failed \n");
+return 1;
+}
+
+j = 0;
+
+pthread_create(&t1, NULL, do_process, NULL);
+pthread_create(&t2, NULL, do_process, NULL);
+
+pthread_join(t1,NULL);
+pthread_join(t2,NULL);
+
+return 0;
+}
+
+Example 2 : Creating Mutex Statically
+
+#include <pthread.h>
+#include <stdio.h>
+
+#define NTHREADS 10
+
+void * thread_function(void*);
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+
+void *thread_function(void *ptr)
+{
+printf("Thread Number %ld\n",pthread_self());
+pthread_mutex_lock(&mutex1);
+counter++;
+pthread_mutex_unlock(&mutex1);
+}
+
+int counter = 0;
+
+int main(void)
+{
+
+pthread_t thread_id[NTHREADS];
+int i,j;
+
+for(i=0; i<NTHREADS; i++) 
+{
+   pthread_create(&thread_id[i], NULL, thread_function, NULL)
+}
+
+for(j=0; j<NTHREADS; j++) 
+{
+   pthread_join(&thread_id[j], NULL);
+}
+
+printf("Final Counter Value %d\n",counter);
+
+}
+
+
+Example 3 : Avoiding Deadlocks Using pthread_mutex_trylock()
+
+#include <pthread.h>
+#include <stdio.h>
+
+pthread_mutex_t lock1, lock2;
+
+void *resource1()
+{
+pthread_mutex_lock(&lock1);
+printf("Job started in resource1...\n");
+sleep(2);
+printf("Trying to get resource2\n");
+while(pthread_mutex_trylock(&lock2))   // Here we will have deadlock for any thread when it executes this line, but we are using try lock statement which only lock mutex 
+                                       // lock2 when it will be released by the resource 1 function.
+{
+pthread_mutex_unlock(&lock1);
+sleep(2);
+pthread_mutex_lock(&lock1);
+}
+
+printf("Acquired Resource2\n");
+pthread_mutex_unlock(&lock2);
+
+sleep(2);
+pthread_mutex_unlock(&lock1);
+
+printf("Job Finished In Resource 1...\n");
+pthread_exit(NULL); 
+
+}
+
+
+void *resource2()
+{
+pthread_mutex_lock(&lock2);
+printf("Job started in resource2...\n");
+sleep(2);
+printf("Trying to get resource1\n");
+pthread_lock(&lock1);                       // Here we will have deadlock for any thread when it executes this line
+printf("Acquired Resource 1\n");
+pthread_mutex_unlock(&lock1);
+
+printf("Job Finished In Resource 1...\n");
+pthread_mutex_unlock(&lock1);
+pthread_exit(NULL); 
+
+}
+
+
+int main()
+{
+
+pthread_mutex_init(&lock1,NULL);
+pthread_mutex_init(&lock2,NULL);
+
+pthread_t t1,t2;
+
+pthread_create(&t1,NULL,resource1,NULL);
+pthread_create(&t2,NULL,resource2,NULL);
+
+pthread_join(t1,NULL);
+pthread_join(t2,NULL);
+
+return 0;
+
+}
+
+
+-------------------------Condition Variables-----------------------------------
+
+Condition variables proide yet another way for threads to synchronize.
+
+A condition variable must always be associated with a mutex
+    To avoid a deadlock created by one thread preparing to wait and another thread which may signal the condition before the first thread actually waits on it.
+    The thread will be perpetually waiting for a signal that is never sent.
+    
+
+Any mutex can be used with a condition variable.
+
+
+A thread wants to access a shared resource then it acquires Mutex and then checks condition variable before modifying shared resource, if condition variable state shows that the shared resource is not updated then it falls sleep and it waits for the shared resource to be updated by another thread. 
+
+The second thread then acquires the mutex from first thread , updates the shared resource then changes the state of condition variable, releases the mutex and signals the sleeping thread to wake up and reqacquire the mutex it had earlier.  
+    
+
+
+------------------------Condition Variable Functions---------------------
+
+Condition variables must be declared with type : "pthread_cond_t" and must be initialized before they can be used.
+
+
+----------Creating/Destroying-----------
+
+pthread_cond_init(condition,attr) - Dynamic Creation
+pthread_cond_t_cond = PTHREAD_COND_INITIALIZER; (statically declared)
+pthread_cond_destroy(condition)
+
+
+---------Waiting On Condition-----------
+
+pthread_cond_wait() - will put the caller thread to sleep on the condition variable and release the mutex lock, guaranteeing when the subsequent line is executed after the caller
+has woken up, the caller will hold lock.
+
+pthread_cond_timedwait - place limit on how long it will block.
+
+
+
+--------Waking Thread Based On Condition------------
+
+pthread_cond_signal
+pthread_cond_broadcast -  wake up all threads blocked by the specified condition variable.
+
+For all of the above functions, the caller must first hold the lock that is associated with that condition variable
+
+Example : 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+pthread_mutex_t count_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t condition_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condition_cod = PTHREAD_COND_INITIALIZER;
+
+void *functionCount1();
+void *functionCount2();
+int count = 0;
+
+#define COUNT_DONE 	10
+#define COUNT_HALT1 	3
+#define COUNT_HALT2     6
+
+void *functionCount1()
+{
+for(;;) 
+{
+pthread_mutex_lock(&condition_mutex);
+while(count >= COUNT_HALT1 && count2 <= COUNT_HALT2) {
+pthread_cond_wait(&condition_cond, &condition_mutex);        // Here we are waiting and checking condition variable before locking mutex
+}
+pthread_mutex_unlock(&condition_mutex);
+pthread_mutex_lock(&count_mutex);
+count++;
+printf("Counter value functionCount1 : %d\n",count);
+pthread_mutex_unlock(&count_mutex);
+if(count >= COUNT_DONE) return(NULL);
+}
+
+void *functionCount2()
+{
+for(;;) 
+{
+pthread_mutex_lock(&condition_mutex);
+if(count < COUNT_HALT1 || count > COUNT_HALT2) {
+pthread_cond_signal(&condition_cond);
+}
+pthread_mutex_unlock(&condition_mutex);
+pthread_mutex_lock(&count_mutex);
+count++;
+printf("Counter value functionCount2 : %d\n",count);
+pthread_mutex_unlock(&count_mutex);
+if(count >= COUNT_DONE) return(NULL);
+}
+
+
+int main()
+{
+pthread_t thread1,thread2;
+
+pthread_create(&thread1, NULL, &functionCount1, NULL);
+pthread_create(&thread2, NULL, &functionCount2, NULL);
+
+pthread_join(thread1, NULL);
+pthread_join(thread2, NULL);
+
+exit(0);
+}
+
+                  --------------------------------------------Section 22 : Networking Sockets-------------------------------------------
+
+
+TCP (Transmission Control Protocol) is a connection oriented protocol.
+
+TCP creates a connection between the source and destination node before transmitting the data and keeps the connection alive until the communication is no longer active.
+
+--------Features of A TCP Connection------
+
+Connection Oriented.
+Reliability.
+Handles lost packets.
+Handles packet sequencing.
+Handles duplicated packets.
+Full Duplex.
+Flow Control.
+Congestion Control.
+
+---------------Types Of Servers : 
+
+Iterative Server : 
+     Simplest form of server where the server process serves one client at a time.
+     After completing the first request, it takes request from another client.
+     Other client wait until it is their turn.
+
+Concurrent Servers : 
+     This type of server runs multiple concurrent processes to serve many requests at a time.
+     One process may take longer and another client does not need to wait too long.
+     Simplest way to write a concurrent server under Unix is to fork a child process to handle each client separately.
+     
+
+--------Sockets
+
+Sockets are the virtual end points of any kind of network communications done between two computers.
+Socket programming is a way of connecting two nodes on a network to communicate with each other.
+
+Server forms the listener socket while client reaches out to the server.
+
+-----Steps in using sockets to communicate
+
+Create a new socket for network communication
+Attach a local address to a socket.
+Announce willingness to accept connections.
+Block caller until a connection request arrives.
+Actively attempt to establish a connection 
+Send some data over connection.
+Receive some data over connection.
+Release the connection.
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 

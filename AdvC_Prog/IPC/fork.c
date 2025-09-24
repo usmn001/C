@@ -24,12 +24,12 @@ for(int i=0;i<MAX_COUNT;i++)
 if(pid == 0)
 {
 char *str = "Child Process";
-sprintf(buf,"%s Process pid = %d,value = %d\n",str,pid,i);  // sprintf is Putting the output in buffer.
+sprintf(buf,"%s Process pid = %i,value = %i\n",str,getpid(),i);  // sprintf is Putting the output in buffer.
 }
 else if(pid > 0)
 {
 char *str = "Parent Process";
-sprintf(buf,"%s Process pid = %d,value = %d\n",str,pid,i);
+sprintf(buf,"%s Process pid = %i,value = %i\n",str,getpid(),i);
 }
 
 write(1,buf,strlen(buf));  // This write statement is showing output on screen 
