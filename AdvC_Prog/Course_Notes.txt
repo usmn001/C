@@ -3993,40 +3993,210 @@ Server forms the listener socket while client reaches out to the server.
 
 -----Steps in using sockets to communicate
 
-Create a new socket for network communication
-Attach a local address to a socket.
-Announce willingness to accept connections.
-Block caller until a connection request arrives.
-Actively attempt to establish a connection 
-Send some data over connection.
-Receive some data over connection.
-Release the connection.
+Create a new socket for network communication (socket).
+Attach a local address to a socket. (bind)
+Announce willingness to accept connections. (listen)
+Block caller until a connection request arrives. (accept)
+Actively attempt to establish a connection. (connect). 
+Send some data over connection. (send).
+Receive some data over connection. (receive).
+Release the connection.  (close).
+
+-----------Socket API-----------
+
+Following header files are required to be added in our socket application.
+
+<sys/types.h>  : Contains definitions of a number of data types used in socket calls.
+
+<sys/socket.h> : The main socket header file.
+                 Includes a number of definitions of structures needed for sockets (socket creation, accept, listen, bin, send, recv etc).
+                 
+<netinet/in.h> : Contains constants and structures needed for internet domain addresses.
+
+<netdb.h>      : Defines the structure hostent.
+
+<arpa/inet.h>  : Defines in_addr structure.                   
+
+---------Ports------
+
+A computer might need to run several server programs at once.
+  
+A port is just like a channel on TV, different ports are used for different network services just like different channgels are used for various content.
+
+A port will be defined as an integer number between 1024 and 65535.
+  Port numbers smaller than 1024 are considered well known system ports (telnet uses port 23, http uses 80, ftp uses 21) so avoid these.
+
+The port assignments to network services can be found in the file /etc/services.
+
+
+------------Port and Service Functions------------
+
+Following functions are provided to fetch service name from the /etc/service file
+
+struct servent *getservbyname(char *name, char*proto)
+    .Takes a service name and a protocol name and returns the corresponding port number for that service.
+
+struct servent *getservbyport(int port, char *port)
+    .Takes a port number and a protocol name and returns the corresponding service.
+
+Return value for each function is a pointer to following structure.
+
+struct servent 
+{
+char *s_name;
+char **s_aliases;
+int s_port;
+char *s_proto;
+};
+
+-------IP Address Functions---------
+
+
+Below functions are for IP Address functionality : 
+
+int inet_aton(const char*strptr, struct in_addr*addrptr) : Function converts specified string in the internet standard dot notation to a network address and stores it in the
+                                                           above structure.
+
+in_addr_t inet_addr (const char*strptr) : Function converts specified string in the standard dot notation to an integer value suitable for use as an internet address.
+
+char *inet_ntoa(struct in_addr inaddr) : Function converts the specified internet host address to a string in the internet standard dot notation
+
+
+------------Structures Used For Support Of Main Functions---------------
+
+.Various structures are used in socket programming to hold information about the address and port and other information.
+.Socket address strucutres are an integral part of every network program, most socket functions require a pointer to a socket address structure as an argument.
+  We allocate and fill these socket address structures and pass pointers to then to various functions.
+
+-------------Structures Used For Support Of Main Functions---------------
+
+.sockaddr is a strucutre holding the socket information, this is a generic socket address structure passed in most of the socket function calls.
+
+	struct sockaddr 
+	{
+	unsigned short sa_family;
+	char sa_data[14];
+	};
+
+sa_family : can be : AF_INET, AF_UNIX, AF_NS, AF_IMPLINK
+           It represents and address family, in most of the interet based applications, we use AF_INET.
+
+sa_data : is a protocol specific address
+          We will be using port number IP address, represented by sockaddr_in structure.
+
+.sockaddr_in is a strucure that helps you to reference to the socketś elements.
+
+	struct sockaddr_in
+	{
+	short int sin_family;
+ 	unsigned short int sin_port;
+	struct in_addr sin_addr;
+	unsinged char sin_zero[8];
+	};
+
+.in_addr is used only in the above structure as a structure field and holds the 32 bit netid/hostid
+
+	struct in_addr
+	{
+	unsinged long s_addr;
+	};
+
+.hostent is a structure used to keep information related to host.
+
+
+struct hostent
+{
+char *h_name;
+char **h_aliases;
+int h_addrtype;
+int h_length;
+char **h_addr_list;
+
+#define h_addr  h_addr_list[0]
+
+};
+
+------------Socket Functions-------------------------
+
+socket() and accept() functions both return handles (file descriptor)
+
+In linux sockets and file descriptors also share same file descriptor table.
+
+We cannot randomly access a socket like we can do by lseek() on a file.
+
+Most common/important socket functions are :
+
+socket()  
+connect() : Specifically Used by client.
+bind()    : Used by server specifically.
+listen() and accept()
+read(),recv(),recvfrom() or recvmsg()
+write(),send(),sendto() or sendmsg().
+close()
+
+
+All the above functions need to include header files : <sys/types.h>, <sys/socket.h> except for read/write/close which are defined in <unistd.h>
 
 
 
+-------Socket Function------
+
+To Perform Network I/O, First thing a process must do is call the socket function, specifying the type of coomunication protocol desired and protocol family.
+
+Function Prototype : int socket(int family,int type, int protocol);
+                     
+                    @param "family"    :  AF_INET   for IPv4 Protocol
+                                          AF_INETC  for IPv6 Protocol
+
+                    @param "type"      :  SOCK_STREAM for a stream socket
+                                          SOCK_DGRAM  for a datagram scoket.
+
+                    @param "protocol"  :  IPPROTO_TCP   for TCP  Transport Protocol. 
+                                          IPPROTO_UDP   for UDP  Transport Protocol.
+                                          IPPROTO_SCTP  for SCTP Transport Protocol. 
 
 
+                    @Return            :  A Socket descriptor for use in system calls or -1 on error.
+
+Function Prototype : int setsockopt(int sockfd, int level, int optname, const void*optval, socklen_t optlen);
+
+We can also use setsockopt function helps in manipulating options for socket referred to by the file descriptor sockfd. 
+This function is completely optional but it helps in reuse of address and port and prevents errors such as : address already in use.
 
 
+------connect Function--------                                   
+
+Connect function is used by a TCP client to establish a connection with a TCP server.
+                
+Function Prototype :  int connect (int sockfd, struct sockaddr * serv_addr, int addrlen); 
+                          
+                         @param "sockfd" is a socket descriptor returned by socket function. 
+                         
+                         @param "serv_addr" is a pointer to struct sockaddr containing the destination IP and Port Address. 
+
+                         @param "addrlen"   is set to sizeof(struct sockaddr).
+ 
+                         @param Return 0 if it successfully connects to server, otherwise it returns -1 on error. 
 
 
+---------Bind Function--------------
 
 
+When a server starts up, it needs to tell the operating system which port it is going to use, this process is called binding the port.
+After this any program on the network will be able to access that server process through connect() function using server name.
 
+Function Prototype : int bind(int sockfd, struct sockaddr*my_addr,int addrlen);
+                     
+                     @param "sockfd"  is a socket descriptor returned by the socket function.
+                     
+                     @param "my_addr" is a pointer to struct sockaddr containing local IP Address and port.
+                                      Where a 0 value for struct member sin_port; will mean that we choose a random port 
+                                              and INADDR_ANY value for struct member sin_addr; means the serverś IP address will be assigned automatically.
+                                              Address is set to sizeof(struct sockaddr).
 
-
-
-
-
-
-
-
-   
-
-
-
-
-
+                                              Example : server.sin_port = 0;
+                                                        server.sin_addr.s_addr = INADDR_ANY;
+                                       
 
 
 
