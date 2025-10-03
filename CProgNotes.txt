@@ -6,7 +6,7 @@ structures and one special data types in C is of file pointers defined by keywor
 
 Derived Data Types in C are : Function, Array, Pointer , Reference.
 
-Userdefined Data Types in C are : Typedef,enum, union, structure, Class.
+User defined Data Types in C are : Typedef,enum, union, structure, Class.
 
 There are four Primitive Data types In C : char(8-bit) , int(32-bit), long(32-bit) ,  short(16-bit) , float (64-bit) , double(64-bit), bool.
 Type Modifiers in C are : unsiged, signed, short , long these type modifiers are used with data types to modify their properties such as range of values or sign.
@@ -63,7 +63,7 @@ Example : A = 0011(3) , B = 0101(9)    A&&B =1 as both are nonzero
 Bitsie Operators : >> (Shift Right) , (Shift Left) <<, | (Bitwise OR), & (Bitwise And), ^ (Bitwise XOR) , ~ ( One´s Complement).
 Example :
 
-A = 0011 , B = 0101          A|B = 0111     (Bitwise | ) 
+A = 0011 , B = 0101          A|B = 0111     (Bitwise | )        Returns True If Both Or Any Conditions Are True
                             
                              A^B = 0110     (Bitwise XOR )      returns false 0 if both conditions are false or true,
                                                                         true  1 if any one condition is true. 
@@ -71,6 +71,11 @@ A = 0011 , B = 0101          A|B = 0111     (Bitwise | )
                               ~A = 1100     (Bitwise Not)
                              A<<2= 1100     (Bitwise Shift Left)
                              A>>2= 0000     (Bitwise Shift Right)
+                           
+To Set A Specific Bit in A at Bit Position pos we do : A | (1<<pos)  ;
+To Check Status Of Specific Bit in A at Bit Position pos we do : bitstatus = (A>>pos) & 1;
+
+
 
 Relational : <,<=, >, =>, == , !=
            
