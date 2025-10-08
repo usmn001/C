@@ -2141,7 +2141,83 @@ libweather.a: weatherstats.o weatherio.o
         ar rcs libweather.a weatherstats.o weatherio.o
 
 
-------------------------------------------------Section 20 : Data Structures-----------------------------------------------
+
+------------------------------------------------Section 18 : Useful C Libraries-----------------------------------------------
+
+------------------------Assert----------------------
+
+The assert library is designed to help with debugging programs , defined in asset.h
+Assert is a macro enabling us to insert tests of arbitrary expressions in our program.
+Assert takes an integer expression as itś argument, this expression is relational or logical.
+Program is terminated with a diagnostic message is specified expression passed to assert is false.
+ error message is written to standard error stream(stderr)
+   . displays the test that failed , name of file containing the test and a line number.
+   . abort() function is invoked terminating the program. 
+
+Assert is a run time check.
+
+We can also disable all assert statements in our code by defining macro as : #define NDEBUG hence we can also enable all assertioons in our code by #undef NDEBUG.
+
+In some non standard systems assertions are disabled by default where we can enable them by : #undef NDEBUG and then add #include<assert.h>
+
+-------Run Time Assertion--------
+
+C11 has introduced run time assertion through static_assert() macro where it takes a expression as itś first argument and second as the message to print out.
+
+Example : static_assert(CHAR_MIN==0,"Type char is a signed type. Code won´t work");
+           Where CHAR_MIN is defined in limits.h file.
+
+
+---------------------------General Utilities stdlib.h------------------------
+
+There are several dozens of functions defined in different library files facilitating C Programmers i.e. 
+        Functions defined in stdio.h facilitate input and output operations.
+        Functions defined in string.h facilitate performing string manipulators.
+
+These standard functions make our programs more portable and efficient.
+
+
+--------------exit function-------------
+
+int exit(int status) : Same effect of terminating (exiting from) current program.
+Open files are automatically closed by the program.
+  .Flushes all output streams.
+  .Closes all open streams.
+  .Closes temporary files created by calls to the standard I/O  Function
+
+integer value status is called the exit status and has same meaning as the value returned from main() :
+  .EXIT_FAILURE represents an integer value that we can use to indicate program has failed (non zero)
+  .EXIT_SUCCESS represents an intger value that we can use to indicate it has succeeded.
+
+Always exit from a program with defined exit status.
+
+
+-----------atexit() function-------------
+
+atexit() function allows us to specify particular function to be called when exit() executes.
+
+It takes a argument a pointer to a function .
+
+Function : int atexit(void(*function)(void));
+              Where *function is a function pointer which we can pass by simply mentioning function name.
+     
+     This function registers allows us to list 32 functions with (void return) and no return arguments which we can call upon exit from a program.          
+
+---------------abort() Function------------
+
+abort() causes abnormal termination of program : Raising the SIGABRT signal
+                                            Returns an implementation defined code indicating unsuccessful termination
+             
+             This function causes a noticeable failure because it will dump core and generate a core file.                                   
+
+
+
+
+
+
+
+
+------------------------------------------------Section 19 : Data Structures-----------------------------------------------
 
 We know in C language every data type (char,int,long,short,bool) has a property and it supports a set of operations (add,subtract,multiply).
 
@@ -4068,9 +4144,9 @@ char *inet_ntoa(struct in_addr inaddr) : Function converts the specified interne
 .Socket address strucutres are an integral part of every network program, most socket functions require a pointer to a socket address structure as an argument.
   We allocate and fill these socket address structures and pass pointers to then to various functions.
 
--------------Structures Used For Support Of Main Functions---------------
+-------------------Structures Used For Support Of Main Functions---------------------
 
-.sockaddr is a strucutre holding the socket information, this is a generic socket address structure passed in most of the socket function calls.
+----.sockaddr is a strucutre holding the socket information, this is a generic socket address structure passed in most of the socket function calls.
 
 	struct sockaddr 
 	{
@@ -4084,7 +4160,7 @@ sa_family : can be : AF_INET, AF_UNIX, AF_NS, AF_IMPLINK
 sa_data : is a protocol specific address
           We will be using port number IP address, represented by sockaddr_in structure.
 
-.sockaddr_in is a strucure that helps you to reference to the socketś elements.
+-----.sockaddr_in is a strucure that helps you to reference to the socketś elements.
 
 	struct sockaddr_in
 	{
@@ -4094,15 +4170,14 @@ sa_data : is a protocol specific address
 	unsinged char sin_zero[8];
 	};
 
-.in_addr is used only in the above structure as a structure field and holds the 32 bit netid/hostid
+------.in_addr is used only in the above structure as a structure field and holds the 32 bit netid/hostid
 
 	struct in_addr
 	{
 	unsinged long s_addr;
 	};
 
-.hostent is a structure used to keep information related to host.
-
+------.hostent is a structure used to keep information related to host.
 
 struct hostent
 {
@@ -4189,79 +4264,443 @@ Function Prototype : int bind(int sockfd, struct sockaddr*my_addr,int addrlen);
                      
                      @param "sockfd"  is a socket descriptor returned by the socket function.
                      
-                     @param "my_addr" is a pointer to struct sockaddr containing local IP Address and port.
-                                      Where a 0 value for struct member sin_port; will mean that we choose a random port 
-                                              and INADDR_ANY value for struct member sin_addr; means the serverś IP address will be assigned automatically.
+                     @param "my_addr" is a pointer to struct sockaddr containing local IP Address and port. i.e. : 
+                                      
+					struct sockaddr 
+					{
+					unsigned short sa_family;
+					char sa_data[14];
+					};
+
+                                      Where a 0 value for sin_port in struct sockaddr_in ; will mean that we choose a random port 
+                                              and INADDR_ANY value for sin_addr in struct sockaddr_in; means the serverś IP address will be assigned automatically.
                                               Address is set to sizeof(struct sockaddr).
 
                                               Example : server.sin_port = 0;
                                                         server.sin_addr.s_addr = INADDR_ANY;
+
+                    @param "addrlen" is set to sizeof(struct sockaddr) 
+
+
+------------Listen Function----------------- 
                                        
 
+Listen function allows specific number of clients to wait in a queue for server to process there request.
 
+Function Prototype : int listen(int sockfd, int backlog);
+                     
+                     @param "sockfd"  :   is a socket descriptor returned by socket function.
+                     
+                     @param "backlog" :   is the number of maximum client connections.
 
 
+-----------Accept Function------------------
 
+Accept() system call waits until a client contacts the server and then it returns a second socket descriptor that we can use to hold the convesration with the client.
 
+Function Prototype : int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);
 
+                     @param "sockfd"   : is a socket descriptor returned by socket function. 
+                      
+                     @param "cliaddr"  : is a pointer to struct sockaddr containing the client IP Address and port.
+                     
+                     @param "addrlen"  : should be set to sizeof(struct sockaddr)
+                     
+                     @ Return a non negative descriptor on success, otherwise it returns -1 on error. 
+                          All read-write operations will be done on this descriptor to communicate with the client.
 
+--------------Recv Function-------------------
 
+The recv function is used to receive data over stream sockets or connected datagram sockets i.e. TCP oriented.
+   If we want to receive data over unconnected datagram sockets we must use recvfrom() function.
 
+Function Prototype : int recv(int sockfd, void *buf, int len,unsigned int flags)
 
+                     @param "sockfd"   : is a socket descriptor returned by socket function.
+                      
+                     @param "buf"      : is the buffer to read information into.
+                     
+                     @param "len"      : is the maximum length of the buffer.
+                     
+                     @param "flags"    : is set to 0.     
+                    
+                     @param returns the number of bytes read into the buffer otherwise it will return -1 on error.
 
+Reference : https://man7.org/linux/man-pages/man3/setsockopt.3p.html
 
 
+--------------recvfrom function---------------------
 
+The recvfrom function is used to receive data from unconnected datagram sockets i.e. UDP orineted.
 
+Function Prototype : int recvfrom(int sockfd, void *buf,int len,unsigned int flags,struct sockaddr*from,int*fromlen);
 
+                     @param "sockfd"   : is a socket descriptor returned by socket function.
+                      
+                     @param "buf"      : is the buffer to read information into.
+                     
+                     @param "len"      : is the maximum length of the buffer.
+                     
+                     @param "flags"    : is set to 0.     
 
+                     @param "from"     : is a pointer to struct sockaddr for the host where data has to be read.
 
+                     @param "fromlen"  : should be set it to sizeof(struct sockaddr).
 
+                     @param returns the number of bytes read into the buffer, otherwise it returns -1 on error.
+                     
+---------------write function part of File I/O present in unistd.h --------------
 
+Write function write nbytes from the buffer pointed by buf to the file associated with open file descriptor.
 
+Function Prototype : int write(int fildes, const void*buf,int nbyte);
 
+                     @param "fildes" : is a socket descriptor returned by socket function.
 
+                     @param "buf"    : is a pointer to the data you want to send.      
 
+                     @param "nbyte"  : is the number of bytes to be written, if nbyte is 0, write() will return 0 and have no results if the file is a regular file,
+                                       otherwise results are specified.
 
+                     @param Returns number of bytes actually written to file associated with fildes if successful otherwise -1 is returned.
 
 
+--------------send function----------------
 
+.Send function is used to send data over stream sockets or connected datagram sockets.
+    If we want to send data over unconnected datagram sockets, we must use sendto() function
+  
+Function Prototype : int send(int sockfd, const void*msg, int len, int flags);
 
+                     @param "sockfd"   : is a socket descriptor returned by socket function.
 
+                     @param "msg"      : is a pointer to the data we want to send.
 
+                     @param "len"      : is the length of data we want to send (in bytes).
 
+                     @param "flags"    : should be set to 0.
 
+                     @param Returns the number of bytes sent out, otherwise it will return -1 on error.
 
+---------------sendto Function-----------------
 
+.sendto function is used to send data over unconnected datagram sockets.
 
+Function Prototype :  int sendto(int sockfd, const void*msg, int len, unsigned int flags, const struct sockaddr *to, int tolen);
 
+                      @param "sockfd" is a socket descriptor returned by socket function.
+                      
+                      @param "msg" is a pointer to the data you want to send.
 
+                      @param "len" is the length of data we want to send (in bytes).
+ 
+                      @param "flags" should be set to 0.
+ 
+                      @param "to" is a pointer to struct sockaddr for the host where data has to be sent.
 
+                      @param "tolen" should be set it to sizeof(struct sockaddr).
 
+ 	              @param returns the number of bytes sent, otherwise it returns -1 on error.
 
 
+------------------read function-----------------------------
 
 
+. read function attempts to read nbyte bytes from the file associated with file descriptor fildes into the buffer pointed to by buf.
 
+Function Prototype : int read (int fildes, const void *buf, int nbyte);
+ 
+                     @param "fildes" is a socket descriptor returned by socket function
+                     
+                     @param "buf" is the buffer to read the information into.
 
+                     @param "nbyte" is the number of bytes to read.
 
+                     @param Returns the number of bytes actually written to the file associated with fildes, if successful otherwise -1 is returned. 
 
 
+------------------close function------------------------
 
+.close function is used to close the communication between the client and the server.
 
+Function Prototype : int close(int sockfd);
+                     
+                     @param "sockfd" is a socket descriptor returned by the socket function.
 
+                     @param returns 0 on success, otherwise it returns -1 on error.
 
+------------------shutdown function--------------------------
 
+shutdown function is used to gracefully close the communication between client and the server. It gives more control in comparison to the close function.
 
+Function Prototype : int shutdown(int sockfd,int how)
+                     
+                   @param "sockfd" is a socket descriptor returned by the socket function.
 
+                   @param "how"   0 indicates receiving is not allowed. 
+                                  1 indicates sending is not allowed.
+                                  2 indicates both sending and receiving is not allowed, equivalent to function close()  
 
+                   @param returns 0 on success, otherwise it returns -1 on error.
 
 
+----------------------------------Lecture : Creating A Server Socket----------------------------------
 
+Steps involved in establishing a server socket are as follows : 
 
+1. Create a socket with the socket() system call. i.e. int socket(int family,int type, int protocol);
 
+2. Bind the socket to an address using the bind() system call i.e. int bind(int sockfd, struct sockaddr*my_addr,int addrlen);
+     For server socket on the internet, address consists of a port number on the host machine.
 
+3. Listen for connections with the listen() system call. i.e. int listen(int sockfd, int backlog);
 
+4. Accept a connection with the accept() system call. i.e. int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);
+       Typically blocks the connection until a client connects with the server.
+
+5. Send and Receive data using the read()/recv() and write()/send() system calls.
+
+Example : Creating A Server Socket
+
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+short socketCreate(void)        // Our Own Function Creating Socket 
+{
+short hSocket;
+printf("Create the socket\n");
+hSocket = socket(AF_INET, SOCK_STREAM, 0);
+return hSocket;
+}
+
+int bindCreatedSocket(int hSocket) 
+{
+
+int iRetval = -1;
+int clientPort = 12345; 
+struct sockaddr_in remote = {0};
+
+/* Internet Address Family */
+remote.sin_family = AF_INET;
+
+/* Any incoming interface */
+remote.sin_addr.s_addr = htonl(INADDR_ANY);   /* Function converts the unsigned integer hostlong from host byte order to network byte order. */
+remote.sin_port = htons(clientPort);          /* Function converts the unsigned short integer hostshort from host byte order to network byte order. */
+
+iRetval = bind(hSocket, (struct sockaddr*)&remote, sizeof(remote));
+return iRetval;
+}
+
+int main(int argc, char*argv[]) 
+{
+
+int socket_desc = 0, sock = 0, clientLen = 0;
+struct sockaddr_in client;
+char client_message[200] = {0};
+char message[100] = {0};
+const char *pMesaage = "hello from Jasons server";
+
+// Create socket
+socket_desc = socketCreate();
+
+if(socket_desc == -1) 
+{
+  printf("Could Not Create Socket");
+  return 1;
+  
+}
+
+printf("Socket Created\n");
+
+//Bind
+if(bindCreatedSocket(socket_desc) < 0)
+{
+perror("Bind Failed");
+return 1;
+}
+
+printf("Bind Done\n");
+
+//Listen
+listen(socket_desc,3);
+
+// Accept incoming connection
+
+while(1)
+{
+	printf("Waiting for incoming connections.......\n");
+	clientLen=sizeof(struct sockaddr_in);
+
+	// Accept connection from an incoming client, accept is returning a new socket descriptor
+	sock = accept(socket_desc,(struct sockaddr *)&client,(socklen_t*)&clientLen);
+
+	if(sock<0)
+	{
+	 perror("Accept Failed");
+ 	return 1;
+	}
+
+	printf("Connection Accepted\n");
+	memset(client_message, "\0",sizeof(client_message)); // Setting the buffer we use for sending message to client.
+	memset(message,"\0",sizeof(message));
+
+
+	// Receive a Reply from the client
+	if( recv(sock,client_message,200,0)<0) )
+	{
+        	printf("recv failed");
+  		break;
+	}
+
+	printf("Client Reply : %s\n",client_message);
+
+
+	if(strcmp(pMessage,client_message)==0)
+	{
+  	strcpy(message,"Hi There");
+	}
+
+	else {
+	strcpy(message,"Invalid Message");
+	}
+
+	if(send(sock,message,strlen(message),0)<0)
+	{
+  	printf("Send Failed");
+  	return 1;
+	}
+
+	close(sock);
+	sleep(1)
+}
+
+	return 0;
+ }
+
+
+
+
+--------------------------------Creating A Client Socket------------------------------
+
+
+1. Create a new socket for network communication.
+2. Attach a local address to a socket(bind).
+3. Announce willingness to accept connections (listen).
+4. Block caller until a connection request arrives (accept).
+5. Actively attempt to establish a connection (connect).
+6. Send some data over connection (send).
+7. Receive some data over connection (receive). 
+
+
+
+Example : 
+
+short socketCreate(void)        // Our Own Function Creating Socket 
+{
+short hSocket;
+printf("Creating the Client socket\n");
+hSocket = socket(AF_INET, SOCK_STREAM, 0);
+return hSocket;
+}
+
+int socketConnect(int hSocket) 
+{
+int iRetval = -1;
+int serverPort = 12345;
+char *serverIP = "127.0.0.1";
+struct sockaddr_in remote = {0};
+/* Internet Address Family */
+remote.sin_family = AF_INET;    
+/* Server Port number */
+remote.sin_port = htons(serverPort);
+/* Server IP address */
+remote.sin_addr.s_addr = inet_addr(serverIP);
+iRetval = connect(hSocket, (struct sockaddr*)&remote, sizeof(remote));
+return iRetval;
+}
+
+
+// Send the data to the server and set the timeout of 20 seconds
+int socketSend(int hSocket,char* Rqst,short lenRqst) {
+    int shortRetval = -1;
+    struct timeval tv;
+    tv.tv_sec = 20;  /* 20 Secs Timeout */
+    tv.tv_usec = 0;
+
+    if(setsockopt(hSocket,SOL_SOCKET,SO_SNDTIMEO,(char *)&tv,sizeof(tv)) < 0) {
+        printf("Time Out\n");
+        return -1;
+    }
+    shortRetval = send(hSocket, Rqst, lenRqst, 0);
+    return shortRetval;
+}
+
+
+
+int socketReceive(int hSocket, char *Rsp,short RcvSize)
+{
+int shortRetval = -1;
+struct timeval tv;
+tv.tv_sec = 20; 
+tv.tv_usec = 0; 
+
+if(setsockopt(hSocket,SOL_SOCKET,SO_RCVTIMEO,(char*)&tv,sizeof(tv))<0)
+{
+printf("Time Out \n");
+return -1;
+}
+
+shortRetval = recv(hSocket, Rsp, RcvSize, 0);
+printf("Response %s\n",Rsp);
+return shortRetval;
+}
+
+int main(int argc, char*argv[]) 
+{
+int socket_desc = 0, sock = 0, clientLen = 0;
+struct sockaddr_in server;
+char sendToServer[200] = {0};
+char server_reply[100] = {0};
+
+
+// Create socket
+socket_desc = socketCreate();
+
+if(socket_desc == -1) 
+{
+  printf("Could Not Create Socket");
+  return 1;  
+}
+
+printf("Socket is Created \n");
+
+// Connect To Remote Server
+if(socketConnect(socket_desc) < 0)
+{
+  printf("Could Not Connect to Server\n");
+  return 1;
+}
+else
+{
+    printf("Connected to Server\n");
+}
+    
+printf("Enter The Mesaage : ");
+fgets(sendToServer,100,stdin);
+
+// Send Data To Server
+socketSend(hSocket, sendToServer, strlen(sendToServer));
+
+// Receive Data From Server
+read_size = socketReceive(hSocket,server_reply,200);
+printf("Server Response : %s\n",server_reply);
+
+close(hSocket);
+return 0;
+}
 
 
 
