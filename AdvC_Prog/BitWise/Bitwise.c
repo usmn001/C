@@ -14,7 +14,7 @@ int main(void)                     // Program to Check and Set a Bit at Given Po
     bitStatus = (a>>pos) & 1; 
     printf("The %d Bit Is Set to %d\n", pos, bitStatus);
 
-    new_num = a | (1<<pos);
+    new_num = a | (1<<pos);       // Shifting 1 to the left by 'pos' and then ORing it with 'a' to set the bit at 'pos'
     printf("New Number After Setting the %d Bit is: %d\n", pos, new_num);
 
 
