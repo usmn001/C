@@ -2168,7 +2168,7 @@ Example : static_assert(CHAR_MIN==0,"Type char is a signed type. Code won´t wor
            Where CHAR_MIN is defined in limits.h file.
 
 
----------------------------General Utilities stdlib.h------------------------
+---------------------Lecture 1 : General Utilities stdlib.h ------------------------
 
 There are several dozens of functions defined in different library files facilitating C Programmers i.e. 
         Functions defined in stdio.h facilitate input and output operations.
@@ -2201,14 +2201,463 @@ It takes a argument a pointer to a function .
 Function : int atexit(void(*function)(void));
               Where *function is a function pointer which we can pass by simply mentioning function name.
      
-     This function registers allows us to list 32 functions with (void return) and no return arguments which we can call upon exit from a program.          
+     This function registers allows us to list 32 functions with (void return) and no return arguments which we can call upon exit from a program.      
+
+Example : 
+#include <stdio.h>
+#include <stdlib.h>
+void sign_off(void)
+void too_bad(void)
+
+int main(void)
+{
+	int n;
+ 	atexit(sign_off);                 // Function sign off() will now execute at execution of EXIT();
+	puts("Enter an Integer");
+if(scanf("%d",&n)!=1) 
+{
+puts("Thatś no integer!");
+atexit(too_bad);                         // Function too_bad() will now execute at execution of EXIT();
+exit(EXIT_FAILURE);
+}
+RETURN 0;	
+}
+
+    
 
 ---------------abort() Function------------
 
-abort() causes abnormal termination of program : Raising the SIGABRT signal
+abort() causes abnormal termination of program : Raising the SIGABRT signal, If this signal is caught by a signal handler then program will not terminate.
                                             Returns an implementation defined code indicating unsuccessful termination
+                                            File buffers are not flushed
+                                            Streams are not closed.
+                                            Temporary files are not deleted. 
              
-             This function causes a noticeable failure because it will dump core and generate a core file.                                   
+             .This function causes a noticeable failure because it will dump core and generate a core file. 
+             .Functions passed to atexit() are not called.
+
+Syntax : abort() 
+
+Example : 
+#include <stdio.h>
+#include <stdlib.h>                                 
+
+int main()
+{
+FILE *fp;
+fp = fopen("textfile.txt","r");
+
+if(fp==NULL)
+{
+printf("Going to abort the program");
+abort();             // In later part of the program the file can be used.
+}
+printf("Closing the file");
+fclose(fp);
+return 0;
+}
+
+-------------qsort() Function-----------------------
+
+Most effective method for sorting data of arrays.
+Divides the array into smaller sizes until the element level is reached, every value is compared with the other.
+
+Syntax : void qsort(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void*));
+          
+         Where first argument is a pointer to the beginning of array which is array name.
+               2nd argument is the size of array.
+               3rd argument is the size of each array element i.e. sizeof(array_type)
+               4th argument is the function int(*compar)(const void *, const void*) qsort uses, 
+                                   where *compar is the function pointer pointing to a comparison function, returning an int and takes two arguments
+                                          This comparison function returns a +ive integer if 1st item is greater than 2nd.
+                                                                   returns zero if 1st and 2nd are same.        
+                                                                   returns -ive integer if 2nd iteam is greater than 1st.
+
+---------------------Lecture 2 : General Utilities stdlib.h ------------------------
+
+Functions of library such as atoi(), atof(), atol() are used to convert ASCII code of data to relevent integer, float and long data types.
+Example : 
+#include <stdlib.h>
+int main(void)
+{
+char a[10] = "3.14";
+long value = atof(a);
+printf("%f\n",value);
+return 0;
+}
+
+--------string to number conversions---------------
+
+Function : double strtod(const char *str, char **end); is used to convert string into decimal.
+
+Example : 
+#include <stdlibh>
+
+int main(void)
+{
+char a[20] = "123.45xyz", *end;     // end is pointing to x
+double value = 0;
+value = strtod(a,&end);
+printf("Value = %lf\n",value);          // This statement will print 123.45 on screen
+return 0;
+}
+
+Function : double strtof(const char *str, char **end) is used to convert string into float.
+
+Example : 
+#include <stdlibh>
+
+int main(void)
+{
+char a[20] = "365.25  7.0", *end;     // end is pointing to 7.0
+float value1 = strtof(a,&end);
+float value 2 = strtof(end,NULL);
+printf("Value = %f:%f\n",value1,value2);   // This statement will print  on screen 365.2500000 and 7.000000000
+return 0;
+}
+
+Function : long int strtol(char const *s, char **end,int base); is used to convert string to long
+
+#include <stdlibh>
+
+int main(void)
+{
+char a[20] = "2030300  This is test";     // end is pointing to "This is test"
+char *ptr = NULL;
+long ret = 0;
+ret = strtol(str,&ptr,10);
+printf("The number(unsigned long integer) is %ld\n",ret);
+printf("String part is %s",ptr);
+return 0;
+}
+
+-------------------------------Random Numbers--------------------------------
+
+C Provides the rand() and srand() functions in order to create random numbers.
+
+Random numbers can be used for many types of applications from security to use in games, can be used to generate UUID, Certificates, Passwords e.t.c.
+
+We generally use functions like time or network traffic as a seed value because they are changing regularly.
+
+Function : int rand(void) generates random numbers without any parameters.
+                          Returns a random numer in the range[0,RAND_MAX]
+                                RAND_MAX is defined in <stdlib.h> with a maximum value of 32767. 
+
+Function void srand(unsigned seed)
+    
+    Defines a starting point for producing a series of psedo-random integers
+       If srand() is not called, the rand() seed is set as if srand(1) were called at program start.
+       Anyother value for seed sets the generator to a different starting point.    
+    
+    Pseudo random number generator should only be seeded once.
+       Before any calls to rand() and start of program.
+       It should not be repeatedly seeded.      
+        
+   Standard practice is to use the result of a call to srand(time(0)) as the seed.
+      time() reurns a time_t value which varies every time and hence the pseduo random number aries for every program call.
+
+Example : 
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+
+int main(void)
+{
+srand(time(0));
+
+for(int i = 0; i<10; i++)
+  printf(" %d ",rand());  // To printf numbers in a specific range we can write printf(" %d ",rand() %5 + 1); it will generate numbers from 1 to 5
+
+printf("\n");
+return 0;
+}
+
+--------------------------------------Lecture 3 : General Utilities stdlib.h -----------------------------------------
+
+------------------System Function : int system(const char *command); ------------------
+
+System function allows us to execute execute system commands in the console shell. 
+It passes the command name or program name specified as an argument to the host environment.
+
+System() Function : int system(const char *command); 
+
+                    Provides the command contained in the character array provided by command to system for execution.
+                    Returns -1 on error, Returns status of the command otherwise.
+
+Example : system("mkdir /usr/tmp/data ");
+          This will result in the creation of directory called /usr/tmp/data (assuming we have proper permission to do so). 
+
+
+---------------The getenv() Function : char*getenv(char const*NAME);---------------
+
+An environment is an implementation defined list of NAME/VALUE pairs maintained by the operating system.
+Function getenv() seraches for the environment string that is passed in. 
+
+Function : char*getenv(char const*NAME);
+
+This function provides the defined values of environment variables.
+
+Example : 
+#include <assert.h>
+#include <stdlib.h>
+
+int main(void)
+{
+char *str = NULL;
+assert((str=getenv("HOME")) !=NULL);
+printf("Value of "Home environment variable \ : %s\n",str);   // This statement will print the value of environment variable.
+return 0;
+}
+
+----------------memcpy() and memmove() Functions----------------------
+Function : void *memcpy(void *restrict,const void*restrict,size_t n);
+Function : void *memmove(void *s1,const void *s2,size_t n);
+
+Both of these function copy n bytes from the location pointed by s2 to the location pointed to by s1. 
+These functions can work with any type of data.
+
+--------------strdup() and strndup() Functions----------------
+
+char *strdup(const char*string);
+char *strndup(const char*s,size_t n); // Where n is specifying how many bytes to be copied, if string s is longer than n then only n bytes are copied and a NULL is added at the end.
+
+These functions are used to duplicate a given string.
+Functions return a pointer to a null terminated byte string, which is a dulicate of string pointed to by pointer s.
+Memory is obtained by malloc() hence it should be free later on using free().
+
+Example : 
+
+int main()
+{
+char *p1 = "Jason";
+char *p2 = NULL;
+
+p2 = strdup(p1);
+
+printf("Dulicated string is : %s",p2);
+
+free(p2)
+
+return 0;
+}
+
+
+------size_t and NULL---------
+
+size_t : unsigned integral type and is result of sizeof keyword.
+
+
+--------------------------------Lecture 4 : Date and Time Functions-----------------------------.
+
+We need to include time.h header file .
+We can use these functins to obtain current time and date.
+We can use these functions to calculate the time elapsed between two events.
+Functions also provide time a processor spent on a certain calculation, function, process and task.
+
+----clock_t clock(void)----- : Returns the processor time (not elapsed time) used by the program.
+                               Return value is of type clock_t, an integer type defined in time.h
+                               To convert this value to seconds we divide it by the value produced by macro CLOCKS_PER_SEC
+                                           CLOCKS_PER_SEC is the number of clock ticks in 1 second. 
+                               Returns -1 if an error occurs.                           
+
+                              We call clock() function at start and at end of program, difference is the execution time of a process.
+
+Example : clock_t start=0, end=0;
+          double cpu_time = 0.0;
+          start = clock();
+          // some instructions
+          end = clock();
+          cpu_time = (double)(end-start)/CLOCKS_PER_SEC                     
+
+
+---------------Getting Time Values------------------
+Function : time_t time(time_t*timer);
+
+Time Function returns calendar time as a value of type time_t.
+        Calendar time is the current time usually measured in seconds since a fixed time on a particular date.
+        Fixed time and date is often 00:00:00 GMT on January 1,1970.
+        type time_t is defined in time.h and if often equivalen to long.
+        
+        To calculate elapsed time in seconds between two successive time_t values returned by time() we use function difftime() with prototype : double difftime(time_t T2,time_t T1).
+                
+Example : 
+
+int main(void)
+{
+time_t calendar_start = time(NULL);
+clock_t cpu_start = clock();
+int count = 0;
+
+const long long iterations = 1000000000000000LL;
+char answer = 'y';
+double x = 0.0;
+
+printf("Initial clock time = %lld Initial calendar time = %lld\n", (long long)cpu_start,(long long) calendar_start);
+
+while(tolower(answer)== 'y') {
+for(long long i = 0LL; i<iterations,i++)
+   x = sqrt(3.14159265);
+   
+printf("%lld square roots completed \n",iterations*(++count));
+printf("Do you want to run some more(y or n) ? \n ");
+scanf("\n%c",answer);
+}
+clock_t cpu_end = clock();
+time_t calendar_end = time(NULL);
+   
+printf("Final clock time = %lld, Final calendar time = %lld\n", (long long)cpu_end, (long long)calendar_end);
+printf("CPU time for %lld iterations is %.2lf seconds \n", count*iterations,((double)(cpu_end-cpu_start))/CLOCKS_PER_SEC);  long)calendar_end);
+printf("Elapsed Calendar time to execute the program is %8.2lf seconds .\n",difftime(calendar_end,calendar_start)); 
+return 0;
+}
+
+--------------------------Getting the Date----------------------------
+
+------------Function : char *ctime(const time_t * time)---------------
+
+We can get todayś date as a string using the ctime function .
+                             
+                             char *ctime(const time_t * time);
+                                            
+                             @param "time" is a pointer to time_t variable containing calendar time returned by time() function             
+                             @param Returns a pointer to a 26 character string containing the day, the date, the time and the year terminated by newline \n and \0
+                             Example : "Mon Aug 25 10:45:56 2003 \n\0".	
+
+Example : char time_str[30] = {'\0'};
+          time_t calendar = time{NULL};
+          printf("%s",ctime(&calendar);	
+
+
+-----------------Function : localtime()--------------------
+
+We can also get various components of time and date from a calendar time value by using localtime() function which returns a structure pointer.
+
+Function Prototype : struct tm * localtime(const time_t *timer);
+                     Accepts a pointer to time_t value.
+                     Returning structure pointer of type tm pointing to a struct defined in time.h
+                     Structure members are overwritten on each call.
+                     Returns NULL if timer cannot be converted.
+
+-----struct tm Members----------
+
+all members of struct tm are of type int and they are :
+
+tm_sec : provides seconds(0-60)
+
+tm_min : provides minutes (0-59)
+
+tm_hour : for hours (0-23).
+
+tm_day : provides day of the month(1-31).
+
+tm_mon : month(0-11).
+
+tm_year : current year + 1900.
+
+tm_wday : weekday(Sunday is 0, Saturday is 6).
+
+tm_yday : day of year (0 to 365).
+
+tm_isdt : daylight saving flag.
+           .+ive for daylighht saving time.
+           .0 for not daylight saving time.
+           .-ive for not known.
+
+
+Example : 
+#include<stdio.h>
+#include<time.h>
+#include<ctype.h>
+#include<math.h>
+
+int main(void)
+{
+
+time_t calendar = time(NULL);
+
+struct tm * time_data;
+const char * days[] = {"Sunday", "Monday","Tuesday","wednesday", "Thursday","Friday","Saturday"};
+const char *months[] = {"January","February","March","April","May", "June", "July", "August","September", "October", "November", "December"};
+
+time_data = localtime(&calendar);
+printf("Today is %s %s %d %d\n",days[time_data->tm_wday],months[time_data->tm_mon],time_data->tm_mday,time_data->tm_year+1900);
+return 0;
+}
+
+
+-----------asctime() Generates a string representation of a tm structure-------------------
+
+	char *asctime(const struct tm*time_data);
+          returns a char pointer pointing to an array of at least 26 elements
+          works for tm structures for the years 1000 - 9999
+          
+          Example : time_t time_ptr;
+                    time(&time_ptr);
+                    printf("Current date and time = %s",asctime(localtime(&time_ptr)));   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						       
+ 
+                                                                   
+                                                                   
+                                                                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
