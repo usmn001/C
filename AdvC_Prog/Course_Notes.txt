@@ -2141,7 +2141,605 @@ libweather.a: weatherstats.o weatherio.o
         ar rcs libweather.a weatherstats.o weatherio.o
 
 
-------------------------------------------------Section 20 : Data Structures-----------------------------------------------
+
+------------------------------------------------Section 18 : Useful C Libraries-----------------------------------------------
+
+------------------------Assert----------------------
+
+The assert library is designed to help with debugging programs , defined in asset.h
+Assert is a macro enabling us to insert tests of arbitrary expressions in our program.
+Assert takes an integer expression as itś argument, this expression is relational or logical.
+Program is terminated with a diagnostic message is specified expression passed to assert is false.
+ error message is written to standard error stream(stderr)
+   . displays the test that failed , name of file containing the test and a line number.
+   . abort() function is invoked terminating the program. 
+
+Assert is a run time check.
+
+We can also disable all assert statements in our code by defining macro as : #define NDEBUG hence we can also enable all assertions in our code by #undef NDEBUG.
+
+In some non standard systems assertions are disabled by default where we can enable them by : #undef NDEBUG and then add #include<assert.h>
+
+-------Run Time Assertion--------
+
+C11 has introduced run time assertion through static_assert() macro where it takes a expression as itś first argument and second as the message to print out.
+
+Example : static_assert(CHAR_MIN==0,"Type char is a signed type. Code won´t work");
+           Where CHAR_MIN is defined in limits.h file.
+
+
+---------------------Lecture 1 : General Utilities stdlib.h ------------------------
+
+There are several dozens of functions defined in different library files facilitating C Programmers i.e. 
+        Functions defined in stdio.h facilitate input and output operations.
+        Functions defined in string.h facilitate performing string manipulators.
+
+These standard functions make our programs more portable and efficient.
+
+
+--------------exit function-------------
+
+int exit(int status) : Same effect of terminating (exiting from) current program.
+Open files are automatically closed by the program.
+  .Flushes all output streams.
+  .Closes all open streams.
+  .Closes temporary files created by calls to the standard I/O  Function
+
+integer value status is called the exit status and has same meaning as the value returned from main() :
+  .EXIT_FAILURE represents an integer value that we can use to indicate program has failed (non zero)
+  .EXIT_SUCCESS represents an intger value that we can use to indicate it has succeeded.
+
+Always exit from a program with defined exit status.
+
+
+-----------atexit() function-------------
+
+atexit() function allows us to specify particular function to be called when exit() executes.
+
+It takes a argument a pointer to a function .
+
+Function : int atexit(void(*function)(void));
+              Where *function is a function pointer which we can pass by simply mentioning function name.
+     
+     This function registers allows us to list 32 functions with (void return) and no return arguments which we can call upon exit from a program.      
+
+Example : 
+#include <stdio.h>
+#include <stdlib.h>
+void sign_off(void)
+void too_bad(void)
+
+int main(void)
+{
+	int n;
+ 	atexit(sign_off);                 // Function sign off() will now execute at execution of EXIT();
+	puts("Enter an Integer");
+if(scanf("%d",&n)!=1) 
+{
+puts("Thatś no integer!");
+atexit(too_bad);                         // Function too_bad() will now execute at execution of EXIT();
+exit(EXIT_FAILURE);
+}
+RETURN 0;	
+}
+
+    
+
+---------------abort() Function------------
+
+abort() causes abnormal termination of program : Raising the SIGABRT signal, If this signal is caught by a signal handler then program will not terminate.
+                                            Returns an implementation defined code indicating unsuccessful termination
+                                            File buffers are not flushed
+                                            Streams are not closed.
+                                            Temporary files are not deleted. 
+             
+             .This function causes a noticeable failure because it will dump core and generate a core file. 
+             .Functions passed to atexit() are not called.
+
+Syntax : abort() 
+
+Example : 
+#include <stdio.h>
+#include <stdlib.h>                                 
+
+int main()
+{
+FILE *fp;
+fp = fopen("textfile.txt","r");
+
+if(fp==NULL)
+{
+printf("Going to abort the program");
+abort();             // In later part of the program the file can be used.
+}
+printf("Closing the file");
+fclose(fp);
+return 0;
+}
+
+-------------qsort() Function-----------------------
+
+Most effective method for sorting data of arrays.
+Divides the array into smaller sizes until the element level is reached, every value is compared with the other.
+
+Syntax : void qsort(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void*));
+          
+         Where 1st Argument is a pointer to the beginning of array which is array name.
+               2nd Argument is the size of array.
+               3rd Argument is the size of each array element i.e. sizeof(array_type)
+               4th Argument is the function int(*compar)(const void *, const void*) qsort uses, 
+                                   where *compar is the function pointer pointing to a comparison function, returning an int and takes two arguments
+                                          This comparison function returns a +ive integer if 1st item is greater than 2nd.
+                                                                   returns zero if 1st and 2nd are same.        
+                                                                   returns -ive integer if 2nd iteam is greater than 1st.
+
+---------------------Lecture 2 : General Utilities stdlib.h ------------------------
+
+Functions of library such as atoi(), atof(), atol() are used to convert ASCII code of data to relevent integer, float and long data types.
+Example : 
+#include <stdlib.h>
+int main(void)
+{
+char a[10] = "3.14";
+long value = atof(a);
+printf("%f\n",value);
+return 0;
+}
+
+--------string to number conversions---------------
+
+Function : double strtod(const char *str, char **end); is used to convert string into decimal.
+
+Example : 
+#include <stdlibh>
+
+int main(void)
+{
+char a[20] = "123.45xyz", *end;     // end is pointing to x
+double value = 0;
+value = strtod(a,&end);
+printf("Value = %lf\n",value);          // This statement will print 123.45 on screen
+return 0;
+}
+
+Function : double strtof(const char *str, char **end) is used to convert string into float.
+
+Example : 
+#include <stdlibh>
+
+int main(void)
+{
+char a[20] = "365.25  7.0", *end;     // end is pointing to 7.0
+float value1 = strtof(a,&end);
+float value 2 = strtof(end,NULL);
+printf("Value = %f:%f\n",value1,value2);   // This statement will print  on screen 365.2500000 and 7.000000000
+return 0;
+}
+
+Function : long int strtol(char const *s, char **end,int base); is used to convert string to long
+
+#include <stdlibh>
+
+int main(void)
+{
+char a[20] = "2030300  This is test";     // end is pointing to "This is test"
+char *ptr = NULL;
+long ret = 0;
+ret = strtol(str,&ptr,10);
+printf("The number(unsigned long integer) is %ld\n",ret);
+printf("String part is %s",ptr);
+return 0;
+}
+
+-------------------------------Random Numbers--------------------------------
+
+C Provides the rand() and srand() functions in order to create random numbers.
+
+Random numbers can be used for many types of applications from security to use in games, can be used to generate UUID, Certificates, Passwords e.t.c.
+
+We generally use functions like time or network traffic as a seed value because they are changing regularly.
+
+Function : int rand(void) generates random numbers without any parameters.
+                          Returns a random numer in the range[0,RAND_MAX]
+                                RAND_MAX is defined in <stdlib.h> with a maximum value of 32767. 
+
+Function void srand(unsigned seed)
+    
+    Defines a starting point for producing a series of psedo-random integers
+       If srand() is not called, the rand() seed is set as if srand(1) were called at program start.
+       Anyother value for seed sets the generator to a different starting point.    
+    
+    Pseudo random number generator should only be seeded once.
+       Before any calls to rand() and start of program.
+       It should not be repeatedly seeded.      
+        
+   Standard practice is to use the result of a call to srand(time(0)) as the seed.
+      time() reurns a time_t value which varies every time and hence the pseduo random number varies for every program call.
+
+Example : 
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+
+int main(void)
+{
+srand(time(0));
+
+for(int i = 0; i<10; i++)
+  printf(" %d ",rand());  // To printf numbers in a specific range we can write printf(" %d ",rand() %5 + 1); it will generate numbers from 1 to 5
+
+printf("\n");
+return 0;
+}
+
+--------------------------------------Lecture 3 : General Utilities stdlib.h -----------------------------------------
+
+------------------System Function : int system(const char *command); ------------------
+
+System function allows us to execute execute system commands in the console shell. 
+It passes the command name or program name specified as an argument to the host environment.
+
+System() Function : int system(const char *command); 
+
+                    Provides the command contained in the character array provided by command to system for execution.
+                    Returns -1 on error, Returns status of the command otherwise.
+
+Example : system("mkdir /usr/tmp/data ");
+          This will result in the creation of directory called /usr/tmp/data (assuming we have proper permission to do so). 
+
+
+---------------The getenv() Function : char*getenv(char const*NAME);---------------
+
+An environment is an implementation defined list of NAME/VALUE pairs maintained by the operating system.
+Function getenv() seraches for the environment string that is passed in. 
+
+Function : char*getenv(char const*NAME);
+
+This function provides the defined values of environment variables.
+
+Example : 
+#include <assert.h>
+#include <stdlib.h>
+
+int main(void)
+{
+char *str = NULL;
+assert((str=getenv("HOME")) !=NULL);
+printf("Value of "Home environment variable \ : %s\n",str);   // This statement will print the value of environment variable.
+return 0;
+}
+
+----------------memcpy() and memmove() Functions----------------------
+Function : void *memcpy(void *restrict,const void*restrict,size_t n);
+Function : void *memmove(void *s1,const void *s2,size_t n);
+
+Both of these function copy n bytes from the location pointed by s2 to the location pointed to by s1. 
+These functions can work with any type of data.
+
+--------------strdup() and strndup() Functions----------------
+
+char *strdup(const char*string);
+char *strndup(const char*s,size_t n); // Where n is specifying how many bytes to be copied, if string s is longer than n then only n bytes are copied and a NULL is added at the end.
+
+These functions are used to duplicate a given string.
+Functions return a pointer to a null terminated byte string, which is a dulicate of string pointed to by pointer s.
+Memory is obtained by malloc() hence it should be free later on using free().
+
+Example : 
+
+int main()
+{
+char *p1 = "Jason";
+char *p2 = NULL;
+
+p2 = strdup(p1);
+
+printf("Dulicated string is : %s",p2);
+
+free(p2)
+
+return 0;
+}
+
+
+------size_t and NULL---------
+
+size_t : unsigned integral type and is result of sizeof keyword.
+
+
+--------------------------------Lecture 4 : Date and Time Functions-----------------------------.
+
+We need to include time.h header file .
+We can use these functins to obtain current time and date.
+We can use these functions to calculate the time elapsed between two events.
+Functions also provide time a processor spent on a certain calculation, function, process and task.
+
+----clock_t clock(void)----- : Returns the processor time (not elapsed time) used by the program.
+                               Return value is of type clock_t, an integer type defined in time.h
+                               To convert this value to seconds we divide it by the value produced by macro CLOCKS_PER_SEC
+                                           CLOCKS_PER_SEC is the number of clock ticks in 1 second. 
+                               Returns -1 if an error occurs.                           
+
+                              We call clock() function at start and at end of program, difference is the execution time of a process.
+
+Example : clock_t start=0, end=0;
+          double cpu_time = 0.0;
+          start = clock();
+          // some instructions
+          end = clock();
+          cpu_time = (double)(end-start)/CLOCKS_PER_SEC                     
+
+
+---------------Getting Time Values------------------
+Function : time_t time(time_t*timer);
+
+Time Function returns calendar time as a value of type time_t.
+        Calendar time is the current time usually measured in seconds since a fixed time on a particular date.
+        Fixed time and date is often 00:00:00 GMT on January 1,1970.
+        type time_t is defined in time.h and if often equivalen to long.
+        
+        To calculate elapsed time in seconds between two successive time_t values returned by time() we use function difftime() with prototype : double difftime(time_t T2,time_t T1).
+                
+Example : 
+
+int main(void)
+{
+time_t calendar_start = time(NULL);
+clock_t cpu_start = clock();
+int count = 0;
+
+const long long iterations = 1000000000000000LL;
+char answer = 'y';
+double x = 0.0;
+
+printf("Initial clock time = %lld Initial calendar time = %lld\n", (long long)cpu_start,(long long) calendar_start);
+
+while(tolower(answer)== 'y') {
+for(long long i = 0LL; i<iterations,i++)
+   x = sqrt(3.14159265);
+   
+printf("%lld square roots completed \n",iterations*(++count));
+printf("Do you want to run some more(y or n) ? \n ");
+scanf("\n%c",answer);
+}
+clock_t cpu_end = clock();
+time_t calendar_end = time(NULL);
+   
+printf("Final clock time = %lld, Final calendar time = %lld\n", (long long)cpu_end, (long long)calendar_end);
+printf("CPU time for %lld iterations is %.2lf seconds \n", count*iterations,((double)(cpu_end-cpu_start))/CLOCKS_PER_SEC);  long)calendar_end);
+printf("Elapsed Calendar time to execute the program is %8.2lf seconds .\n",difftime(calendar_end,calendar_start)); 
+return 0;
+}
+
+--------------------------Getting the Date----------------------------
+
+------------Function : char *ctime(const time_t * time)---------------
+
+We can get todayś date as a string using the ctime function .
+                             
+                             char *ctime(const time_t * time);
+                                            
+                             @param "time" is a pointer to time_t variable containing calendar time returned by time() function             
+                             @param Returns a pointer to a 26 character string containing the day, the date, the time and the year terminated by newline \n and \0
+                             Example : "Mon Aug 25 10:45:56 2003 \n\0".	
+
+Example : char time_str[30] = {'\0'};
+          time_t calendar = time{NULL};
+          printf("%s",ctime(&calendar);	
+
+
+-----------------Function : localtime()--------------------
+
+We can also get various components of time and date from a calendar time value by using localtime() function which returns a structure pointer.
+
+Function Prototype : struct tm * localtime(const time_t *timer);
+                     Accepts a pointer to time_t value.
+                     Returning structure pointer of type tm pointing to a struct defined in time.h
+                     Structure members are overwritten on each call.
+                     Returns NULL if timer cannot be converted.
+
+-----struct tm Members----------
+
+all members of struct tm are of type int and they are :
+
+tm_sec : provides seconds(0-60)
+
+tm_min : provides minutes (0-59)
+
+tm_hour : for hours (0-23).
+
+tm_day : provides day of the month(1-31).
+
+tm_mon : month(0-11).
+
+tm_year : current year + 1900.
+
+tm_wday : weekday(Sunday is 0, Saturday is 6).
+
+tm_yday : day of year (0 to 365).
+
+tm_isdt : daylight saving flag.
+           .+ive for daylighht saving time.
+           .0 for not daylight saving time.
+           .-ive for not known.
+
+
+Example : 
+#include<stdio.h>
+#include<time.h>
+#include<ctype.h>
+#include<math.h>
+
+int main(void)
+{
+
+time_t calendar = time(NULL);
+
+struct tm * time_data;
+const char * days[] = {"Sunday", "Monday","Tuesday","wednesday", "Thursday","Friday","Saturday"};
+const char *months[] = {"January","February","March","April","May", "June", "July", "August","September", "October", "November", "December"};
+
+time_data = localtime(&calendar);
+printf("Today is %s %s %d %d\n",days[time_data->tm_wday],months[time_data->tm_mon],time_data->tm_mday,time_data->tm_year+1900);
+return 0;
+}
+
+
+-----------asctime() Generates a string representation of a tm structure-------------------
+
+	char *asctime(const struct tm*time_data);
+          returns a char pointer pointing to an array of at least 26 elements
+          works for tm structures for the years 1000 - 9999
+          
+          Example : time_t time_ptr;
+                    time(&time_ptr);
+                    printf("Current date and time = %s",asctime(localtime(&time_ptr)));   
+
+
+-------------------Getting The Day For A Date---------------------
+
+We can use the mktime() function to determine the day of the week for a given date.
+
+Function : time_t mktime(struct tm*ptime);
+            @param "ptime" is the pointer pointing to tm structure.
+                  Where tm structure members tm_mon, tm_mday and tm_year are set to values corresponding to the date we are interested in.
+                        Values of the tm_wday and tm_yday structure members will be ignored.
+            @param returns the calendar time as a value of type time_t if the operation is successful
+                   returns -1 if the date cannot be represented as time_t value, causing the operation to fail.             
+          
+            If the operation is successful the values will be replaced with values that are correct for the date we have supplied.      
+Example : 
+
+#include<stdio.h>
+#include <time.h>
+
+int main(void)
+{
+const char * days[] = {"Sunday", "Monday","Tuesday","wednesday", "Thursday","Friday","Saturday"};
+const char *months[] = {"January","February","March","April","May", "June", "July", "August","September", "October", "November", "December"};
+
+const char *suffix[] = {"st", "nd", "rd" , "th" };
+
+enum suffindex = {st ,nd, rd, th} sufsel = th;
+
+struct tm birthday = {0};
+char name[30] = {'\0'};
+
+printf("Enter a Name : "};
+scanf("%s",name);
+
+printf("Enter the birthday for %s as day month year integers separated by spaces" "\n e.g. Enter 1st February 1985 as 1 2 1985 : ",name); 
+scanf(" %d %d %d ",&birthday.tm_mday, &birthday.tm_mon, &birthday.tm_year);
+
+birthday.tm_mon -=1;               // Month Zero Based
+birthday.tm_year -= 1900;          // Year Relative To 1900
+
+if(mktime(&birthday) == -1) 
+{
+printf(stderr,"Operation Failed.\n");
+return -1;
+}
+
+switch(birthday.tm_mday) 
+{
+case 1 : case 21 : case 31 :
+ sufsel = st;
+ break;
+ 
+case 2 : case 22 : 
+ sufsel = nd;
+ break;
+ 
+case 3 : case 23 : 
+  sufsel = rd;
+  break;
+  
+default :
+  sufsel = th;
+  break;
+}
+
+printf("%s was born on the %d%s %s %d, which was a %s.\n",name,birthday.tm_mday, sufsel, birthday.tm_mon, birthday.tm_year,days[birthday.tm_day]); 
+
+}
+
+--------------------struct tm *gmtime(time_t const *time_value)----------------------
+
+There is one more function converting a time_t value into struct tm.
+
+Function : struct tm *gmtime(time_t const*time_value);
+
+This function converts time_t value either obtained from ctime()  into a struct tm according to Coordinated Univeral Time(UTC).
+
+UTC was formerly called Greenwich Mean Time and hence the name gmtime corresponds to that.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						       
+ 
+                                                                   
+                                                                   
+                                                                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------Section 19 : Data Structures-----------------------------------------------
 
 We know in C language every data type (char,int,long,short,bool) has a property and it supports a set of operations (add,subtract,multiply).
 
@@ -2441,6 +3039,2529 @@ Before dequeing we check if queue is already empty.
 When enqueing first element we set the value of FRONT to 0.
 
 When dequeing the last element we rest the values of FRONT and REAR to -1.
+
+
+---------------------------------------------------Section 20 : Interprocess Communication and Signals------------------------------------------------------------------------
+
+A process is a program in execution, when we start exection of the program it is loaded into RAM and starts execution.
+
+Each process has it´s own address space and usually with one thread of control.
+
+We can have multiple processes executing same program but each process has it´s own address space and executes it independently of the other copies.
+
+Processes are organized hierarchically where each process has a parent process. Every process has itś own unique ID.
+
+Processes created by a given parent are called child processes, a child inherits many of itś attributes from the parent process.
+
+We can use system calls provided by a operating system kernel to access a service, programmers don´t have to concern with these system calls because these system calls
+are made available through GNU C library functions as these functions work by making systems themselves.
+
+The system call getpid() returns process ID of calling process.
+  . this call is always successful and returns no value indicating an error.
+
+Header file sys/types.h contains getpid() system call function.
+            unistd.h is a operating system header file.
+
+Example : #include <sys/types.h>
+          #include <unistd.h>
+
+          pid_t getpid(void);
+
+-------------Interprocess Communication(IPC)----------
+
+.A process can be of two types 
+    . Independent process : not affected by exection of other processes
+                            does not interact with other programs.
+    
+    . copperating process : affected by other executing processes
+                            can be used for increasing computational speed, convenience and modularity.
+
+IPC letś processes work tegether enalbing programs to be more powerful by interacting with each other.  
+
+
+If any process wants to communicate some information  from itś address space to other process then it needs to use IPC techniques.
+
+This commuincation between multiple processes can be seen as a method of cooperation between them, this can be done between parent and child proceeses or in between unrelated 
+processes.
+
+
+IPC (Interprocess Communication ) Methods : 
+
+	Pipes (Used For Same Processes i.e. parent and child) 
+   		first process communicates with second process allows flow of data in one direction only ( half duplex )
+
+	Named pipes ( different processes, FIFO ) 
+  		first process can communicate with second process and vice versa at the same time ( full duplex ).
+
+        Message Queues : 
+                Processes will communicate with each other by posting a message and retrieving it out of a queue (full duplex).
+
+        Shared Memory : 
+                Communication between two or more processes is achieved through a shared piece of memory among all processes.
+
+        Sockets : 
+                Mostly used to communicate over a network between a client and server.
+
+        Signals : 
+                Communication between multiple processes by way of signalling.
+
+-----Pipes (named and anonymous)-----
+
+Pipe is a communication mechanism bewteen two or more related or interrelated processes.
+   .communication can be either within one process or a communication between child and parent process.
+System calls are used for creating and using pipes.
+
+Steps to utilize pipes for IPC are : 
+   . create a pipe.
+   . send a message to the pipe.
+   . retrieve message from the pipe and write to standard output.
+   . send another message to the pipe.
+   . retrieve message from pipe and write to standard output. 
+
+                  
+------------Message Queues-----------------
+
+All processes can exchange information through access to a common system message queue.
+
+Message queues are a sort of mix between signals and sockets.
+   Allows us to create a data stream of messages which can allow one or multiple processes to communicate between them.
+   Sending and Receiving can be achieved by using a simple function.
+
+Sending process places a message (via some OS message passing module) onto a queue which can be read by another process.
+   Each message is given an identification or type so that processes can select appropriate message.
+   process must share a common key in order to gain access to the queue in the first place.
+
+System calls are used for creating and using message queues.
+
+To perform communication using message queues, we follow these steps 
+   . ftok() function is used to generate a unique key.
+   . create a message queue or connect to an already existing message queue (msgget())
+   . write into message queue (msgsnd()).
+   . read from message queue (msgrcv()).
+   . perform control applications on message queue (msgctl()).
+
+--------------Shared Memory---------------
+
+IPC through shared memory is done so changes made by one process can be viewed another process.
+Communication is done via this shared memory where changes made by one process can be viewed by another process.
+Communication between processes requires processes to share some variables and it completely depends on how programmer will implement it.
+System calls allows us to create a memory segment which can be accessed and modified by multiple processes
+ 
+To perform communication through shared memory we follow these stpes : 
+     .Create a shared memory segment or use an already created shared memory segment (shmget()).
+     .Attach the process to the already created shared memory segment (shmat()).
+     .Detach the process from already attached shared memory segment (shmdt()).
+     .control operations on the shared memory segment( shmctl() ).   
+
+
+--------------Signals Overview-----------------
+
+. Signals are a form of IPC typically used in UNix like operating systems.
+           A notification to a process indicating occurence of an event.
+
+. Signals are generated by the system or the user can also generate signal by programming.
+
+. When a signal is sent the operating system interrupts target process normal flow of execution to deliver signal.
+
+. A process can receive a particular signal asynchronously (at any time)
+   .After receiving the signal the process will interrupt itś current operations.
+    The process has to stop whatever it is doing and go deal with the signal.
+    It will either handle signal or ignore the signal and may terminate it.
+
+. A signal is just a short message containing a single integer value.
+
+Signals are similar to interrupts .
+
+Examples of signals are : kill command of shell.
+                          typing ctrl-c    same as sending SIGNT signal
+                          typing ctrl-z    same as sending SIGTSTP signal.
+                          typing fg or bg that is same as sending as SIGCONT signal. 
+
+When a program calls the fgets() function.
+ The operating system reads the data from keyboard and when it sees the user hit ctrl-c, sends an interrupt signal to the program.
+      
+---------Default Actions----------
+
+Whenever a signal is raised (either programmatically or system generated signal ) a default action is performed for some signals , some of the default actions performed are :
+
+Term - The process will terminate.
+
+Core - Process will terminate and produce a core dump file that traces the process state at the time of termination.
+
+Ign - Process will ignore the signal.
+
+Stop - process will stop like a Ctrl-Z.
+
+Cont - Process will continue from being stopped.
+
+
+----------Raising A Signal-------------------
+
+Signal handling library <signal.h> provides capability to raise specific signals.
+
+Signal can be generated using raise() or kill() system calls.
+  raise() sends a signal to the current process.
+  kill() sends a signal to a specific process.
+
+int raise(int sig)
+  if this function is executed successfully, signal specified in sig is generated.
+
+if the call is unsuccessful, raise() returns a non zero value.
+
+
+When a signal is raised execution of current process is stopped.
+
+
+Example : 
+
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+   printf("Testing SIGSTOP \n");
+   raise(SIGSTOP);                 // SIGSTOP signal is raised here stopping this program executing in a linux process. 
+   printf("I am back \n\n");       // This statement will execute when the process is continued upon receiving SIGCONT signal from terminal by the command " kill -s SIGCONT PID "
+   return 0;
+}
+
+
+-------alarm()Command 'Kill' not found, did you mean---------
+
+Alarm function provides a mechanism for a process to interrupt itself in the future.
+
+Alarm function sets a timer, when the timer expires process receives a signal (SIGALARM)
+
+If we ignore or do not catch this alarm() signal the process is terminated.
+    The defalut action for SIGALARM is to terminate the process.
+
+There is only one alarm clock per process.
+
+The alarm function will return a value if another alarm has been previously set.
+
+Example : 
+
+
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+   
+   alarm(5);
+
+   while(1)
+   {
+   printf(testing);
+   }
+
+
+   return 0;
+
+}
+
+
+  
+----------------Handling A Signal Using The Signal Function--------------------
+
+
+
+It is possible to handle or catch almost all signals.
+
+Signal handling allows us to run our own code when receiving a signal (handle/catch).
+    . When our process has files or network connections open.
+      . It might want to close things and tidy up before exiting.
+
+It is also possible to ignore almost all signals.
+   Neither performing the default action nor handling the signal.
+
+A few signals cannot be ignored or handled/caught
+   . SIGKILL, SIGABRT and SIGSTOP (which is why kill 9 is the ultimate kill statement)
+
+Actions performed for signals are : 
+   .default action.
+   .handle the signal.
+   .ignore the signal.
+
+-----Handling/Catching A Signal Using Signal Function--------------
+
+Signal handling library <signal.h> provides the capability to catch and handle signals.
+   Signal handling can be done in two different ways through system calls signal () and sigaction().
+
+Signal function is used to tell the operating system which function it should call when a signal is sent to a process.
+
+For example if we have a function called foo() that we want the opeating system to call when someone sends an interrupt signal to our process.
+  We need to pass the function name foo to the signal function as parameter so function foo () is called the handler.
+ 
+Signal handlers just like interrupt service routines or interrupt handlers are intended to be short and fast pieces of code.
+  They should just handle the signal with the signal has been received.
+
+Signal function receives two arguments i.e. an integer signal number and a pointer to signal handling function.
+
+Signal function returns 
+     .on success returns the address of a function that takes an integer argument and has no return value.
+     .on error retunrs SIG_ERR in case of error.
+
+
+Syntax Example : 
+
+#include<signal.h>
+
+void (*sighandler_t) (int);
+sighandler_t signal(int signum, sighandler_t handler);
+
+system call signal() would call the registered handler (second parameter) upon generation of signal.
+
+The handler (second parameter) can be either one of : 
+    . SIG_IGN (ignoring the signal)
+    . SIG_DFL ( Setting signal back to default mechanism)
+    . or user defined signal handler or function address.
+
+
+Example 1 : 
+
+
+#include<stdio.h>
+#include<signal.h>
+#include<stdlib.h>
+
+
+void handler_dividebyzero(int signum);
+
+
+int main(void) 
+{
+
+int result = 0;
+
+int v1 = 0, v2 = 0;
+
+void (*sighandler) (int);
+
+sighandler = signal(SIGFPE,handler_dividebyzero);
+
+
+if(sighandler==SIG_ERR) 
+{
+perror("Signal Error :");
+return 1;
+}
+
+return 0;
+}
+
+
+void handler_dividebyzero(int signum) 
+{
+
+if(signum == SIGFPE) {
+printf("Received SIGFPE, Divide by Zero Exception");
+exit(0);
+}
+else
+{
+    printf("Received %d Signal \n",signum);
+}
+
+}
+
+
+
+Example 2 : 
+
+
+If we don´t want to catch a signal using signal handler we can use SIG_IGN in the signal function i.e. signal(SIGINT, SIG_IGN) enabliing us to ignore interrupt signal. 
+
+
+#include<stdio.h>
+#include<signal.h>
+#include<stdlib.h>
+
+int main()
+{
+signal(SIGINT, SIG_IGN);
+while(1);
+}
+
+----------------------Handling/Catching A Signal (sigaction)---------------------
+
+
+. We can also handle or catch signals in our program using  sigaction just like we did with signal().
+
+. sigaction is essentially a function wrapper.
+    A struct containing pointer to a function.
+
+. sigactions inform the operating system which function it should call when a signal is sent to a process.
+   Functions are used to deal with ( or handle ) a signal that is sent to it.
+
+. If we have a function called foo() that we want the operating system to call when someone sends an interrupt signal to our process.
+    . We need to wrap the foo() function up as a sigaction.
+    . Function foo() is called the handler.
+
+signal handling library  signal.h provides us the capability to catch and handle signals through sigaction function so to use sigaction we need to include this header file in our code
+just like we did with signal().  
+
+By using sigaction we can also change a signal handler.
+
+
+sigaction function : int sigaction(int signum, const struct sigaction *newaction, struct sigaction *oldaction)
+                   Where :  signum is signal number an integer value of signal we want to handle.
+                            new action is the address of new sigaction we want to register, if we don´t want to replace old signal handler then we put NULL here.          
+                            old action is the address of sigaction we want to replace.
+
+                           Returns -1 if it fails and will also set errno variable.
+
+
+------------struct sigaction-------------
+
+sigaction function : int sigaction(int signum, const struct sigaction *newaction, struct sigaction *oldaction)
+
+sigaction structure contains following fields
+
+Field 1 : Handler mentioned either in sa_handler or sa_sigaction function pointer, second signal handler void (*sa_sigaction)(int,siginfo_t *, void*); provides more information.
+
+void (*sa_handler)(int);
+
+.The handler sa_handler specifies the action to be performed based on signum.
+     .SIG_DFL indicating default action.
+     .SIG_IGN to ignore the signal or pointer to a signal handling function.
+
+
+void (*sa_sigaction)(int,siginfo_t *, void*);
+    .1st argument Specifies the signal number as first argument.
+    .2nd argument Specifies pointer to siginfo_t structure as second argument, this strucure contains signal information 
+                                                     such as signal number to be delivered, signal value, process id, real user id of sending process e.t.c.
+    .3rd argument pointer to user content  
+   
+
+Field 2 : Set of signals to be blocked
+
+int sa_mask : This variable specifies the mask of signals that should be blocked during execution of signal header.
+sigaddset(&new_action.sa_mask, SIGINT);  // Where SIGINT is the signal to be blocked.
+
+Field 3 : Special Flags
+
+int sa_flags : This field specifies a set of flags which modify the behavior of signals.
+
+Field 4 : Restore Handler.
+
+void (*sa_restorer)(void); //returns 0 on success and -1 in case of failure.
+
+
+Example 1 : sigaction() using signal handler function pointer
+
+#include<unistd.h>
+#include<signal.h>
+#include<string.h>
+
+
+void termination_handler(int signum)
+{
+struct temp_file *p;
+for(p= temp_file_list; p; p = p->next)
+ unlink(p->name);
+}
+
+int main(void)
+{
+
+struct sigaction new_handler, old_handler;
+
+new_action.sa_handler = terminate_handler;
+sigemptyset(&new_action.sa_mask);     // Initializing a signal set to an empty state, where no signals are included.
+new_action.sa_flags = 0;
+sigaction(SIGINT,NULL, &old_action);
+
+if(old_Action.sa_handler !=SIG_IGN)     // Here we are checking if the signal is not SIG_IGN then we perform a action in the following line.
+  sigaction(SIGINT, &new_action, NULL);
+
+sigaction(SIGHUP,NULL,&old_Action);
+
+if(old_action.sa_handler != SIG_IGN)
+  sigaction(SIGHUP,&new_action,NULL);
+
+sigaction(SIGTERM,NULL,&old_action);
+
+
+if(old_action.sa_handler != SIG_IGN)
+  sigaction(SIGTERM,&new_action,NULL);
+
+return 0;
+}
+
+
+
+Example 2 : sigaction  using void (*sa_sigaction)(int,siginfo_t *, void*);
+
+#include<unistd.h>
+#include<signal.h>
+#include<string.h>
+
+static void hdl (int sig,siginfo_t *siginfo, void *context) 
+{
+ printf("Sending PID : %ld, UID : %ld\n", (long)siginfo->si_pid,(long)siginfo->si_uid);
+}
+
+
+int main(int argc, char *argv[])
+{
+
+struct sigaction act;
+
+memset(&act,'\0',sizeof(act)); // Initializing the sigaction struct act with 0ś
+
+act.sa_sigaction = &hdl;
+
+act.sa_flags = SA_SIGINFO;
+
+if( sigaction(SIGTERM, &act,NULL)<0 ) 
+{
+perror("sigaction");
+return 1;
+}
+
+
+while(1)
+ sleep(3);
+
+return 0;
+
+}
+
+Summary : The operating system talks to processes using signals.
+           Programs are normally stopped using signals.
+            For most error signals, default handler stops the program.
+         
+          Handlers can be replaced with the signal() or sigaction functions.
+
+          We can send signals to ourself with raise().
+
+          The interval timer sends SIGALARM signals       
+               The alarm() function sets the interval timer.
+               There is one timer per process.
+
+          Kill -KILL  will always kill a process.
+      
+
+-------------------------------Fork() System call-----------------------------------
+
+In Multitasking operating systems, processes (running programs) need a way to create new processes.
+  A new process is often needed to run other programs or to run a different branch of existing program.
+
+fork() system call available to us in unistd.h file is used to create new processes.
+
+When a process calls fork(), it is deemed that the newly created process is its child.
+
+Child process has an exact copy of all the memory segments of the parent process.
+   Fork operation creates a separate address space for the child.
+      Updating a variable in one process will not affect other.
+
+
+---------------Use Case-------------------
+
+Fork() is often used with exec() system call in order to start the execution of a different program.
+
+A process will create a copy of itself i.e. child process using fork() call and then that child process will use exec() system call to overlay itself with the previous parent process that created this child process thus it ceases execution of parent process.
+
+
+After a new child process is created both processes will execute next instruction following fork() system call.
+   Child and parent processes run in parallel.
+    
+To differentiate between parent and child process we use pid value returned by fork(). This is of type pid_t defined in sys/types.h
+    Where process ID is an integer.
+    getpid() function enables us to retrieve the value of pid.
+
+If the :        Value of pid < 0 then fork() is not successfull, child process creation failed.
+                         pid = 0 We are in child process.
+                         pid > 0 We are in parent process.
+
+
+Note : The scheduler assisgns equal amount of time to both child and parent processes.
+
+
+Example 1 : 
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#define MAX_COUNT 10
+#define BUF_SIZE 100
+
+void main(void)
+{
+
+pid_t pid;
+char buf[BUF_SIZE];
+
+fork();
+pid = getpid();
+for(int i=1; i<=MAX_COUNT; i++) 
+{
+sprinf(buf,"This line is from pid %d,value = %d\n",pid,i);   // sprintf is Putting the output in buffer.
+write(1,buf,strlen(buf));     // This write statement is showing output on screen 
+}
+
+}
+
+Example 2 : 
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#define MAX_COUNT 10
+
+void childprocess(void);
+void parentprocess(void);
+
+
+void main(void)
+{
+pid_t pid;
+
+pid = fork();
+
+if(pid==0)
+  childprocess();
+else if(pid >0)
+  parentprocess();
+else
+{
+printf("fork() failed");
+return 1;
+}
+
+}
+
+void childprocess(void)
+{
+
+int i = 0;
+
+for (i==1; i<=MAX_COUNT; i++)
+   printf("This line is from child,value = %d\n ",i);
+
+printf("Child process is done");
+}
+
+
+void parentprocess(void)
+{
+
+int i = 0;
+
+for (i==1; i<=MAX_COUNT; i++)
+   printf("This line is from parent,value = %d\n ",i);
+
+printf("parent process is done");
+}
+
+
+-----------------------------------------------------------Section 21 : Threads--------------------------------------------------------
+
+Problem with creating separate processes lies in the fact that every process will require a spearate address space, they can´t communicate directly need to use IPC 
+mechanisms ( shared memory, signals, message queues e.t.c ) and also we need to create specific code for each process to execute as well.
+
+Threads solve all of the above issues of processes.
+
+Threads provide a way to divide a single process into sub runnable parts.
+   Separate path of execution inside a program.
+   Sometimes called lightweight process.
+
+Threads have own unique ID, A program counter, a register set and a stack space just like a process.
+
+Threads share memory across each thread by having the same address space (unlike multi processes )
+   .Two threads have access to the same set of variables and can alter each others variable values.
+     .If one thread changes a global variable, all of the other threads will see the change immediately.
+
+Using multithreading several tasks can execute concurrently.
+
+Threaded applications offer potential performance gains and practical advantages over non threaded applications in several ways : 
+    The creation of a thread is much faster ( much less operatin system overhead)
+    Faster context switching.
+    Faster termination of a thread.
+
+
+If one thread accesses the value to change it and the second thread does the same before the first thread has stored the modified value.
+   You will have inconsistent data.
+
+
+--------------Multithreading In C----------
+
+
+C is a language that runs on one thread by default (main), which means that the code will only run one instruction at a time.
+
+C does not contain any built in support for multithreaded applications, only C11 standard has this support but those threads are not very portable.
+
+In 1995, POSIX became the standard interface for many system calls in UNIX including the threading environment.
+
+POSIX threads are known as pthreads and implementation is available with the gcc compiler.
+
+POSIX threads model is also available in every language (Java, Python e.t.c.).
+
+POSIX threads libraries are a standard based thread API for C/C++
+   allowing one to spawn a new concurrent process flow.
+   can be found on almost any modern POSIX compliant OS.
+
+POSIX threads are most effective on multi processor or mutli core systems where the process flow can be scheduled to run on another processor.
+
+The purpose of using POSIX thread library in our software is to execute software faster.
+
+pthread functions are defined in a pthread.h header/ include file and implemented in a thread library.
+
+
+------------------pthreads API---------------------
+
+The functions comprise the pthreads API can be grouped into three major categories : 
+
+Thread Management : 
+  Routines that work directly on threads - creating, detaching, joining e.t.c
+  Also include functions to set/query thread attributes (joinable, scheduling e.t.c.) 
+
+Synchronization : 
+  Routines that manage read/write locks and barriers and deal with synchronization.
+  Mutex functions provide for creating, destroying, locking and unlocking mutexes 
+
+Condition Variables : 
+  Routines that address communications between threads that share a mutex.
+  Based upon programmer specified conditions.
+
+
+Operations that can be performed on threads include : 
+  .Thread Creation 
+  .Termination
+  .Synchronization
+  .Scheduling
+   Data Management
+   Process Interaction
+
+Threads are not forked from a parent to create a child.
+
+On POSIX operating systems there is a library named pthread.h allowing us to create threads and perform many operations on thread
+Must include this library when creating and using threads.
+
+There are three functions involved in the creation of threads : pthread_create, pthread_exit and pthread_join
+
+pthread_create function is called to create a new thread and make it executable.
+
+The maximum number of threads that may be created by a process is implementation dependent.
+  Once created, threads are peers and may create other threads.
+  There is no implicit hierarchy or dependency between threads.
+
+------pthread_create--------
+
+Function Syntax : int pthread_create(pthread_t *thread, const pthread_attr_t * attr,void*(*start_routine)(void*), void*arg);
+
+pthread_create() takes four arguments : 
+
+First argument is of type pthread_t
+  An integer used to identify the thread in the system.
+  Upon successful completion, pthread_create() stores the ID of the created thread in the location referenced by thread.
+
+Second argument specifies attributes for the thread.
+ We can specify a thread attributes object, or NULL for the default values.
+ Thread attribute that can be specified include detached state, scheduling policy, scope, stack address and stack size.
+
+Third argument is name of function that the thread will execute once it is created.
+
+Fourth argument is used to pass arguments to the function (start_routine)
+  .It is a pointer of type void, It can be NULL if not required.
+  .To pass multiple arguments, we need to use a pointer to a structure.
+
+
+---------pthread_join------------
+
+pthread_join() allows us to analyze when a thread execution is completed or it has exited.
+
+A join is performed when one wants to wait for a thread to finish.
+  Used to link one thread process to another thread.
+  A thread calling routine may launch multiple threads then wait for them to finish to get the results.
+ 
+A call to pthread_join blocks the calling thread until the thread with identifier equal to the first argument terminates.
+   Makes the program stops in orer to wait for the end of the selected thread.
+
+all threads automatically joined when main thread terminates.
+
+
+pthread_join() also receives return value of our thread function and stores it in a void pointer
+   Once both threads are finished our program can exit smoothly.
+
+Syntax : 
+int pthread_join(pthread_t thread, void **value_ptr);
+ First argument is the thread ID of thread you want to wait for.
+ If the second argument is not NULL, value is passed to pthread_exit() by the terminating thread.
+
+---------pthread_exit-------------
+
+Threads can be terminated in a number of ways :
+     . By explicitly calling pthread_exit.
+     . By Letting the thread function return.
+     . By a call to the function exit which will terminate the process including any threads.
+
+pthread_exit() routine is called after a thread has completed itś work and is no longer required.
+
+If main() finishes before the threads it has created finish and exit with pthread_exit() in such a case the created threads will continue to execute otherwise
+they will be automatically terminated when main() finishes.
+
+pthread_exit() is not explicitly required to be called at the end of thread function but it is a good practise to use it and 
+there can be some arbitrary date required to be returned back to the caller via pthread_join() 
+
+Syntax : 
+void pthread_exit(void *value_ptr);
+
+First argument makes the value_ptr available to any successful join with terminating thread.
+
+Sometimes we don´t want a thread to terminate which can be solved by placing thread code in an infinite loop and use condition variables.
+
+-------To compile POSIX thread programs in linux and mac we need to first link our program with pthread library  we do it as gcc main.c -lpthread
+
+
+Example 1 : 
+#include <stdio.h>
+#include <pthread.h>
+
+void * hello_fun() 
+{
+printf("Hello World");
+return NULL;
+}
+
+
+int main(int argc, char * argv[])
+{
+pthread_t thread;
+pthread_create(&thread,NULL,hello_fun,NULL);
+pthread_exit(NULL);
+return 0;
+}
+
+
+Example 2 : Using pthread_join 
+#include <stdio.h>
+#include <pthread.h>
+
+void * hello_fun() 
+{
+printf("Hello World");
+return NULL;
+}
+
+
+int main(int argc, char * argv[])
+{
+pthread_t thread;
+pthread_create(&thread,NULL,hello_fun,NULL);
+pthread_join(thread,NULL);      // Now we are going to wait for our thread function to finish its execution.
+pthread_exit(NULL);
+return 0;
+}
+
+
+-------------------Passing Arguments And Returning Values------------------
+
+pthread_create() function permits the programmer to pass one argument to the thread start routine.
+
+To pass more than one argument to thread routine we can create a structure with arguments and then pass address of structure through pointer to pthread_create() function.
+
+All arguments must be casted to (void*)
+
+Example 1 : Passing A Message To Thread Function
+
+#include<stdio.h>
+#include<pthread.h>
+#include<string.h>
+#include<malloc.h>
+
+int main(void)
+{
+pthread_t thread1, thread2;
+char *msg1_p = "Thread1";
+char *msg2_p = "Thread2";
+int iret1 = 0; int iret2 = 0;
+
+/*Creating independent threads each of which will execute own function */
+
+iret1 = pthread_create(&thread1,NULL,print_message_function, (void*)msg1_p);    // Creating and passing argument to thread routine.
+iret2 = pthread_create(&thread2,NULL,print_message_function, (void*)msg2_p);    // Creating and passing argument to thread routine.
+
+pthread_join(thread1,NULL);
+pthread_join(thread2,NULL);
+pthread_exit(NULL);
+return 0;
+}
+
+void *print_message_function(void *ptr)
+{
+char *msg_p;
+msg_p = (char*) ptr;
+printf("%s \n",msg_p);
+}
+
+Example 2 : Passing Struct To A Thread Function
+
+#include<stdio.h>
+#include<pthread.h>
+#include<string.h>
+#include<malloc.h>
+
+struct thread_data
+{
+int thread_id;
+int sum;
+char *msg_p;
+};
+
+void *print_message_function(void *thread_ptr)
+{
+struct thread_data * st_thread_data_ptr;
+int taskid = 0, sum = 0;
+char hello_msg_ch_arr[255];
+st_thread_data_ptr = (struct thread_data*)thread_ptr;
+taskid = st_thread_data_ptr->thread_id;
+sum = st_thread_data_ptr->sum;
+strcpy(hello_msg,st_thread_data_ptr->msg_p);
+printf("taskid = %d, sum = %d, message = %s\n",taskid,sum,hello_msg_ch_arr);
+}
+
+
+int main(void)
+{
+pthread_t my_thread;
+
+struct thread_data st_thread_data;
+
+st_thread_data.msg_p = (char*)malloc(sizeof(char)*255);
+
+st_thread_data.thread_id = 10;
+st_thread_data.sum = 35;
+st_thread_data.msg_p = "Hello World"
+
+/*Creating independent threads each of which will execute own function */
+
+my_thread = pthread_create(&my_thread,NULL,print_message_function, (void*)msg_p);    // Creating and passing argument to thread routine.
+
+pthread_join(my_thread,NULL);
+pthread_exit(NULL);
+return 0;
+}
+
+
+
+Example 3 : Returning values from a thread function using pthread_join()
+
+#include<stdio.h>
+#include<pthread.h>
+#include<string.h>
+#include<malloc.h>
+
+struct thread_data
+{
+int thread_id;
+int sum;
+char *msg_p;
+};
+
+void *thread_func(void *args)
+{
+char *th_ptr = strdup("Hello From Thread\n");
+return (void*)th_ptr;
+}
+
+
+
+int main(int argc, char *argv[])
+{
+char *str;
+pthread_t my_thread;
+
+
+/*Creating independent threads each of which will execute own function */
+my_thread = pthread_create(&my_thread,NULL,thread_func, NULL);    // Creating and passing argument to thread routine.
+
+
+//wait until thread completes, assign return value to str
+pthread_join(my_thread,(void**)&str);
+printf("%s",str);
+pthread_exit(NULL);
+return 0;
+}
+
+
+--------------------Common Thread Functions----------------
+
+---------pthread_self() : Provides thread ID assinged by OS
+
+Example : pthread_self()
+#include<stdio.h>
+#include<pthread.h>
+void *thread_func(void *args)
+{
+printf("In Thread Function , Thread ID = %d\n",pthread_self()); // Here we are reading thread ID assigned by OS.
+pthread_exit(NULL);
+return NULL;
+}
+
+int main(int argc, char *argv[])
+{
+pthread_t my_thread;
+
+/*Creating independent threads each of which will execute own function */
+pthread_create(&my_thread,NULL,thread_func, NULL);    // Creating and passing argument to thread routine.
+printf("In Main Thread , Created Thread ID = %d\n",thread);
+pthread_join(my_thread,NULL);
+return 0;
+}
+
+-----------pthread_detach : 
+When a thread is created, one of itś attributes defines whether it is joinable or detached.
+  If this second parameter of pthread_creatpthread_t thread1, thread2;
+char *msg1_p = "Thread1";
+char *msg2_p = "Thread2";
+int iret1 = 0; int iret2 = 0;
+
+/*Creating independent threads ee function is defined as NULL the thread will be in a joinable state.
+  Only threads that are created as joinable can be joined.
+  If a thread is created as detached , it can never be joined.
+
+There are two scenarios when we would like to have a thread detached i.e. 
+   When we have thread joined and want to cancel itś joined state then we can make it detached.
+
+Syntax Function : int pthread_detach(pthread_t thread)
+
+
+Example : 
+
+#include<stdio.h>
+#include<pthread.h>
+#include<unistd.h>
+
+void *threadFn(void *arg) 
+{
+pthread_detach(pthread_self());
+sleep(1);
+printf(Thread Function\n");
+pthread_exit(NULL);
+}
+
+
+int main(int argc, char *argv[])
+{
+
+pthread_t tid;
+int ret = pthread_create(&tid,NULL,thread_func,NULL);
+
+if(ret !=0)
+{
+perror("Thread Creation Error\n");
+exit(1);
+}
+
+
+printf("After thread created in Main\n");
+pthread_exit(NULL);
+
+}
+
+-----------Stack Management-----------
+
+POSIX standard does not dictate the size of a threadś stack and itś size is implementation dependent and varies.
+
+Safe and portable programs do not depend upon the default stack limit instead explicitly allocate enough stack for each thread using : pthread_attr_setstacksize function
+
+pthread_attr_getstacksize(attr,stacksize)
+pthread_attr_setstacksize(attr,stacksize)
+
+
+Example : 
+#include<stdio.h>
+#include<stdlib>
+#include<pthread.h>
+
+pthread_attr_t  attr;
+
+void *thread_func(void * threadid)
+{
+long tid;
+size_t mystacksize;
+tid = (long)threadid;
+pthread_attr_getstacksize(&attr,&mystacksize);
+printf("Thread id %ld,stack size = %li bytes \n",tid,mystacksize);
+pthread_exit(NULL);
+}
+
+int main(int arg, char*argv[]) 
+{
+
+pthread_t myThread;
+size_t stacksize;
+pthread_t myID;
+long t;
+
+pthread_attr_init(&attr);              // Here we are initializing the thread attribute type variable attr       
+pthread_attr_getstacksize(&attr,&stacksize); // Function returning default allocated stack size
+printf("Default stack size = %li\n",stacksize);
+stacksize=9000000;
+printf("Amount of stack needed per thread = %li\n",stacksize);
+pthread_attr_setstacksize(&attr,stacksize);
+
+printf("Creating thread with stack size = %li bytes\n",stacksize);
+
+myID = pthread_create(&myThread, &attr,thread_func, (void*)t);
+
+if(myID)
+{
+printf("ERROR,Return Code from pthread_create() %lud\n");
+exit(-1);
+}
+pthread_exit(NULL);
+}
+
+
+-------------------------pthread_equal() and pthread_once()---------------------------
+
+pthread_equal() function compares two thread IDs
+  .If two IDś are different this function returns 0, otherwise non zero value is returned
+  . We should not use == operator to compare two thread ID´s
+  
+Syntax Example : pthread_id(thread1,thread2);
+
+
+pthread_once() function  executes the init_routine exactly once in a process
+  .First call to this function by any thread in the process executes the given init_routine, without parameters.
+  .Any subsequent call will have no effect.
+ 
+Syntax Example : pthread_once(once_control, init_routine)
+
+  Where param init_routine is typically an initialization routine.
+        param once_control parameter is a synchronization control structure requires initialization prior to calling pthread_once
+          pthread_once_t_once_control = PTHREAD_ONCE_INIT; 
+
+
+pthread_cancel() function terminates execution of a thread i.e remaining thread code is not executed from the line it appears.
+
+Example : 
+
+#include<stdio.h>
+#include<pthread.h>
+
+void *thread_func(void*ptr)
+{
+printf("Hello World");
+pthread_cancel(pthread_self());
+return NULL;
+}
+
+int main()
+{
+
+pthread_t thread = NULL;
+
+pthread_create(&thread,NULL,thread_func,NULL);
+pthread_join(thread,NULL);
+
+return 0;
+}
+
+
+---------------------------------------Thread Synchronization Concepts---------------------------------------
+
+
+Thread synchronization is the concurrent execution of two or more threads sharing critical resources.
+
+Race Condition and Deadlocks are the two main issues which occurr due to parallel execution of threads.
+
+----------Race Condition------------
+
+A Race condition occurs when two or more threads need to perform an operation on the same memory area but the results of computations depends on the order in which these operations 
+are performed.
+
+----------Deadlocks----------------
+
+Deadlocks occur when multiple threads are trying to access a shared resource.
+Deadlock is a situation in which two threads are sharing the same resource and effectiviely preventing each other from accessing the resource causing:
+   Program execution to halt.
+   Each thread is waiting for the other thread to finish,
+
+------------Thread Safe Code-----------------
+
+Thread Safe means that there are no static and non static global variables (shared resources) which other threads can corrupt.
+
+Threads safe means that the programs protects shared data through mutual exclusion, atomic operations and condition variables.
+
+Threads unsafe functions may be used by only one thread at a time in a program and uniqueness of thread must be ensured.
+
+
+----------------Mutual Exclusion-----------------
+
+Mutual Exclusion is when a process or a thread is prevented simultaneous access to a critical section
+ A property of concurrency control which is used to prevent race conditions.
+
+Mutual exclusion is the method of serializing access to shared resources.
+
+To access a critical shared resource at first thread gains the mutex by locking it perform read/write operation and then reuturns or unlocks the mutex allowing other threads to access
+the resource.
+
+-------Atomic Operations and Condition Variables-------------
+
+Atomic operations allow for concurrent algorithms and access to certain shared data types without the use of mutexes.
+   One can modify some variable within a multithreaded context without having to go through a locking protocol.
+
+
+
+-------------------------------------------Mutexes--------------------------------------------------
+
+
+Threads library (pthread.h) provides three synchronization mechanisms that we can implement :
+   Mutexes - locks,block access to variables by other threads.
+   Joins - makes a thread wait till others have completed their execution
+   Condition Variables - A way to communicate to other threads.
+
+
+If four threads are updating the same shared data but only one thread uses a mutex the data still can be corrupted.
+
+A safe way to ensure that when several threads update the same variable , the final value is the same as it would be if only one thread performed the update. 
+
+A typical squence in the use of a mutex is as follows : 
+     . Create and Initialize a mutex variable.
+     . Several threads attempt to lock the mutex.
+     . Only one succeeds and that thread owns the mutex.
+     . The owner unlocks the mutex.
+     . Another thread acquires the mutex and repeats the process.
+     . Finally the mutex is destroyed.
+  
+To avoid deadlocks ensure that threads acquire locks in a agreed order i.e. preservation of lock ordering.
+
+----------------Creating and Destroying Mutexes-----------------
+
+Mutex variables must be declared with type pthread_mutex_t and these variables must be initialized/createdbefore they can be used.
+
+There are two ways to initialize/create a mutex variable.
+
+------1.Statically when it is declared.
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+------2.Dynamically With The pthread_mutex_init() function
+
+int pthread_mutex_init(pthread_mutex_t * mutex,const pthread_mutexattr_t*mutexattr)
+
+. This function requires a pthread_mutex_t variable to operate on as the first argument.
+. Attributes for the mutex can be given through second parameter.
+   .To specify default attributex, pass NULL as the second parameter.
+
+.The pthreads standard defines three optional mutex attributes.
+  .protocol - specifies the protocol used to prevent priority inversions for a mutex.
+  .prioceiling - specifies the priority ceiling of a mutex.
+  .process-shared - specifies the process sharing of a mutex.
+
+------Destroying A Mutex
+. The pthread_mutex_destroy(mutex) function should be used to free a mutex object when it´s no longer needed similar to freeing heap memory using free(ptr).
+
+
+
+------------------Locking and Unlocking Mutexes-------------------------
+
+
+Mutex Locking Function   :   int pthread_mutex_lock(pthread_mutex_t * mutex);
+           		     input : mutex variable name i.e. &mutex_lock
+           		     If the mutex is already locked this call will block the calling thread until the mutex is unlocked.
+
+Mutex Unlocking Function :   int pthread_mutex_unlock(pthread_mutex_t * mutex)
+                             input : mutex variable name i.e. &mutex_lock
+                             Returns : Error if the mutex is already unlocked. 
+                                       Error if the mutex is owned by another thread. 
+
+                             This function needs to be called by the thread owning a mutex after it has completed itś execution of critical section.
+
+
+Mutex Try Lock Function  :   int pthread_mutex_trylock(pthread_mutex_t * mutex);
+                             input : mutex variable name i.e. &mutex_lock
+                             Returns busy error code if the mutex tried to be locked is already locked. 
+                             
+                             This function is useful in preventing deadlock conditions as in a priority inversion situation.
+
+Example 1 : Creating Mutex Dynamically
+
+#include <pthread.h>
+#include <stdio.h>
+
+pthread_mutex_t lock = NULL;
+
+int j = 0; 
+
+void do_process()
+{
+pthread_mutex_lock(&lock);
+int i = 0;
+j++;
+
+while(i < 5) {
+printf("%d",j);
+sleep(1);
+i++;
+}
+
+printf("..Done");
+pthread_mutex_unlock(&lock);
+}
+
+
+
+int main(void) 
+{
+
+int err = 0;
+
+pthread_t t1,t2;
+
+if (pthread_mutex_init(&lock,NULL) != 0) {  // Here we are initializing and creating mutex dynamically
+printf("Mutex Initialization Failed \n");
+return 1;
+}
+
+j = 0;
+
+pthread_create(&t1, NULL, do_process, NULL);
+pthread_create(&t2, NULL, do_process, NULL);
+
+pthread_join(t1,NULL);
+pthread_join(t2,NULL);
+
+return 0;
+}
+
+Example 2 : Creating Mutex Statically
+
+#include <pthread.h>
+#include <stdio.h>
+
+#define NTHREADS 10
+
+void * thread_function(void*);
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+
+void *thread_function(void *ptr)
+{
+printf("Thread Number %ld\n",pthread_self());
+pthread_mutex_lock(&mutex1);
+counter++;
+pthread_mutex_unlock(&mutex1);
+}
+
+int counter = 0;
+
+int main(void)
+{
+
+pthread_t thread_id[NTHREADS];
+int i,j;
+
+for(i=0; i<NTHREADS; i++) 
+{
+   pthread_create(&thread_id[i], NULL, thread_function, NULL)
+}
+
+for(j=0; j<NTHREADS; j++) 
+{
+   pthread_join(&thread_id[j], NULL);
+}
+
+printf("Final Counter Value %d\n",counter);
+
+}
+
+
+Example 3 : Avoiding Deadlocks Using pthread_mutex_trylock()
+
+#include <pthread.h>
+#include <stdio.h>
+
+pthread_mutex_t lock1, lock2;
+
+void *resource1()
+{
+pthread_mutex_lock(&lock1);
+printf("Job started in resource1...\n");
+sleep(2);
+printf("Trying to get resource2\n");
+while(pthread_mutex_trylock(&lock2))   // Here we will have deadlock for any thread when it executes this line, but we are using try lock statement which only lock mutex 
+                                       // lock2 when it will be released by the resource 1 function.
+{
+pthread_mutex_unlock(&lock1);
+sleep(2);
+pthread_mutex_lock(&lock1);
+}
+
+printf("Acquired Resource2\n");
+pthread_mutex_unlock(&lock2);
+
+sleep(2);
+pthread_mutex_unlock(&lock1);
+
+printf("Job Finished In Resource 1...\n");
+pthread_exit(NULL); 
+
+}
+
+
+void *resource2()
+{
+pthread_mutex_lock(&lock2);
+printf("Job started in resource2...\n");
+sleep(2);
+printf("Trying to get resource1\n");
+pthread_lock(&lock1);                       // Here we will have deadlock for any thread when it executes this line
+printf("Acquired Resource 1\n");
+pthread_mutex_unlock(&lock1);
+
+printf("Job Finished In Resource 1...\n");
+pthread_mutex_unlock(&lock1);
+pthread_exit(NULL); 
+
+}
+
+
+int main()
+{
+
+pthread_mutex_init(&lock1,NULL);
+pthread_mutex_init(&lock2,NULL);
+
+pthread_t t1,t2;
+
+pthread_create(&t1,NULL,resource1,NULL);
+pthread_create(&t2,NULL,resource2,NULL);
+
+pthread_join(t1,NULL);
+pthread_join(t2,NULL);
+
+return 0;
+
+}
+
+
+-------------------------Condition Variables-----------------------------------
+
+Condition variables proide yet another way for threads to synchronize.
+
+A condition variable must always be associated with a mutex
+    To avoid a deadlock created by one thread preparing to wait and another thread which may signal the condition before the first thread actually waits on it.
+    The thread will be perpetually waiting for a signal that is never sent.
+    
+
+Any mutex can be used with a condition variable.
+
+
+A thread wants to access a shared resource then it acquires Mutex and then checks condition variable before modifying shared resource, if condition variable state shows that the shared resource is not updated then it falls sleep and it waits for the shared resource to be updated by another thread. 
+
+The second thread then acquires the mutex from first thread , updates the shared resource then changes the state of condition variable, releases the mutex and signals the sleeping thread to wake up and reqacquire the mutex it had earlier.  
+    
+
+
+------------------------Condition Variable Functions---------------------
+
+Condition variables must be declared with type : "pthread_cond_t" and must be initialized before they can be used.
+
+
+----------Creating/Destroying-----------
+
+pthread_cond_init(condition,attr) - Dynamic Creation
+pthread_cond_t_cond = PTHREAD_COND_INITIALIZER; (statically declared)
+pthread_cond_destroy(condition)
+
+
+---------Waiting On Condition-----------
+
+pthread_cond_wait() - will put the caller thread to sleep on the condition variable and release the mutex lock, guaranteeing when the subsequent line is executed after the caller
+has woken up, the caller will hold lock.
+
+pthread_cond_timedwait - place limit on how long it will block.
+
+
+
+--------Waking Thread Based On Condition------------
+
+pthread_cond_signal
+pthread_cond_broadcast -  wake up all threads blocked by the specified condition variable.
+
+For all of the above functions, the caller must first hold the lock that is associated with that condition variable
+
+Example : 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+pthread_mutex_t count_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t condition_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condition_cod = PTHREAD_COND_INITIALIZER;
+
+void *functionCount1();
+void *functionCount2();
+int count = 0;
+
+#define COUNT_DONE 	10
+#define COUNT_HALT1 	3
+#define COUNT_HALT2     6
+
+void *functionCount1()
+{
+for(;;) 
+{
+pthread_mutex_lock(&condition_mutex);
+while(count >= COUNT_HALT1 && count2 <= COUNT_HALT2) {
+pthread_cond_wait(&condition_cond, &condition_mutex);        // Here we are waiting and checking condition variable before locking mutex
+}
+pthread_mutex_unlock(&condition_mutex);
+pthread_mutex_lock(&count_mutex);
+count++;
+printf("Counter value functionCount1 : %d\n",count);
+pthread_mutex_unlock(&count_mutex);
+if(count >= COUNT_DONE) return(NULL);
+}
+
+void *functionCount2()
+{
+for(;;) 
+{
+pthread_mutex_lock(&condition_mutex);
+if(count < COUNT_HALT1 || count > COUNT_HALT2) {
+pthread_cond_signal(&condition_cond);
+}
+pthread_mutex_unlock(&condition_mutex);
+pthread_mutex_lock(&count_mutex);
+count++;
+printf("Counter value functionCount2 : %d\n",count);
+pthread_mutex_unlock(&count_mutex);
+if(count >= COUNT_DONE) return(NULL);
+}
+
+
+int main()
+{
+pthread_t thread1,thread2;
+
+pthread_create(&thread1, NULL, &functionCount1, NULL);
+pthread_create(&thread2, NULL, &functionCount2, NULL);
+
+pthread_join(thread1, NULL);
+pthread_join(thread2, NULL);
+
+exit(0);
+}
+
+                  --------------------------------------------Section 22 : Networking Sockets-------------------------------------------
+
+
+TCP (Transmission Control Protocol) is a connection oriented protocol.
+
+TCP creates a connection between the source and destination node before transmitting the data and keeps the connection alive until the communication is no longer active.
+
+--------Features of A TCP Connection------
+
+Connection Oriented.
+Reliability.
+Handles lost packets.
+Handles packet sequencing.
+Handles duplicated packets.
+Full Duplex.
+Flow Control.
+Congestion Control.
+
+---------------Types Of Servers : 
+
+Iterative Server : 
+     Simplest form of server where the server process serves one client at a time.
+     After completing the first request, it takes request from another client.
+     Other client wait until it is their turn.
+
+Concurrent Servers : 
+     This type of server runs multiple concurrent processes to serve many requests at a time.
+     One process may take longer and another client does not need to wait too long.
+     Simplest way to write a concurrent server under Unix is to fork a child process to handle each client separately.
+     
+
+--------Sockets
+
+Sockets are the virtual end points of any kind of network communications done between two computers.
+Socket programming is a way of connecting two nodes on a network to communicate with each other.
+
+Server forms the listener socket while client reaches out to the server.
+
+-----Steps in using sockets to communicate
+
+Create a new socket for network communication (socket).
+Attach a local address to a socket. (bind)
+Announce willingness to accept connections. (listen)
+Block caller until a connection request arrives. (accept)
+Actively attempt to establish a connection. (connect). 
+Send some data over connection. (send).
+Receive some data over connection. (receive).
+Release the connection.  (close).
+
+-----------Socket API-----------
+
+Following header files are required to be added in our socket application.
+
+<sys/types.h>  : Contains definitions of a number of data types used in socket calls.
+
+<sys/socket.h> : The main socket header file.
+                 Includes a number of definitions of structures needed for sockets (socket creation, accept, listen, bin, send, recv etc).
+                 
+<netinet/in.h> : Contains constants and structures needed for internet domain addresses.
+
+<netdb.h>      : Defines the structure hostent.
+
+<arpa/inet.h>  : Defines in_addr structure.                   
+
+---------Ports------
+
+A computer might need to run several server programs at once.
+  
+A port is just like a channel on TV, different ports are used for different network services just like different channgels are used for various content.
+
+A port will be defined as an integer number between 1024 and 65535.
+  Port numbers smaller than 1024 are considered well known system ports (telnet uses port 23, http uses 80, ftp uses 21) so avoid these.
+
+The port assignments to network services can be found in the file /etc/services.
+
+
+------------Port and Service Functions------------
+
+Following functions are provided to fetch service name from the /etc/service file
+
+struct servent *getservbyname(char *name, char*proto)
+    .Takes a service name and a protocol name and returns the corresponding port number for that service.
+
+struct servent *getservbyport(int port, char *port)
+    .Takes a port number and a protocol name and returns the corresponding service.
+
+Return value for each function is a pointer to following structure.
+
+struct servent 
+{
+char *s_name;
+char **s_aliases;
+int s_port;
+char *s_proto;
+};
+
+-------IP Address Functions---------
+
+
+Below functions are for IP Address functionality : 
+
+int inet_aton(const char*strptr, struct in_addr*addrptr) : Function converts specified string in the internet standard dot notation to a network address and stores it in the
+                                                           above structure.
+
+in_addr_t inet_addr (const char*strptr) : Function converts specified string in the standard dot notation to an integer value suitable for use as an internet address.
+
+char *inet_ntoa(struct in_addr inaddr) : Function converts the specified internet host address to a string in the internet standard dot notation
+
+
+------------Structures Used For Support Of Main Functions---------------
+
+.Various structures are used in socket programming to hold information about the address and port and other information.
+.Socket address strucutres are an integral part of every network program, most socket functions require a pointer to a socket address structure as an argument.
+  We allocate and fill these socket address structures and pass pointers to then to various functions.
+
+-------------------Structures Used For Support Of Main Functions---------------------
+
+----.sockaddr is a strucutre holding the socket information, this is a generic socket address structure passed in most of the socket function calls.
+
+	struct sockaddr 
+	{
+	unsigned short sa_family;
+	char sa_data[14];
+	};
+
+sa_family : can be : AF_INET, AF_UNIX, AF_NS, AF_IMPLINK
+           It represents and address family, in most of the interet based applications, we use AF_INET.
+
+sa_data : is a protocol specific address
+          We will be using port number IP address, represented by sockaddr_in structure.
+
+-----.sockaddr_in is a strucure that helps you to reference to the socketś elements.
+
+	struct sockaddr_in
+	{
+	short int sin_family;
+ 	unsigned short int sin_port;
+	struct in_addr sin_addr;
+	unsinged char sin_zero[8];
+	};
+
+------.in_addr is used only in the above structure as a structure field and holds the 32 bit netid/hostid
+
+	struct in_addr
+	{
+	unsinged long s_addr;
+	};
+
+------.hostent is a structure used to keep information related to host.
+
+struct hostent
+{
+char *h_name;
+char **h_aliases;
+int h_addrtype;
+int h_length;
+char **h_addr_list;
+
+#define h_addr  h_addr_list[0]
+
+};
+
+------------Socket Functions-------------------------
+
+socket() and accept() functions both return handles (file descriptor)
+
+In linux sockets and file descriptors also share same file descriptor table.
+
+We cannot randomly access a socket like we can do by lseek() on a file.
+
+Most common/important socket functions are :
+
+socket()  
+connect() : Specifically Used by client.
+bind()    : Used by server specifically.
+listen() and accept()
+read(),recv(),recvfrom() or recvmsg()
+write(),send(),sendto() or sendmsg().
+close()
+
+
+All the above functions need to include header files : <sys/types.h>, <sys/socket.h> except for read/write/close which are defined in <unistd.h>
+
+
+
+-------Socket Function------
+
+To Perform Network I/O, First thing a process must do is call the socket function, specifying the type of coomunication protocol desired and protocol family.
+
+Function Prototype : int socket(int family,int type, int protocol);
+                     
+                    @param "family"    :  AF_INET   for IPv4 Protocol
+                                          AF_INETC  for IPv6 Protocol
+
+                    @param "type"      :  SOCK_STREAM for a stream socket
+                                          SOCK_DGRAM  for a datagram scoket.
+
+                    @param "protocol"  :  IPPROTO_TCP   for TCP  Transport Protocol. 
+                                          IPPROTO_UDP   for UDP  Transport Protocol.
+                                          IPPROTO_SCTP  for SCTP Transport Protocol. 
+
+
+                    @Return            :  A Socket descriptor for use in system calls or -1 on error.
+
+Function Prototype : int setsockopt(int sockfd, int level, int optname, const void*optval, socklen_t optlen);
+
+We can also use setsockopt function helps in manipulating options for socket referred to by the file descriptor sockfd. 
+This function is completely optional but it helps in reuse of address and port and prevents errors such as : address already in use.
+
+
+------connect Function--------                                   
+
+Connect function is used by a TCP client to establish a connection with a TCP server.
+                
+Function Prototype :  int connect (int sockfd, struct sockaddr * serv_addr, int addrlen); 
+                          
+                         @param "sockfd" is a socket descriptor returned by socket function. 
+                         
+                         @param "serv_addr" is a pointer to struct sockaddr containing the destination IP and Port Address. 
+
+                         @param "addrlen"   is set to sizeof(struct sockaddr).
+ 
+                         @param Return 0 if it successfully connects to server, otherwise it returns -1 on error. 
+
+
+---------Bind Function--------------
+
+
+When a server starts up, it needs to tell the operating system which port it is going to use, this process is called binding the port.
+After this any program on the network will be able to access that server process through connect() function using server name.
+
+Function Prototype : int bind(int sockfd, struct sockaddr*my_addr,int addrlen);
+                     
+                     @param "sockfd"  is a socket descriptor returned by the socket function.
+                     
+                     @param "my_addr" is a pointer to struct sockaddr containing local IP Address and port. i.e. : 
+                                      
+					struct sockaddr 
+					{
+					unsigned short sa_family;
+					char sa_data[14];
+					};
+
+                                      Where a 0 value for sin_port in struct sockaddr_in ; will mean that we choose a random port 
+                                              and INADDR_ANY value for sin_addr in struct sockaddr_in; means the serverś IP address will be assigned automatically.
+                                              Address is set to sizeof(struct sockaddr).
+
+                                              Example : server.sin_port = 0;
+                                                        server.sin_addr.s_addr = INADDR_ANY;
+
+                    @param "addrlen" is set to sizeof(struct sockaddr) 
+
+
+------------Listen Function----------------- 
+                                       
+
+Listen function allows specific number of clients to wait in a queue for server to process there request.
+
+Function Prototype : int listen(int sockfd, int backlog);
+                     
+                     @param "sockfd"  :   is a socket descriptor returned by socket function.
+                     
+                     @param "backlog" :   is the number of maximum client connections.
+
+
+-----------Accept Function------------------
+
+Accept() system call waits until a client contacts the server and then it returns a second socket descriptor that we can use to hold the convesration with the client.
+
+Function Prototype : int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);
+
+                     @param "sockfd"   : is a socket descriptor returned by socket function. 
+                      
+                     @param "cliaddr"  : is a pointer to struct sockaddr containing the client IP Address and port.
+                     
+                     @param "addrlen"  : should be set to sizeof(struct sockaddr)
+                     
+                     @ Return a non negative descriptor on success, otherwise it returns -1 on error. 
+                          All read-write operations will be done on this descriptor to communicate with the client.
+
+--------------Recv Function-------------------
+
+The recv function is used to receive data over stream sockets or connected datagram sockets i.e. TCP oriented.
+   If we want to receive data over unconnected datagram sockets we must use recvfrom() function.
+
+Function Prototype : int recv(int sockfd, void *buf, int len,unsigned int flags)
+
+                     @param "sockfd"   : is a socket descriptor returned by socket function.
+                      
+                     @param "buf"      : is the buffer to read information into.
+                     
+                     @param "len"      : is the maximum length of the buffer.
+                     
+                     @param "flags"    : is set to 0.     
+                    
+                     @param returns the number of bytes read into the buffer otherwise it will return -1 on error.
+
+Reference : https://man7.org/linux/man-pages/man3/setsockopt.3p.html
+
+
+--------------recvfrom function---------------------
+
+The recvfrom function is used to receive data from unconnected datagram sockets i.e. UDP orineted.
+
+Function Prototype : int recvfrom(int sockfd, void *buf,int len,unsigned int flags,struct sockaddr*from,int*fromlen);
+
+                     @param "sockfd"   : is a socket descriptor returned by socket function.
+                      
+                     @param "buf"      : is the buffer to read information into.
+                     
+                     @param "len"      : is the maximum length of the buffer.
+                     
+                     @param "flags"    : is set to 0.     
+
+                     @param "from"     : is a pointer to struct sockaddr for the host where data has to be read.
+
+                     @param "fromlen"  : should be set it to sizeof(struct sockaddr).
+
+                     @param returns the number of bytes read into the buffer, otherwise it returns -1 on error.
+                     
+---------------write function part of File I/O present in unistd.h --------------
+
+Write function write nbytes from the buffer pointed by buf to the file associated with open file descriptor.
+
+Function Prototype : int write(int fildes, const void*buf,int nbyte);
+
+                     @param "fildes" : is a socket descriptor returned by socket function.
+
+                     @param "buf"    : is a pointer to the data you want to send.      
+
+                     @param "nbyte"  : is the number of bytes to be written, if nbyte is 0, write() will return 0 and have no results if the file is a regular file,
+                                       otherwise results are specified.
+
+                     @param Returns number of bytes actually written to file associated with fildes if successful otherwise -1 is returned.
+
+
+--------------send function----------------
+
+.Send function is used to send data over stream sockets or connected datagram sockets.
+    If we want to send data over unconnected datagram sockets, we must use sendto() function
+  
+Function Prototype : int send(int sockfd, const void*msg, int len, int flags);
+
+                     @param "sockfd"   : is a socket descriptor returned by socket function.
+
+                     @param "msg"      : is a pointer to the data we want to send.
+
+                     @param "len"      : is the length of data we want to send (in bytes).
+
+                     @param "flags"    : should be set to 0.
+
+                     @param Returns the number of bytes sent out, otherwise it will return -1 on error.
+
+---------------sendto Function-----------------
+
+.sendto function is used to send data over unconnected datagram sockets.
+
+Function Prototype :  int sendto(int sockfd, const void*msg, int len, unsigned int flags, const struct sockaddr *to, int tolen);
+
+                      @param "sockfd" is a socket descriptor returned by socket function.
+                      
+                      @param "msg" is a pointer to the data you want to send.
+
+                      @param "len" is the length of data we want to send (in bytes).
+ 
+                      @param "flags" should be set to 0.
+ 
+                      @param "to" is a pointer to struct sockaddr for the host where data has to be sent.
+
+                      @param "tolen" should be set it to sizeof(struct sockaddr).
+
+ 	              @param returns the number of bytes sent, otherwise it returns -1 on error.
+
+
+------------------read function-----------------------------
+
+
+. read function attempts to read nbyte bytes from the file associated with file descriptor fildes into the buffer pointed to by buf.
+
+Function Prototype : int read (int fildes, const void *buf, int nbyte);
+ 
+                     @param "fildes" is a socket descriptor returned by socket function
+                     
+                     @param "buf" is the buffer to read the information into.
+
+                     @param "nbyte" is the number of bytes to read.
+
+                     @param Returns the number of bytes actually written to the file associated with fildes, if successful otherwise -1 is returned. 
+
+
+------------------close function------------------------
+
+.close function is used to close the communication between the client and the server.
+
+Function Prototype : int close(int sockfd);
+                     
+                     @param "sockfd" is a socket descriptor returned by the socket function.
+
+                     @param returns 0 on success, otherwise it returns -1 on error.
+
+------------------shutdown function--------------------------
+
+shutdown function is used to gracefully close the communication between client and the server. It gives more control in comparison to the close function.
+
+Function Prototype : int shutdown(int sockfd,int how)
+                     
+                   @param "sockfd" is a socket descriptor returned by the socket function.
+
+                   @param "how"   0 indicates receiving is not allowed. 
+                                  1 indicates sending is not allowed.
+                                  2 indicates both sending and receiving is not allowed, equivalent to function close()  
+
+                   @param returns 0 on success, otherwise it returns -1 on error.
+
+
+----------------------------------Lecture : Creating A Server Socket----------------------------------
+
+Steps involved in establishing a server socket are as follows : 
+
+1. Create a socket with the socket() system call. i.e. int socket(int family,int type, int protocol);
+
+2. Bind the socket to an address using the bind() system call i.e. int bind(int sockfd, struct sockaddr*my_addr,int addrlen);
+     For server socket on the internet, address consists of a port number on the host machine.
+
+3. Listen for connections with the listen() system call. i.e. int listen(int sockfd, int backlog);
+
+4. Accept a connection with the accept() system call. i.e. int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);
+       Typically blocks the connection until a client connects with the server.
+
+5. Send and Receive data using the read()/recv() and write()/send() system calls.
+
+Example : Creating A Server Socket
+
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+short socketCreate(void)        // Our Own Function Creating Socket 
+{
+short hSocket;
+printf("Create the socket\n");
+hSocket = socket(AF_INET, SOCK_STREAM, 0);
+return hSocket;
+}
+
+int bindCreatedSocket(int hSocket) 
+{
+
+int iRetval = -1;
+int clientPort = 12345; 
+struct sockaddr_in remote = {0};
+
+/* Internet Address Family */
+remote.sin_family = AF_INET;
+
+/* Any incoming interface */
+remote.sin_addr.s_addr = htonl(INADDR_ANY);   /* Function converts the unsigned integer hostlong from host byte order to network byte order. */
+remote.sin_port = htons(clientPort);          /* Function converts the unsigned short integer hostshort from host byte order to network byte order. */
+
+iRetval = bind(hSocket, (struct sockaddr*)&remote, sizeof(remote));
+return iRetval;
+}
+
+int main(int argc, char*argv[]) 
+{
+
+int socket_desc = 0, sock = 0, clientLen = 0;
+struct sockaddr_in client;
+char client_message[200] = {0};
+char message[100] = {0};
+const char *pMesaage = "hello from Jasons server";
+
+// Create socket
+socket_desc = socketCreate();
+
+if(socket_desc == -1) 
+{
+  printf("Could Not Create Socket");
+  return 1;
+  
+}
+
+printf("Socket Created\n");
+
+//Bind
+if(bindCreatedSocket(socket_desc) < 0)
+{
+perror("Bind Failed");
+return 1;
+}
+
+printf("Bind Done\n");
+
+//Listen
+listen(socket_desc,3);
+
+// Accept incoming connection
+
+while(1)
+{
+	printf("Waiting for incoming connections.......\n");
+	clientLen=sizeof(struct sockaddr_in);
+
+	// Accept connection from an incoming client, accept is returning a new socket descriptor
+	sock = accept(socket_desc,(struct sockaddr *)&client,(socklen_t*)&clientLen);
+
+	if(sock<0)
+	{
+	 perror("Accept Failed");
+ 	return 1;
+	}
+
+	printf("Connection Accepted\n");
+	memset(client_message, "\0",sizeof(client_message)); // Setting the buffer we use for sending message to client.
+	memset(message,"\0",sizeof(message));
+
+
+	// Receive a Reply from the client
+	if( recv(sock,client_message,200,0)<0) )
+	{
+        	printf("recv failed");
+  		break;
+	}
+
+	printf("Client Reply : %s\n",client_message);
+
+
+	if(strcmp(pMessage,client_message)==0)
+	{
+  	strcpy(message,"Hi There");
+	}
+
+	else {
+	strcpy(message,"Invalid Message");
+	}
+
+	if(send(sock,message,strlen(message),0)<0)
+	{
+  	printf("Send Failed");
+  	return 1;
+	}
+
+	close(sock);
+	sleep(1)
+}
+
+	return 0;
+ }
+
+
+
+
+--------------------------------Creating A Client Socket------------------------------
+
+
+1. Create a new socket for network communication.
+2. Attach a local address to a socket(bind).
+3. Announce willingness to accept connections (listen).
+4. Block caller until a connection request arrives (accept).
+5. Actively attempt to establish a connection (connect).
+6. Send some data over connection (send).
+7. Receive some data over connection (receive). 
+
+
+
+Example : 
+
+short socketCreate(void)        // Our Own Function Creating Socket 
+{
+short hSocket;
+printf("Creating the Client socket\n");
+hSocket = socket(AF_INET, SOCK_STREAM, 0);
+return hSocket;
+}
+
+int socketConnect(int hSocket) 
+{
+int iRetval = -1;
+int serverPort = 12345;
+char *serverIP = "127.0.0.1";
+struct sockaddr_in remote = {0};
+/* Internet Address Family */
+remote.sin_family = AF_INET;    
+/* Server Port number */
+remote.sin_port = htons(serverPort);
+/* Server IP address */
+remote.sin_addr.s_addr = inet_addr(serverIP);
+iRetval = connect(hSocket, (struct sockaddr*)&remote, sizeof(remote));
+return iRetval;
+}
+
+
+// Send the data to the server and set the timeout of 20 seconds
+int socketSend(int hSocket,char* Rqst,short lenRqst) {
+    int shortRetval = -1;
+    struct timeval tv;
+    tv.tv_sec = 20;  /* 20 Secs Timeout */
+    tv.tv_usec = 0;
+
+    if(setsockopt(hSocket,SOL_SOCKET,SO_SNDTIMEO,(char *)&tv,sizeof(tv)) < 0) {
+        printf("Time Out\n");
+        return -1;
+    }
+    shortRetval = send(hSocket, Rqst, lenRqst, 0);
+    return shortRetval;
+}
+
+
+
+int socketReceive(int hSocket, char *Rsp,short RcvSize)
+{
+int shortRetval = -1;
+struct timeval tv;
+tv.tv_sec = 20; 
+tv.tv_usec = 0; 
+
+if(setsockopt(hSocket,SOL_SOCKET,SO_RCVTIMEO,(char*)&tv,sizeof(tv))<0)
+{
+printf("Time Out \n");
+return -1;
+}
+
+shortRetval = recv(hSocket, Rsp, RcvSize, 0);
+printf("Response %s\n",Rsp);
+return shortRetval;
+}
+
+int main(int argc, char*argv[]) 
+{
+int socket_desc = 0, sock = 0, clientLen = 0;
+struct sockaddr_in server;
+char sendToServer[200] = {0};
+char server_reply[100] = {0};
+
+
+// Create socket
+socket_desc = socketCreate();
+
+if(socket_desc == -1) 
+{
+  printf("Could Not Create Socket");
+  return 1;  
+}
+
+printf("Socket is Created \n");
+
+// Connect To Remote Server
+if(socketConnect(socket_desc) < 0)
+{
+  printf("Could Not Connect to Server\n");
+  return 1;
+}
+else
+{
+    printf("Connected to Server\n");
+}
+    
+printf("Enter The Mesaage : ");
+fgets(sendToServer,100,stdin);
+
+// Send Data To Server
+socketSend(hSocket, sendToServer, strlen(sendToServer));
+
+// Receive Data From Server
+read_size = socketReceive(hSocket,server_reply,200);
+printf("Server Response : %s\n",server_reply);
+
+close(hSocket);
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               
+                  
+           
+
+
+
+
+
+
 
 
 

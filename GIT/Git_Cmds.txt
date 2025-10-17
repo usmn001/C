@@ -48,6 +48,12 @@ git stash                                    "Command temporarily shelves (or st
                                               and then come back and re-apply them later on."  
 
 
+-----------------------Merge a branch into main----------------------------
+
+git checkout main  // If you are on other branch
+git merge other_branch        // The branch you want to merge into main
+
+
 
 ******************Commands For Resolving Merge Conflicts In Git***************************
 
