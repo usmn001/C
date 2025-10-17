@@ -2156,7 +2156,7 @@ Program is terminated with a diagnostic message is specified expression passed t
 
 Assert is a run time check.
 
-We can also disable all assert statements in our code by defining macro as : #define NDEBUG hence we can also enable all assertioons in our code by #undef NDEBUG.
+We can also disable all assert statements in our code by defining macro as : #define NDEBUG hence we can also enable all assertions in our code by #undef NDEBUG.
 
 In some non standard systems assertions are disabled by default where we can enable them by : #undef NDEBUG and then add #include<assert.h>
 
@@ -2264,10 +2264,10 @@ Divides the array into smaller sizes until the element level is reached, every v
 
 Syntax : void qsort(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void*));
           
-         Where first argument is a pointer to the beginning of array which is array name.
-               2nd argument is the size of array.
-               3rd argument is the size of each array element i.e. sizeof(array_type)
-               4th argument is the function int(*compar)(const void *, const void*) qsort uses, 
+         Where 1st Argument is a pointer to the beginning of array which is array name.
+               2nd Argument is the size of array.
+               3rd Argument is the size of each array element i.e. sizeof(array_type)
+               4th Argument is the function int(*compar)(const void *, const void*) qsort uses, 
                                    where *compar is the function pointer pointing to a comparison function, returning an int and takes two arguments
                                           This comparison function returns a +ive integer if 1st item is greater than 2nd.
                                                                    returns zero if 1st and 2nd are same.        
@@ -2354,7 +2354,7 @@ Function void srand(unsigned seed)
        It should not be repeatedly seeded.      
         
    Standard practice is to use the result of a call to srand(time(0)) as the seed.
-      time() reurns a time_t value which varies every time and hence the pseduo random number aries for every program call.
+      time() reurns a time_t value which varies every time and hence the pseduo random number varies for every program call.
 
 Example : 
 #include <stdlib.h>
@@ -2596,9 +2596,82 @@ return 0;
                     printf("Current date and time = %s",asctime(localtime(&time_ptr)));   
 
 
+-------------------Getting The Day For A Date---------------------
 
+We can use the mktime() function to determine the day of the week for a given date.
 
+Function : time_t mktime(struct tm*ptime);
+            @param "ptime" is the pointer pointing to tm structure.
+                  Where tm structure members tm_mon, tm_mday and tm_year are set to values corresponding to the date we are interested in.
+                        Values of the tm_wday and tm_yday structure members will be ignored.
+            @param returns the calendar time as a value of type time_t if the operation is successful
+                   returns -1 if the date cannot be represented as time_t value, causing the operation to fail.             
+          
+            If the operation is successful the values will be replaced with values that are correct for the date we have supplied.      
+Example : 
 
+#include<stdio.h>
+#include <time.h>
+
+int main(void)
+{
+const char * days[] = {"Sunday", "Monday","Tuesday","wednesday", "Thursday","Friday","Saturday"};
+const char *months[] = {"January","February","March","April","May", "June", "July", "August","September", "October", "November", "December"};
+
+const char *suffix[] = {"st", "nd", "rd" , "th" };
+
+enum suffindex = {st ,nd, rd, th} sufsel = th;
+
+struct tm birthday = {0};
+char name[30] = {'\0'};
+
+printf("Enter a Name : "};
+scanf("%s",name);
+
+printf("Enter the birthday for %s as day month year integers separated by spaces" "\n e.g. Enter 1st February 1985 as 1 2 1985 : ",name); 
+scanf(" %d %d %d ",&birthday.tm_mday, &birthday.tm_mon, &birthday.tm_year);
+
+birthday.tm_mon -=1;               // Month Zero Based
+birthday.tm_year -= 1900;          // Year Relative To 1900
+
+if(mktime(&birthday) == -1) 
+{
+printf(stderr,"Operation Failed.\n");
+return -1;
+}
+
+switch(birthday.tm_mday) 
+{
+case 1 : case 21 : case 31 :
+ sufsel = st;
+ break;
+ 
+case 2 : case 22 : 
+ sufsel = nd;
+ break;
+ 
+case 3 : case 23 : 
+  sufsel = rd;
+  break;
+  
+default :
+  sufsel = th;
+  break;
+}
+
+printf("%s was born on the %d%s %s %d, which was a %s.\n",name,birthday.tm_mday, sufsel, birthday.tm_mon, birthday.tm_year,days[birthday.tm_day]); 
+
+}
+
+--------------------struct tm *gmtime(time_t const *time_value)----------------------
+
+There is one more function converting a time_t value into struct tm.
+
+Function : struct tm *gmtime(time_t const*time_value);
+
+This function converts time_t value either obtained from ctime()  into a struct tm according to Coordinated Univeral Time(UTC).
+
+UTC was formerly called Greenwich Mean Time and hence the name gmtime corresponds to that.
 
 
 
