@@ -7,7 +7,6 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "-map=threads.map",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"

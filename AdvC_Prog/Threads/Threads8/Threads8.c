@@ -17,6 +17,27 @@ pthread_cond_t cond_var1 = PTHREAD_COND_INITIALIZER;;   // Creating Condition va
 
 int num_sh = 0;      // Shared Resource, Access to this resource is controlled by mutex locks
 
+
+
+int set_thread_stacksize(pthread_attr_t *attr, size_t stacksize)
+{
+    int result;
+    result = pthread_attr_setstacksize(attr, stacksize);
+    printf("Creating thread with stack size = %li bytes \n",stacksize);
+    return result;
+}
+
+
+int get_thread_stacksize(pthread_attr_t *attr)
+{
+    int result;
+    size_t stacksize;
+    result = pthread_attr_getstacksize(attr, &stacksize);
+    printf("Default stack size = %li bytes \n",stacksize);
+    return result;
+}
+
+
 void *thread_func1(void *threadid) 
 {
 size_t stacksize;
@@ -45,6 +66,8 @@ else
 }
 pthread_exit(NULL);
 }
+
+
 
 void *thread_func2(void *threadid) 
 {
@@ -83,35 +106,21 @@ pthread_exit(NULL);
 }
 
 
-
 int main(int argc, char *argv[])
 {
 pthread_t thread1,thread2;             // Here we are declaring two thread variables thread1 and thread2 of type pthread_t
 size_t stacksize;
 
 pthread_attr_init(&thr1_attr);         // Here we are initializing the thread attribute type variable attr
-pthread_attr_getstacksize(&thr1_attr,&stacksize);   // Function returning default allocated stack size
-printf("Default stack size = %li bytes \n",stacksize);
+
+get_thread_stacksize(&thr1_attr);
+get_thread_stacksize(&thr2_attr);
+
 stacksize = 9000000;
-pthread_attr_setstacksize(&thr1_attr,stacksize); // Here we are setting the stack size attribute to 9000000 bytes
-
-pthread_attr_init(&thr2_attr);         // Here we are initializing the thread attribute type variable attr
-pthread_attr_getstacksize(&thr2_attr,&stacksize);   // Function returning default allocated stack size
-printf("Default stack size = %li bytes \n",stacksize);
+set_thread_stacksize(&thr1_attr, stacksize);
 stacksize = 400000;
-pthread_attr_setstacksize(&thr2_attr,stacksize);  // Here we are setting the stack size attribute to 400000 bytes
+set_thread_stacksize(&thr2_attr, stacksize);
 
-printf("Creating threads with stack size = %li bytes \n",stacksize);
-
-if(pthread_create(&thread1,&thr1_attr,thread_func1,NULL)) // Here we are creating the thread named thread1 with attributes defined in thr1_attr and executing function thread_func1
-{
-    printf("Thread 1 Creation has failed\n");
-}
-
-if(pthread_create(&thread2,&thr2_attr,thread_func2,NULL))  // Here we are creating the thread named thread2 with attributes defined in thr2_attr and executing function thread_func2
-{
-    printf("Thread 2 Creation has failed\n");
-}
 
 if(pthread_mutex_init(&mutex_lock1, NULL)!=0)       // Here we are initializing and creating mutex lock1 dynamically 
 {
@@ -123,8 +132,24 @@ if(pthread_mutex_init(&mutex_lock2, NULL)!=0)       // Here we are initializing 
     printf("Mutex Lock 2 Creation has failed\n");
 }
 
+
+if(pthread_create(&thread1,&thr1_attr,thread_func1,NULL)) // Here we are creating the thread named thread1 with attributes defined in thr1_attr and executing function thread_func1
+{
+    printf("Thread 1 Creation has failed\n");
+}
+
+if(pthread_create(&thread2,&thr2_attr,thread_func2,NULL))  // Here we are creating the thread named thread2 with attributes defined in thr2_attr and executing function thread_func2
+{
+    printf("Thread 2 Creation has failed\n");
+}
+
+
+
+
 pthread_join(thread1, NULL);                        // Here we are waiting for thread1 to complete
 pthread_join(thread2, NULL);                        // Here we are waiting for thread2 to complete
+
+
 printf("All threads are completed\n");
 
 pthread_exit(NULL);
