@@ -7,10 +7,12 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "-map=threads.map",
                 "${file}",
+                "-fstack-usage",
+                "-O0",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-lm"
             ],
             "options": {
                 "cwd": "${fileDirname}"

@@ -1,6 +1,6 @@
 ----------------------------------------------Advance C Programming Course----------------------------------------------------
 
-In C we can disintegrate a very large program into multiple files of code instead of keeping a signle source 
+In C we can disintegrate a very large program into multiple files of code instead of keeping a single source 
 code file which is difficult to be updated and maintained.
 
 This approach of breaking a lerger program into groups of multiple files is called modular approach offering
@@ -25,17 +25,17 @@ Where -std flag defines which version of C language we want to compile in this c
       -Wall flag is used to turn on additional warnings about potential bad code practices.
       -Wextra flag is used to turn on more warnings than the -Wall flag alone will activate.
       -fmax-errors=10 flags indicates listing of maximum of 10 errors
-      -o option flag sets the compiler optimiztion level
+      -o option flag sets the compiler optimization level
 
 
 Normally this approach of combining and linking multiple object files of sub modules works well however if we have numerous ones then we can merge them
 into a library file which can be linked either statically or dynamically with main source code file , it should be noted that 
-each static and dynamic linking have it´s own advantages and disadvantages alongwith specific syntax to be used with relevant compiler.
+each static and dynamic linking have it´s own advantages and disadvantages along with specific syntax to be used with relevant compiler.
 
 -------Communication Between Two Files-------------
 
 Two or more files containing code can pass information either through function methods and through extern variables
-(a extension of global variables) while in case of function menthods it should be noted that we include respective 
+(a extension of global variables) while in case of function methods it should be noted that we include respective 
 header files in a program file from where a specific function is called thus arguments can be passed
 and returned for e.g. 
 
@@ -62,9 +62,9 @@ file.
 If we are using compiler from command line then we need to make sure that we compile all the multiple module 
 files correctly such that relevant object codes are generated and linked with main source code file smoothly.
 
-To use external variables in our sorce code files we use the keyword extern with global variable and it becomes
+To use external variables in our source code files we use the keyword extern with global variable and it becomes
 accessible in all of our program files provided that it´s also defined in all of the module files with same 
-definiton.
+definition.
 
 
 For example : 
@@ -102,7 +102,7 @@ Notice here we can access num extern variable outside of our files in both scena
 
 -----static global variable--------
 
-If we want a global variable to be only accessed inisde one specific source code file then we use static keyword with it at the time of it´s
+If we want a global variable to be only accessed inside one specific source code file then we use static keyword with it at the time of it´s
 declaration, this is very useful if we want to avoid repeatitive decalarition error. Static is just the opposite of extern.
 
 To do it just write  : 
@@ -146,25 +146,25 @@ printf(" Today is %i nd day of the week",Day);  Output : Today is 2nd day of the
 When we have multiple enumeration then the constants present in all must be unique in their names otherwise compilation error will be generated.
 
 
-             ------------Mmeory Types Available To Us In C-----------
+             ------------Memory Types Available To Us In C-----------
 
 
 There are three types of memory available to us i.e. Static, Stack and Heap.
 
 
-Static memory persists throguh entire lifecycle of our program used to store global variables or variables 
-declared with static cluase.
+Static memory persists through entire life cycle of our program used to store global variables or variables 
+declared with static clause.
 
 ----------Stack Memory-------
 
 Managed By the CPU.
 
 All local variables of a function are placed in stack, these variables are pushed onto the stack as long 
-as the function is in exection after that they are popped out of the stack and no longer exists.
+as the function is in execution after that they are popped out of the stack and no longer exists.
 
 Stack memory shrinks and expands as variables get created in a function as discussed earlier why it happens.
 
-Stack memory is limited in size if we push to much variables on it then it overflows occuring mostly 
+Stack memory is limited in size if we push to much variables on it then it overflows occurring mostly 
 in recursion case.
 
 Stack memory is divided into successive frames each time when a function is called it allocates itself a fresh 
@@ -174,7 +174,7 @@ Stack has fast access time as compared to heap.
 
 Use stack when we have small variables.
 
-Stack cannot be resized i.e. we cannot assign more mory to local variables once they are pushed on the stack.
+Stack cannot be resized i.e. we cannot assign more memory to local variables once they are pushed on the stack.
 
 ---------Heap Memory---------
 
@@ -191,8 +191,6 @@ memory leaks i.e. same heap memory cannot be used by other processes and part of
 
 Heap can be accessed anywhere in the program through the use of pointers.
 
-Global varfaibles are placed in heap memory.
-
 Heap is used when we need to store large block of data such as large data structure or big array.
 
 and also if we have some global variable which we want to keep for longer period of time.
@@ -207,7 +205,7 @@ executies.
 
 By scope of a variable we mean from where it can be referenced or accessed in a program like for example some varaibes are global and some are local.
 
-Visbility or linkage of a variable determines in case of a multiple source file program whether identifier is known only in current source file or in any source file with proper declarations.
+Visibility or linkage of a variable determines in case of a multiple source file program whether identifier is known only in current source file or in any source file with proper declarations.
 
 By default all local variables have auto storage class as they exists only inisde body of a function or Block of code (inside a conditionla statement ) and get´s destroyed when we step out of a function or block of code.
 
@@ -405,8 +403,8 @@ In case char arr[]  compiler allocates 12 consecutive bytes of memory and associ
 
 -----Flexible array members-----
 
-flexible array memeber is a feature introduced in the C99 standard of the C programming language, it allows us to
-declare an array without any dimmension and whose size is flexible in nature and flexible array members size is
+flexible array member is a feature introduced in the C99 standard of the C programming language, it allows us to
+declare an array without any dimension and whose size is flexible in nature and flexible array members size is
 variable(can be changed at run time)
 
 struct s{
@@ -414,7 +412,7 @@ int arraysize;
 int array[];
 }; 
 
-so if weant to allocate memory on heap for the above struct then we do 
+so if want to allocate memory on heap for the above struct then we do 
 int main(){
 struct s *ptr;    
 int des_size = 5;
@@ -1018,8 +1016,8 @@ printf("\n Using variadic function Sum = %i",sum(2,2,4));
 printf("\n Average = %.2lf",average(v1,3.5,v2,4.5,0.0));
 }
 
-In summary variadic function should have at least one fixed paramter.
-We should have a way to detect which data type is passed for that we can have a paramter in the varadic function.
+In summary variadic function should have at least one fixed parameter.
+We should have a way to detect which data type is passed for that we can have a parameter in the varadic function.
     
 --------------va_copy-------------
 
@@ -1192,7 +1190,7 @@ return 0;
 
 Union is similar to structure. 
 
-In Union all memebers reside in same memory space unlike structures. Size of this allocatedmemory is equal to the size of largest member residing in union.
+In Union all members reside in same memory space unlike structures. Size of this allocated memory is equal to the size of largest member residing in union.
 
 We need to make sure that data in union is referenced with relevant data type, referencing data in a union
 with a variable of wrong type is a logic error.
@@ -1221,9 +1219,9 @@ type_N identifier_N;
 
 Union tag is optional and each member definition is a normal variable definition.
 
-At the end of union definition before final semicolon we can specify one ormore union variables but its optional.
+At the end of union definition before final semicolon we can specify one or more union variables but its optional.
 
-Union definition is placed in a header file just like strucutres if we weant to share it among several files.
+Union definition is placed in a header file just like strucutres if we want to share it among several files.
 
 Example 1 : union Data {
           int i; 
@@ -1231,7 +1229,7 @@ Example 1 : union Data {
           char str[20];
           }data; 
 
-Mmeory is allocated by compiler when we create variables to access it i.e. union Data d1 . where d1 is variable. and in the above example data also is.
+Memory is allocated by compiler when we create variables to access it i.e. union Data d1 . where d1 is variable. and in the above example data also is.
 
 structures and arrays both can contain unions.
 
@@ -1281,10 +1279,19 @@ double aa;
 } 
 
 void main(){
-union number n1 = {.i = 0,f = 1.1, aa = 22.2234};
+union number n1;
+
+n1.i = 0;
+n1.f = 1.1; 
+n1.aa = 22.2234;
+
+printf(n1.i);
+printf(n1.f);
+printf(n1.aa);
+
 }
 
-
+We can only access one type at a time.
 
 ----------------------------------------Section 13 : The Preprocessor------------------------------------------
 
@@ -1771,7 +1778,7 @@ clear function : disables break point in function.
 
 Core files are generated by core dump when a program crashes or is terminated abnormally due to segmentation.
 
-Segemenation fault occurs when we try to access memory restrcited to us.
+Segmentation fault occurs when we try to access memory restricted to us.
 
 Core dump is also called memory or storage dump.
 
@@ -1779,7 +1786,7 @@ Core files contain a snapshot of contents of the process memory at the time when
 
 Core dumps cann also be used for capturing data during dynamic memory allocation.
 
-A core dump is contained in a file named simlar to core.<process_id>
+A core dump is contained in a file named similar to core.<process_id>
 
 On some systems core dump may be disabled due to large size of the core files which we can enable using ulimit -c unlimited command.
 
@@ -1804,7 +1811,7 @@ info locals : command for visualizing the variables.
 -----------Profiling-----------
 
 Profiling a program allows to measure consumption of : 
-  Mmeory while it´s running.     
+  Memory while it´s running.     
   Time complexity (efficiency)
   Usage of particular instructions.
   Frequency and duration of function calls.
@@ -1822,7 +1829,7 @@ gprof gathers profiling information by probing program counter at regular interv
 operating system interrupts thus resulting profiling data is not exact but statistical approximation.
 
 gprof is more preferred in multithreaded applications.
-gprof is unable to profile shared libraries used in our source code maaking it unsuitable for
+gprof is unable to profile shared libraries used in our source code making it unsuitable for
 today´s real world projects.
 
 gcc -pg src.c -o exec_name .
@@ -1898,7 +1905,7 @@ If we pass a signle pointer in as argument :
 We use a double pointer as an argument to a function when we want to preserve memory allocation or
 assignment even outside of function.
 
-When we are passing address of a pointer to a function having a local pointer as it´s paramter then we
+When we are passing address of a pointer to a function having a local pointer as it´s parameter then we
 can change the value stored at the passed address however we cannot change the passed address inside the function.
    
 Example : 
@@ -1996,7 +2003,7 @@ int ret_val = pread(5);
 
 -----------------Common Convention----------
 
-As mentioned previously, function pointers can be passed as paramters in function calls and can be returned as function values, this use of function pointers as paramters provides flexibility for flexible functions and programs.
+As mentioned previously, function pointers can be passed as parameters in function calls and can be returned as function values, this use of function pointers as paramters provides flexibility for flexible functions and programs.
 
 So if we use typdef keyword then it will allow us to declare function pointers more easily and they will become more readable as we can assign name to the function pointer return type i.e.
 
@@ -2410,7 +2417,7 @@ return 0;
 }
 
 ----------------memcpy() and memmove() Functions----------------------
-Function : void *memcpy(void *restrict,const void*restrict,size_t n);
+Function : void *memcpy(void *restrict s1,const void*restrict s2,size_t n);
 Function : void *memmove(void *s1,const void *s2,size_t n);
 
 Both of these function copy n bytes from the location pointed by s2 to the location pointed to by s1. 
@@ -4550,6 +4557,24 @@ pthread_join(thread2, NULL);
 
 exit(0);
 }
+
+----------------------Infinite Thread : 
+
+pthread_id thread_id;
+
+void thread_func(void *msg)
+{
+       // Some code.
+}
+
+/*while(1)
+{
+   pthread_t thread_id;
+   int local_val = 100;
+   pthread_create(&thread_id,NULL,thread_func1,&local_val); 
+}    // Infinite loop to keep main thread alive */
+
+
 
                   --------------------------------------------Section 22 : Networking Sockets-------------------------------------------
 

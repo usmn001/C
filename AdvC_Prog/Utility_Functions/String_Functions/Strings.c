@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-int main(void)                     // Program to Check and Set a Bit at Given Position
+int main(void)                     // Program to Convert
 {
 
     char str[20] = "2030300  This is test";     // end is pointing to "This is test"

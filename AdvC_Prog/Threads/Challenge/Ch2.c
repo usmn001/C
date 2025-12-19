@@ -13,7 +13,6 @@ void *thread_func1(void *msg)
 {
 
 int *x = (int *)msg;
-
 if(pthread_mutex_lock(&mutex_lock)==0)
 {
 printf("Thread ID = %i Acquired the lock\n",pthread_self());
@@ -64,6 +63,7 @@ else
 
 
 
+
 for(int i=0;i<NUM_THREADS;i++)
 {
 pthread_join(thread_id[i],NULL);                        // Here we are waiting for thread1 to complete
@@ -71,6 +71,13 @@ pthread_exit(&thread_id[i]);
 }
 printf("All threads are completed\n");
 
+
+/*while(1)
+{
+   pthread_t thread_id;
+   int local_val = 100;
+   pthread_create(&thread_id,NULL,thread_func1,&local_val); 
+}    // Infinite loop to keep main thread alive */
 
 }
 

@@ -6,8 +6,8 @@
             "command": "/usr/bin/gcc",
             "args": [
                 "-fdiagnostics-color=always",
+                "-O0",
                 "-g",
-                "-map=threads.map",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"

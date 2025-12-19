@@ -10,6 +10,12 @@ User defined Data Types in C are : Typedef,enum, union, structure, Class.
 
 There are four Primitive Data types In C : char(8-bit) , int(32-bit), long(32-bit) ,  short(16-bit) , float (64-bit) , double(64-bit), bool.
 Type Modifiers in C are : unsiged, signed, short , long these type modifiers are used with data types to modify their properties such as range of values or sign.
+
+The Maximum And Minimum Values For the following data types can be found in limits.h file, Just need to include it in our program and use printf or cout statements such as : 
+#include<limits.h>
+printf("UCHAR_MAX from limits.h : %u \n", UCHAR_MAX);
+
+
  
 Printf/Scanf/sizeof Format Specifier      Data Type                    Range                         Size In Bits/Precision
  
@@ -86,6 +92,9 @@ scanf("%c",&c);   /* Whenever we enter a character input in scanf like here then
 	                     memory locations in the form of their ASCII codes.
 	                     To display it's ASCII code stored in memory we can use
 	                     printf statement with %d as output format specifier */
+
+
+
                    
 -----------------------String Functions : For Performing Operations On Strings----------------------------
 

@@ -30,9 +30,16 @@ gcc -flags src.c :
 gcc src.c - o executable_name -Xlinker -map=mapfilename.map
 
 
+gcc Test.c -Xlinker -Map=Test.map
+
 -------------Generating Preprocessed Output From File-----------
 
 gcc (Compiler Flags) -E  src.c -o src.i
+
+
+-----------------Generating Object .elf File----------------------
+
+gcc (Compiler Flags) Src.c -o Src.o
 
 
 --------------GCC Architecture Specific Compiler Flags-------------------
