@@ -1,6 +1,25 @@
 
 DEB files are installation files for Debian based distributions. RPM files are installation files for Red Hat based distributions. Ubuntu is based on Debian's package manage based on APT and DPKG. Red Hat, CentOS and Fedora are based on the old Red Hat Linux package management system, RPM.
 
+----------------Linux Management Commands-----------------------
+cat : concatenate (print out) a file to terminal e.g. " cat textfile.txt "
+echo : echo a command to the terminal e.g. echo "Hello World"
+pwd : print working directory e.g. pwd 
+ls : list contents of a directory.
+cd : change directory.
+mkdir : make a new directory e.g. mkdir new_directory_name 
+mv : move files or directories to a new location.
+cp : copy files or directories to a new location.
+rm : remove a directory.
+find : locate files, directories ;  syntax : find file_name
+
+grep : searching for content with grep ; e.g : grep -r "IS_AWESOME *
+          Where : * in means files with any character in the name. 
+
+tree : to visualize directory structure.
+
+cat /etc/os-release				  /* Command for finding linux distro package */
+
 lsb_release -a                                    /* Command provideing complete information about linux kernel distribution and version.*/
 
 uname -a                                          /* Command for finding Linux Kernel Architecture */ 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <ctype.h>
+#include "unity.h"
 
 #define SUM(a,b)                ( (a)+(b))
 #define IS_UPPER(c)             (isupper(c) ? 1 : 0)
