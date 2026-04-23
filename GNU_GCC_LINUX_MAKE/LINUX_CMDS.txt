@@ -17,6 +17,9 @@ grep : searching for content with grep ; e.g : grep -r "IS_AWESOME *
           Where : * in means files with any character in the name. 
 
 tree : to visualize directory structure.
+
+cat /etc/os-release				  /* Command for finding linux distro package */
+
 lsb_release -a                                    /* Command provideing complete information about linux kernel distribution and version.*/
 
 uname -a                                          /* Command for finding Linux Kernel Architecture */ 
